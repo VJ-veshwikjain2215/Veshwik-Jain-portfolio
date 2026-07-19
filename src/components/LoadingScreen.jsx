@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 const BOOT_LINES = [
   "booting portfolio.exe",
-  "loading profile: Aarav Sharma",
+  "loading profile: VESHWIK JAIN",
   "mounting sections/",
   "ready.",
 ];
