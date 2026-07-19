@@ -1,4 +1,4 @@
-import civicIssueImg from "../assets/Civic-issue.png";
+import civicIssueImg from "../assets/civic-issue.png";
 import { motion } from "framer-motion";
 import { FiGithub, FiExternalLink, FiArrowUpRight } from "react-icons/fi";
 import { fadeUp } from "../animations/variants";
