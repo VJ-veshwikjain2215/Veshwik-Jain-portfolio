@@ -1,4 +1,4 @@
-# Aarav Sharma — Portfolio
+# Veshwik Jain — Portfolio
 
 A premium, fully responsive personal portfolio built with **React (Vite)**, **Tailwind CSS v4**, **Framer Motion**, and **React Icons**. The design leans into a code-editor visual language (file-path section labels, a status bar, terminal-styled hero) rather than generic gradients or glassmorphism — see [Design notes](#design-notes) below.
 
