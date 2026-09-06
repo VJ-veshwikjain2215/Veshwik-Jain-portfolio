@@ -97,39 +97,6 @@ export const skillCategories = [
 export const projects = [
 
   {
-    id: "RupeeRakshak",
-    title: "RupeeRakshak",
-    subtitle: " — AI-Powered Personal Finance Management Platform",
-    description: ` Full-stack AI-powered personal finance platform designed to help users manage expenses, analyze spending habits,
-                  and build financial stability. Features include secure Google OAuth authentication, CSV bank statement import,
-                  automatic transaction categorization, interactive financial dashboard, monthly income vs. expense analytics,
-                  AI-driven financial insights, emergency fund recommendations, future income prediction, financial health score,
-                  risk analysis, and personalized budgeting suggestions.`,
-    tech: ["React 18", "Vite 5", "Tailwind CSS", "Recharts", "Google OAuth", "Spring Boot 3.x (Java 21)", "Spring Security", "PostgreSQL", "JPA/Hibernate", "REST APIs", "Python FastAPI", "Docker", "Render", "Vercel"],
-    github: "https://github.com/VJ-veshwikjain2215/rupeerakshak.git",
-    demo: "",
-    featured: false,
-    image: "./assets/RupeeRakshak.png",
-    screenshot: rupeeRakshakImg,
-  },
-
-  {
-    id: "Civic Issue Reporter",
-    title: "Civic Issue Reporter",
-    subtitle: " — Smart Civic Complaint Management Platform",
-    description: ` Full-stack civic issue reporting platform that enables citizens to report public infrastructure problems such as potholes,
-                    garbage, water leakage, broken streetlights, and drainage issues. Features include secure user authentication, issue submission with
-                    image upload and location details, real-time complaint tracking, status updates (Pending, In Progress, Resolved), role-based dashboards
-                    for citizens and administrators, complaint categorization, search and filtering, and responsive UI for seamless access across devices.`,
-    tech: ["React 18", "Vite 5", "Tailwind CSS", "Spring Boot 3.x (Java 21)", "Spring Security", "MySQL", "JWT Authentication", "RESTAPIs", "Maven"],
-    github: "https://github.com/VJ-veshwikjain2215/Civic-Issue-Reporter",
-    demo: "https://civic-issue-reporter-1-zxms.onrender.com/",
-    featured: false,
-    image: "./assets/Civic.png",
-    screenshot: civicIssueImg,
-  },
-
-  {
     id: "TrueVoice",
     title: "TrueVoice",
     subtitle: " — AI Voice Authenticity Detection & Synthetic Voice Defense Platform",
@@ -166,6 +133,39 @@ export const projects = [
     featured: false,
     image: "./assets/Secure-Crypt.png",
     screenshot: secureCryptImg,
+  },
+
+  {
+    id: "RupeeRakshak",
+    title: "RupeeRakshak",
+    subtitle: " — AI-Powered Personal Finance Management Platform",
+    description: ` Full-stack AI-powered personal finance platform designed to help users manage expenses, analyze spending habits,
+                  and build financial stability. Features include secure Google OAuth authentication, CSV bank statement import,
+                  automatic transaction categorization, interactive financial dashboard, monthly income vs. expense analytics,
+                  AI-driven financial insights, emergency fund recommendations, future income prediction, financial health score,
+                  risk analysis, and personalized budgeting suggestions.`,
+    tech: ["React 18", "Vite 5", "Tailwind CSS", "Recharts", "Google OAuth", "Spring Boot 3.x (Java 21)", "Spring Security", "PostgreSQL", "JPA/Hibernate", "REST APIs", "Python FastAPI", "Docker", "Render", "Vercel"],
+    github: "https://github.com/VJ-veshwikjain2215/rupeerakshak.git",
+    demo: "",
+    featured: false,
+    image: "./assets/RupeeRakshak.png",
+    screenshot: rupeeRakshakImg,
+  },
+
+  {
+    id: "Civic Issue Reporter",
+    title: "Civic Issue Reporter",
+    subtitle: " — Smart Civic Complaint Management Platform",
+    description: ` Full-stack civic issue reporting platform that enables citizens to report public infrastructure problems such as potholes,
+                    garbage, water leakage, broken streetlights, and drainage issues. Features include secure user authentication, issue submission with
+                    image upload and location details, real-time complaint tracking, status updates (Pending, In Progress, Resolved), role-based dashboards
+                    for citizens and administrators, complaint categorization, search and filtering, and responsive UI for seamless access across devices.`,
+    tech: ["React 18", "Vite 5", "Tailwind CSS", "Spring Boot 3.x (Java 21)", "Spring Security", "MySQL", "JWT Authentication", "RESTAPIs", "Maven"],
+    github: "https://github.com/VJ-veshwikjain2215/Civic-Issue-Reporter",
+    demo: "https://civic-issue-reporter-1-zxms.onrender.com/",
+    featured: false,
+    image: "./assets/Civic.png",
+    screenshot: civicIssueImg,
   },
 
 ];
