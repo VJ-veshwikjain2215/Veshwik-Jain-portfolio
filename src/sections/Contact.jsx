@@ -31,12 +31,12 @@ export default function Contact() {
           >
             {CARDS.map(({ icon: Icon, label, value, href }) => {
               const content = (
-                <div className="flex items-center gap-4 rounded-xl border border-hairline bg-card p-5 card-shadow hover:card-shadow-lg hover:-translate-y-0.5 transition-all duration-200">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                <div className="flex items-center gap-4 rounded-lg border border-hairline bg-card p-5 transition-colors duration-200 hover:border-text-secondary">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded bg-accent/10 text-accent">
                     <Icon size={17} />
                   </div>
                   <div>
-                    <p className="font-mono text-xs text-text-secondary">{label}</p>
+                    <p className="label-caps text-text-secondary">{label}</p>
                     <p className="text-sm font-medium text-text">{value}</p>
                   </div>
                 </div>
@@ -44,7 +44,7 @@ export default function Contact() {
               return (
                 <motion.div key={label} variants={fadeUp}>
                   {href ? (
-                    <a href={href} data-cursor-hover className="block">
+                    <a href={href} className="block">
                       {content}
                     </a>
                   ) : (
@@ -59,9 +59,8 @@ export default function Contact() {
                 href={profile.social.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                data-cursor-hover
                 aria-label="GitHub"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-hairline text-text-secondary hover:text-primary hover:border-primary transition-colors"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-hairline text-text-secondary hover:text-accent hover:border-accent transition-colors"
               >
                 <FiGithub size={16} />
               </a>
@@ -69,9 +68,8 @@ export default function Contact() {
                 href={profile.social.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                data-cursor-hover
                 aria-label="LinkedIn"
-                className="flex h-10 w-10 items-center justify-center rounded-full border border-hairline text-text-secondary hover:text-primary hover:border-primary transition-colors"
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-hairline text-text-secondary hover:text-accent hover:border-accent transition-colors"
               >
                 <FiLinkedin size={16} />
               </a>
@@ -83,7 +81,7 @@ export default function Contact() {
             initial="hidden"
             whileInView="show"
             viewport={viewportOnce}
-            className="rounded-xl border border-hairline bg-card p-6 md:p-8 card-shadow"
+            className="rounded-lg border border-hairline bg-card p-6 md:p-8"
           >
             <ContactForm />
           </motion.div>

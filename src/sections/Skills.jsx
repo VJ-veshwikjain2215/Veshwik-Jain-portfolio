@@ -24,17 +24,14 @@ export default function Skills() {
             <motion.div
               key={category.label}
               variants={fadeUp}
-              whileHover={{ y: -4 }}
-              transition={{ duration: 0.2 }}
-              className="rounded-xl border border-hairline bg-card p-6 card-shadow hover:card-shadow-lg transition-shadow duration-300"
+              className="rounded-lg border border-hairline bg-card p-6 transition-colors duration-300 hover:border-text-secondary"
             >
-              <span className="font-mono text-xs text-primary">{category.path}</span>
-              <h3 className="mt-1 font-display text-lg font-semibold text-text">{category.label}</h3>
+              <span className="label-caps text-accent">{category.label}</span>
               <div className="mt-4 flex flex-wrap gap-2">
                 {category.skills.map((skill) => (
                   <span
                     key={skill}
-                    className="group rounded-md border border-hairline px-3 py-1.5 text-sm text-text-secondary transition-all duration-200 hover:border-primary hover:text-primary hover:-translate-y-0.5"
+                    className="rounded border border-hairline px-3 py-1.5 text-sm text-text-secondary transition-colors duration-200 hover:border-accent hover:text-accent"
                   >
                     {skill}
                   </span>

@@ -33,40 +33,38 @@ export default function AcademicProgress() {
               <motion.div
                 key={sem.sem}
                 variants={fadeUp}
-                whileHover={{ y: -4 }}
-                transition={{ duration: 0.2 }}
-                className="rounded-xl border border-hairline bg-card p-6 card-shadow hover:card-shadow-lg transition-shadow duration-300"
+                className="rounded-lg border border-hairline bg-card p-6 transition-colors duration-300 hover:border-text-secondary"
               >
                 <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-1.5 font-display text-2xl font-semibold text-primary">
+                  <span className="flex items-baseline gap-1.5 font-display text-2xl text-text">
                     {sem.sem}
-                    <span className="font-mono text-xs text-text-secondary">SEM</span>
+                    <span className="label-caps text-text-secondary">Sem</span>
                   </span>
                   <span
-                    className={`rounded-full px-3 py-1 font-mono text-[11px] ${
+                    className={`label-caps rounded-full px-3 py-1 ${
                       isUpcoming
                         ? "border border-hairline text-text-secondary"
-                        : "bg-emerald-500/10 text-emerald-500"
+                        : "bg-accent/10 text-accent"
                     }`}
                   >
                     {sem.status}
                   </span>
                 </div>
 
-                <div className="mt-5 grid grid-cols-2 divide-x divide-hairline rounded-lg border border-hairline bg-bg">
+                <div className="mt-5 grid grid-cols-2 divide-x divide-hairline rounded border border-hairline bg-bg">
                   <div className="px-4 py-3 text-center">
-                    <p className="font-display text-xl font-semibold text-text">{sem.sgpa ?? "—"}</p>
-                    <p className="mt-0.5 font-mono text-[10px] text-text-secondary">SGPA</p>
+                    <p className="font-display text-xl text-text">{sem.sgpa ?? "—"}</p>
+                    <p className="mt-0.5 label-caps text-text-secondary">SGPA</p>
                   </div>
                   <div className="px-4 py-3 text-center">
-                    <p className="font-display text-xl font-semibold text-text">{sem.cgpa ?? "—"}</p>
-                    <p className="mt-0.5 font-mono text-[10px] text-text-secondary">CGPA</p>
+                    <p className="font-display text-xl text-text">{sem.cgpa ?? "—"}</p>
+                    <p className="mt-0.5 label-caps text-text-secondary">CGPA</p>
                   </div>
                 </div>
 
                 {sem.subjects.length > 0 && (
                   <div className="mt-5">
-                    <p className="font-mono text-[11px] text-text-secondary mb-2">SUBJECTS</p>
+                    <p className="label-caps text-text-secondary mb-2">Subjects</p>
                     <div className="flex flex-wrap gap-1.5">
                       {sem.subjects.map((s) => (
                         <Chip key={s} className="text-xs py-1">
@@ -114,7 +112,7 @@ export default function AcademicProgress() {
           <div className="aspect-[1/1.3] w-full rounded-lg border border-hairline bg-bg overflow-hidden">
             <object data={previewSem.marksheetUrl} type="application/pdf" className="h-full w-full">
               <div className="flex h-full items-center justify-center p-6 text-center text-sm text-text-secondary">
-                Add the marksheet PDF to <code className="font-mono text-xs">/public{previewSem.marksheetUrl}</code> to enable preview.
+                Add the marksheet PDF to <code className="text-data text-xs">/public{previewSem.marksheetUrl}</code> to enable preview.
               </div>
             </object>
           </div>

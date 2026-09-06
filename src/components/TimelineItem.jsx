@@ -10,12 +10,12 @@ export default function TimelineItem({ marker, title, meta, detail, isLast = fal
           aria-hidden="true"
         />
       )}
-      <div className="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-hairline bg-card text-primary">
-        {icon ?? <span className="h-1.5 w-1.5 rounded-full bg-primary" />}
+      <div className="relative z-10 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-hairline bg-card text-accent">
+        {icon ?? <span className="h-1.5 w-1.5 rounded-full bg-accent" />}
       </div>
       <div className="pt-0.5">
-        <span className="font-mono text-xs text-primary">{marker}</span>
-        <h4 className="mt-1 font-display text-lg font-semibold text-text">{title}</h4>
+        <span className="label-caps text-accent">{marker}</span>
+        <h4 className="mt-1.5 font-display text-lg text-text">{title}</h4>
         {meta && <p className="text-sm text-text-secondary">{meta}</p>}
         {detail && <p className="mt-2 text-sm text-text-secondary leading-relaxed max-w-xl">{detail}</p>}
       </div>

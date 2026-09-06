@@ -2,10 +2,8 @@ import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import Navbar from "./components/Navbar";
-import Cursor from "./components/Cursor";
 import ScrollProgress from "./components/ScrollProgress";
 import BackToTop from "./components/BackToTop";
-import StatusBar from "./components/StatusBar";
 import LoadingScreen from "./components/LoadingScreen";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
@@ -29,7 +27,6 @@ export default function App() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
         >
-          <Cursor />
           <ScrollProgress />
           <Navbar theme={theme} onToggleTheme={toggleTheme} activeSection={activeSection} />
 
@@ -40,7 +37,6 @@ export default function App() {
             </Routes>
           </AnimatePresence>
 
-          <StatusBar activeSection={activeSection} theme={theme} />
           <BackToTop />
         </motion.div>
       )}

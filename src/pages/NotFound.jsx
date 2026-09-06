@@ -9,25 +9,17 @@ export default function NotFound() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md rounded-xl border border-hairline bg-card p-8 card-shadow-lg"
+        className="w-full max-w-md"
       >
-        <div className="flex items-center gap-1.5 pb-4 mb-4 border-b border-hairline">
-          <span className="h-2.5 w-2.5 rounded-full bg-red-400/80" />
-          <span className="h-2.5 w-2.5 rounded-full bg-yellow-400/80" />
-          <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
-          <span className="ml-2 font-mono text-[11px] text-text-secondary">bash</span>
-        </div>
-        <p className="font-mono text-sm text-left text-text-secondary">
-          <span className="text-primary">$</span> cd /requested-page
+        <span className="label-caps text-accent">Error 404</span>
+        <h1 className="mt-4 font-display text-5xl md:text-6xl text-text">
+          Page not found
+        </h1>
+        <p className="mt-4 text-text-secondary leading-relaxed">
+          The page you're looking for doesn't exist, or may have moved.
+          Let's get you back to the portfolio.
         </p>
-        <p className="font-mono text-sm text-left text-red-400 mt-1">
-          bash: cd: /requested-page: No such file or directory
-        </p>
-        <h1 className="mt-6 font-display text-4xl font-semibold text-text">404</h1>
-        <p className="mt-2 text-text-secondary">
-          This page doesn't exist. Let's get you back on the main path.
-        </p>
-        <Button as={Link} to="/" variant="primary" className="mt-6">
+        <Button as={Link} to="/" variant="primary" className="mt-8">
           Back to home
         </Button>
       </motion.div>

@@ -61,7 +61,7 @@ export default function Projects() {
             <p className="mt-5 text-text-secondary leading-relaxed">{activeProject.description}</p>
             <div className="mt-5 flex flex-wrap gap-2">
               {activeProject.tech.map((t) => (
-                <Chip key={t}>{t}</Chip>
+                <Chip key={t} className="text-data">{t}</Chip>
               ))}
             </div>
             <div className="mt-6 flex gap-3">

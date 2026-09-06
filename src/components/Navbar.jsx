@@ -4,14 +4,14 @@ import { FiMenu, FiX } from "react-icons/fi";
 import ThemeToggle from "./ThemeToggle";
 
 const NAV_LINKS = [
-  { id: "home", label: "home" },
-  { id: "about", label: "about" },
-  { id: "skills", label: "skills" },
-  { id: "projects", label: "projects" },
-  { id: "academics", label: "academics" },
-  { id: "achievements", label: "achievements" },
-  { id: "resume", label: "resume" },
-  { id: "contact", label: "contact" },
+  { id: "home", label: "Home" },
+  { id: "about", label: "About" },
+  { id: "skills", label: "Skills" },
+  { id: "projects", label: "Projects" },
+  { id: "academics", label: "Academics" },
+  { id: "achievements", label: "Achievements" },
+  { id: "resume", label: "Résumé" },
+  { id: "contact", label: "Contact" },
 ];
 
 export default function Navbar({ theme, onToggleTheme, activeSection }) {
@@ -44,33 +44,33 @@ export default function Navbar({ theme, onToggleTheme, activeSection }) {
     <header
       className={`fixed top-0 left-0 right-0 z-[80] transition-all duration-300 ${
         scrolled
-          ? "bg-bg/85 backdrop-blur border-b border-hairline"
+          ? "bg-bg/90 backdrop-blur border-b border-hairline"
           : "bg-transparent border-b border-transparent"
       }`}
     >
-      <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 md:px-8 h-16">
+      <nav className="mx-auto flex max-w-6xl items-center justify-between px-5 md:px-8 h-16 md:h-20">
         <button
           onClick={() => handleNavClick("home")}
-          className="font-display font-semibold text-lg tracking-tight text-text"
+          className="font-display text-xl tracking-tight text-text"
           aria-label="Go to home section"
         >
-          <span className="text-primary">&gt;</span> veshwik.dev
+          Veshwik <span className="text-accent">Jain</span>
         </button>
 
-        <div className="hidden lg:flex items-center gap-1 font-mono text-sm">
+        <div className="hidden lg:flex items-center gap-7 text-sm">
           {NAV_LINKS.map((link) => (
             <button
               key={link.id}
               onClick={() => handleNavClick(link.id)}
-              className={`relative px-3 py-2 transition-colors duration-200 ${
-                activeSection === link.id ? "text-primary" : "text-text-secondary hover:text-text"
+              className={`relative py-2 transition-colors duration-200 ${
+                activeSection === link.id ? "text-accent" : "text-text-secondary hover:text-text"
               }`}
             >
               {link.label}
               {activeSection === link.id && (
                 <motion.span
                   layoutId="nav-underline"
-                  className="absolute left-3 right-3 -bottom-0.5 h-[2px] bg-primary rounded-full"
+                  className="absolute left-0 right-0 -bottom-0.5 h-px bg-accent"
                   transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 />
               )}
@@ -78,14 +78,14 @@ export default function Navbar({ theme, onToggleTheme, activeSection }) {
           ))}
         </div>
 
-        <div className="flex items-center gap-3 md:gap-4">
+        <div className="flex items-center gap-3 md:gap-5">
           <ThemeToggle theme={theme} onToggle={onToggleTheme} />
           <button
             type="button"
             onClick={() => setMenuOpen((o) => !o)}
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
-            className="lg:hidden flex h-9 w-9 items-center justify-center rounded-md text-text hover:text-primary"
+            className="lg:hidden flex h-9 w-9 items-center justify-center text-text hover:text-accent"
           >
             {menuOpen ? <FiX size={20} /> : <FiMenu size={20} />}
           </button>
@@ -101,16 +101,16 @@ export default function Navbar({ theme, onToggleTheme, activeSection }) {
             transition={{ duration: 0.25, ease: "easeInOut" }}
             className="lg:hidden overflow-hidden bg-bg border-b border-hairline"
           >
-            <div className="flex flex-col px-5 py-4 gap-1 font-mono text-base">
+            <div className="flex flex-col px-5 py-5 gap-1 font-display text-2xl">
               {NAV_LINKS.map((link) => (
                 <button
                   key={link.id}
                   onClick={() => handleNavClick(link.id)}
-                  className={`text-left py-2.5 ${
-                    activeSection === link.id ? "text-primary" : "text-text-secondary"
+                  className={`text-left py-2.5 transition-colors ${
+                    activeSection === link.id ? "text-accent" : "text-text-secondary"
                   }`}
                 >
-                  ~/{link.label}
+                  {link.label}
                 </button>
               ))}
             </div>

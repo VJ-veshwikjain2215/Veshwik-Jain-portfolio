@@ -20,23 +20,23 @@ export default function Resume() {
           initial="hidden"
           whileInView="show"
           viewport={viewportOnce}
-          className="flex flex-col md:flex-row items-center gap-8 rounded-xl border border-hairline bg-card p-6 md:p-8 card-shadow"
+          className="flex flex-col md:flex-row items-center gap-8 rounded-lg border border-hairline bg-card p-6 md:p-8"
         >
-          <div className="flex h-32 w-24 shrink-0 flex-col items-center justify-center gap-2 rounded-lg border border-hairline bg-bg">
-            <FiFileText className="text-primary" size={28} />
-            <span className="font-mono text-[10px] text-text-secondary">PDF</span>
+          <div className="flex h-32 w-24 shrink-0 flex-col items-center justify-center gap-2 rounded border border-hairline bg-bg">
+            <FiFileText className="text-accent" size={28} />
+            <span className="label-caps text-text-secondary">PDF</span>
           </div>
 
           <div className="flex-1 text-center md:text-left">
-            <h3 className="font-display text-xl font-semibold text-text">{profile.name} — Résumé</h3>
+            <h3 className="font-display text-xl text-text">{profile.name} — Résumé</h3>
             <p className="mt-1 text-text-secondary text-sm">
               One page. Education, skills, projects and experience, kept current.
             </p>
             <div className="mt-5 flex flex-wrap justify-center md:justify-start gap-3">
-              <Button variant="primary" onClick={() => setPreviewOpen(true)} data-cursor-hover>
+              <Button variant="primary" onClick={() => setPreviewOpen(true)}>
                 <FiEye size={16} /> View résumé
               </Button>
-              <Button as="a" href={profile.resumeUrl} download variant="secondary" data-cursor-hover>
+              <Button as="a" href={profile.resumeUrl} download variant="secondary">
                 <FiDownload size={16} /> Download
               </Button>
             </div>
@@ -48,7 +48,7 @@ export default function Resume() {
         <div className="aspect-[1/1.3] w-full rounded-lg border border-hairline bg-bg overflow-hidden">
           <object data={profile.resumeUrl} type="application/pdf" className="h-full w-full">
             <div className="flex h-full items-center justify-center p-6 text-center text-sm text-text-secondary">
-              Add <code className="font-mono text-xs">resume.pdf</code> to the <code className="font-mono text-xs">/public</code> folder to enable the in-page preview.
+              Add <code className="text-data text-xs">resume.pdf</code> to the <code className="text-data text-xs">/public</code> folder to enable the in-page preview.
             </div>
           </object>
         </div>

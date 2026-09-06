@@ -8,13 +8,14 @@ export default function ThemeToggle({ theme, onToggle }) {
       onClick={onToggle}
       aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}
       aria-pressed={isDark}
-      className="relative h-8 w-14 rounded-full border border-hairline bg-card transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2"
+      className="relative h-7 rounded-full border border-hairline bg-bg transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2"
+      style={{ width: "3.25rem" }}
     >
       <span
-        className="absolute top-0.5 flex h-6 w-6 items-center justify-center rounded-full bg-primary text-white shadow-sm transition-transform duration-300 ease-out"
-        style={{ transform: isDark ? "translateX(26px)" : "translateX(2px)" }}
+        className="absolute top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-bg transition-transform duration-300 ease-out"
+        style={{ transform: isDark ? "translateX(1.75rem)" : "translateX(0.125rem)" }}
       >
-        {isDark ? <FiMoon size={13} /> : <FiSun size={13} />}
+        {isDark ? <FiMoon size={11} /> : <FiSun size={11} />}
       </span>
     </button>
   );

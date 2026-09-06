@@ -1,44 +1,40 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const BOOT_LINES = [
-  "booting portfolio.exe",
-  "loading profile: VESHWIK JAIN",
-  "mounting sections/",
-  "ready.",
-];
-
+/**
+ * A brief, quiet mark-and-line loader — a monogram settling into
+ * place with a thin rule drawing underneath it. No boot sequence,
+ * no simulated console output.
+ */
 export default function LoadingScreen({ onDone }) {
-  const [lineIndex, setLineIndex] = useState(0);
   const [visible, setVisible] = useState(true);
 
   useEffect(() => {
-    if (lineIndex < BOOT_LINES.length - 1) {
-      const t = setTimeout(() => setLineIndex((i) => i + 1), 260);
-      return () => clearTimeout(t);
-    }
-    const exit = setTimeout(() => setVisible(false), 420);
+    const exit = setTimeout(() => setVisible(false), 900);
     return () => clearTimeout(exit);
-  }, [lineIndex]);
+  }, []);
 
   return (
     <AnimatePresence onExitComplete={onDone}>
       {visible && (
         <motion.div
-          exit={{ opacity: 0, transition: { duration: 0.4, ease: "easeInOut" } }}
-          className="fixed inset-0 z-[200] flex items-center justify-center bg-dark-bg"
+          exit={{ opacity: 0, transition: { duration: 0.45, ease: "easeInOut" } }}
+          className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-dark-bg"
         >
-          <div className="font-mono text-sm text-dark-text-secondary">
-            {BOOT_LINES.slice(0, lineIndex + 1).map((line, i) => (
-              <div key={line} className="flex items-center gap-2">
-                <span className="text-dark-accent">$</span>
-                <span className={i === lineIndex && i === BOOT_LINES.length - 1 ? "text-dark-text" : ""}>
-                  {line}
-                </span>
-              </div>
-            ))}
-            <span className="caret-blink text-dark-accent">▍</span>
-          </div>
+          <motion.span
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            className="font-display text-3xl text-dark-text tracking-tight"
+          >
+            VJ
+          </motion.span>
+          <motion.span
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-4 h-px w-10 origin-center bg-dark-accent"
+          />
         </motion.div>
       )}
     </AnimatePresence>

@@ -1,28 +1,29 @@
 @import "tailwindcss";
 
 /* ---------------------------------------------------------
-   Design tokens
-   Two palettes, one type system. Everything in the design
-   is derived from these values — no ad-hoc hex codes below.
+   Design tokens — "Warm Editorial Scholar"
+   A literary, archival palette (parchment, bookcloth, ink)
+   rendered as light and dark variants of the same warm family.
+   Depth comes from tonal layering and hairlines, not shadows.
 --------------------------------------------------------- */
 @theme {
-  --font-display: "Space Grotesk", "Inter", sans-serif;
-  --font-body: "Inter", sans-serif;
-  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+  --font-display: "Newsreader", "Georgia", serif;
+  --font-body: "Plus Jakarta Sans", "Inter", sans-serif;
+  --font-mono: "Courier Prime", "Courier New", monospace;
 
-  --color-light-bg: #FAFAFA;
-  --color-light-card: #FFFFFF;
-  --color-light-primary: #2563EB;
-  --color-light-accent: #0EA5E9;
-  --color-light-text: #111827;
-  --color-light-text-secondary: #6B7280;
+  --color-light-bg: #FBF9F5;
+  --color-light-card: #F3EEE5;
+  --color-light-primary: #1C1612;
+  --color-light-accent: #8C4E24;
+  --color-light-text: #1C1612;
+  --color-light-text-secondary: #6B5D51;
 
-  --color-dark-bg: #0F172A;
-  --color-dark-card: #1E293B;
-  --color-dark-primary: #60A5FA;
-  --color-dark-accent: #38BDF8;
-  --color-dark-text: #F8FAFC;
-  --color-dark-text-secondary: #CBD5E1;
+  --color-dark-bg: #181310;
+  --color-dark-card: #241C17;
+  --color-dark-primary: #F7F1E6;
+  --color-dark-accent: #D89355;
+  --color-dark-text: #F4EADC;
+  --color-dark-text-secondary: #BFAB93;
 
   /* Semantic aliases — resolve at runtime via the CSS custom
      properties below, so bg-bg / text-text / etc flip with .dark */
@@ -42,8 +43,8 @@
   --accent: var(--color-light-accent);
   --text: var(--color-light-text);
   --text-secondary: var(--color-light-text-secondary);
-  --border: rgb(17 24 39 / 0.08);
-  --shadow-color: 220 40% 20%;
+  --border: #E2DBD0;
+  --shadow-color: 30 35% 10%;
 }
 
 .dark {
@@ -53,8 +54,8 @@
   --accent: var(--color-dark-accent);
   --text: var(--color-dark-text);
   --text-secondary: var(--color-dark-text-secondary);
-  --border: rgb(248 250 252 / 0.08);
-  --shadow-color: 220 60% 4%;
+  --border: rgb(244 234 220 / 0.14);
+  --shadow-color: 20 40% 3%;
 }
 
 * {
@@ -71,6 +72,7 @@ body {
   font-family: var(--font-body);
   transition: background-color 300ms ease, color 300ms ease;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
 /* Respect reduced-motion preferences everywhere */
@@ -86,35 +88,37 @@ body {
   }
 }
 
-/* Visible keyboard focus, always */
+/* Visible keyboard focus, always — crisp ring, no blur */
 :focus-visible {
-  outline: 2px solid var(--primary);
+  outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-radius: 2px;
 }
 
 ::selection {
   background-color: var(--primary);
-  color: white;
+  color: var(--bg);
 }
 
-/* Subtle graph-paper texture used behind the hero and section heads
-   instead of gradients or blobs. Barely-there, dev-notebook feel. */
-.dot-grid {
-  background-image: radial-gradient(var(--text-secondary) 1px, transparent 1px);
-  background-size: 26px 26px;
-  opacity: 0.12;
+/* Small tracked-out label used for eyebrows, meta text, and form
+   labels — the calm visual anchor that replaces terminal prompts
+   and mono-heavy UI voice. */
+.label-caps {
+  font-family: var(--font-body);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-/* Editor-style line-number gutter, used sparingly as a structural motif */
-.gutter-line {
+/* A single, deliberate monospace touch — tech tags, GPA figures,
+   file-style metadata. Never used for headings, nav, or body copy. */
+.text-data {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
-  color: var(--text-secondary);
-  opacity: 0.5;
 }
 
-/* Thin hairline divider between sections, replacing heavy card shadows */
+/* A hairline rule used to separate sections instead of heavy
+   card shadows or background blocks. */
 .hairline {
   border-top: 1px solid var(--border);
 }
@@ -132,31 +136,18 @@ body {
   border-radius: 999px;
 }
 
-.card-shadow {
-  box-shadow: 0 1px 2px hsl(var(--shadow-color) / 0.06), 0 8px 24px -8px hsl(var(--shadow-color) / 0.16);
-}
-
+/* Reserved for genuinely floating surfaces (the modal dialog) —
+   kept faint. Cards in the page flow use tonal layering + a
+   hairline border instead, never a shadow. */
 .card-shadow-lg {
-  box-shadow: 0 4px 12px hsl(var(--shadow-color) / 0.08), 0 24px 48px -12px hsl(var(--shadow-color) / 0.28);
+  box-shadow: 0 8px 24px -8px hsl(var(--shadow-color) / 0.28);
 }
 
-@keyframes ripple {
-  from {
-    transform: scale(0);
-    opacity: 1;
-  }
-  to {
-    transform: scale(1);
-    opacity: 0;
-  }
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes blink {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
+.animate-fade-up {
+  animation: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-
-.caret-blink {
-  animation: blink 1s step-end infinite;
-}
-

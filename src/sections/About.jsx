@@ -29,7 +29,7 @@ export default function About() {
             ))}
 
             <motion.div variants={fadeUp} className="mt-8">
-              <h3 className="font-mono text-xs text-primary mb-3">// what I enjoy building</h3>
+              <h3 className="label-caps text-accent mb-3">What I enjoy building</h3>
               <div className="flex flex-wrap gap-2">
                 {about.interests.map((interest) => (
                   <Chip key={interest}>{interest}</Chip>
@@ -37,7 +37,7 @@ export default function About() {
               </div>
             </motion.div>
 
-            <motion.p variants={fadeUp} className="mt-8 text-text-secondary leading-relaxed border-l-2 border-primary pl-4">
+            <motion.p variants={fadeUp} className="mt-8 font-display italic text-lg md:text-xl text-text leading-relaxed border-l-2 border-accent pl-5">
               {about.goals}
             </motion.p>
           </motion.div>

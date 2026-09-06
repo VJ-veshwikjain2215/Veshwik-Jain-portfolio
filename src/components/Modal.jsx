@@ -43,7 +43,7 @@ export default function Modal({ open, onClose, title, children }) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.97 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="relative z-10 w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-xl bg-card border border-hairline card-shadow-lg"
+            className="relative z-10 w-full max-w-2xl max-h-[85vh] overflow-y-auto rounded-lg bg-card border border-hairline card-shadow-lg"
           >
             <div className="sticky top-0 flex items-center justify-between border-b border-hairline bg-card px-6 py-4">
               <h3 className="font-display font-semibold text-lg text-text">{title}</h3>
@@ -51,7 +51,7 @@ export default function Modal({ open, onClose, title, children }) {
                 ref={closeButtonRef}
                 onClick={onClose}
                 aria-label="Close dialog"
-                className="flex h-8 w-8 items-center justify-center rounded-md text-text-secondary hover:text-primary hover:bg-bg"
+                className="flex h-8 w-8 items-center justify-center rounded text-text-secondary hover:text-accent hover:bg-bg"
               >
                 <FiX size={18} />
               </button>

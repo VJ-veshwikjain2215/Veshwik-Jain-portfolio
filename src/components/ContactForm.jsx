@@ -23,7 +23,7 @@ function validate(values) {
 }
 
 const FIELD_CLASS =
-  "w-full rounded-lg border bg-bg px-4 py-3 text-sm text-text placeholder:text-text-secondary/60 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary/40";
+  "w-full rounded border bg-bg px-4 py-3 text-sm text-text placeholder:text-text-secondary/60 transition-colors duration-200 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent";
 
 export default function ContactForm() {
   const [values, setValues] = useState(initialValues);
@@ -78,8 +78,8 @@ export default function ContactForm() {
     <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
-          <label htmlFor="name" className="mb-1.5 block font-mono text-xs text-text-secondary">
-            name
+          <label htmlFor="name" className="label-caps mb-1.5 block text-text-secondary">
+            Name
           </label>
           <input
             id="name"
@@ -101,8 +101,8 @@ export default function ContactForm() {
         </div>
 
         <div>
-          <label htmlFor="email" className="mb-1.5 block font-mono text-xs text-text-secondary">
-            email
+          <label htmlFor="email" className="label-caps mb-1.5 block text-text-secondary">
+            Email
           </label>
           <input
             id="email"
@@ -125,8 +125,8 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label htmlFor="subject" className="mb-1.5 block font-mono text-xs text-text-secondary">
-          subject
+        <label htmlFor="subject" className="label-caps mb-1.5 block text-text-secondary">
+          Subject
         </label>
         <input
           id="subject"
@@ -148,8 +148,8 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label htmlFor="message" className="mb-1.5 block font-mono text-xs text-text-secondary">
-          message
+        <label htmlFor="message" className="label-caps mb-1.5 block text-text-secondary">
+          Message
         </label>
         <textarea
           id="message"
@@ -171,7 +171,7 @@ export default function ContactForm() {
       </div>
 
       <div className="flex items-center gap-4">
-        <Button type="submit" variant="primary" disabled={status === "sending"} data-cursor-hover>
+        <Button type="submit" variant="primary" disabled={status === "sending"}>
           <AnimatePresence mode="wait" initial={false}>
             {status === "sent" ? (
               <motion.span
