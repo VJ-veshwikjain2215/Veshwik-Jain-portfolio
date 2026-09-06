@@ -5,6 +5,8 @@
 // ---------------------------------------------------------------
 import civicIssueImg from "../assets/civic-issue.png";
 import rupeeRakshakImg from "../assets/RupeeRakshak.png";
+import trueVoiceImg from "../assets/TrueVoice.png";
+import secureCryptImg from "../assets/Secure-Crypt.png";
 export const profile = {
   name: "Veshwik Jain",
   roles: [
@@ -106,7 +108,7 @@ export const projects = [
     tech: ["React 18", "Vite 5", "Tailwind CSS", "Recharts", "Google OAuth", "Spring Boot 3.x (Java 21)", "Spring Security", "PostgreSQL", "JPA/Hibernate", "REST APIs", "Python FastAPI", "Docker", "Render", "Vercel"],
     github: "https://github.com/VJ-veshwikjain2215/rupeerakshak.git",
     demo: "",
-    featured: true,
+    featured: false,
     image: "./assets/RupeeRakshak.png",
     screenshot: rupeeRakshakImg,
   },
@@ -121,10 +123,49 @@ export const projects = [
                     for citizens and administrators, complaint categorization, search and filtering, and responsive UI for seamless access across devices.`,
     tech: ["React 18", "Vite 5", "Tailwind CSS", "Spring Boot 3.x (Java 21)", "Spring Security", "MySQL", "JWT Authentication", "RESTAPIs", "Maven"],
     github: "https://github.com/VJ-veshwikjain2215/Civic-Issue-Reporter",
-      demo: "https://civic-issue-reporter-1-zxms.onrender.com/",
-      featured: false,
-      image: "./assets/Civic.png",
-      screenshot: civicIssueImg,
+    demo: "https://civic-issue-reporter-1-zxms.onrender.com/",
+    featured: false,
+    image: "./assets/Civic.png",
+    screenshot: civicIssueImg,
+  },
+
+  {
+    id: "TrueVoice",
+    title: "TrueVoice",
+    subtitle: " — AI Voice Authenticity Detection & Synthetic Voice Defense Platform",
+    description: ` AI-powered voice authenticity detection and synthetic voice (deepfake) defense platform, built as a dual-surface system:
+                  an in-browser forensic lab and an Android real-time call interceptor. Combines biometric speaker verification
+                  (Resemblyzer/GE2E voice embeddings) with an anti-spoofing detector (AASIST), calibrated per enrolled contact, to
+                  identify AI-cloned voices on live calls. Correlates calls, SMS, and notifications on-device into a single risk score,
+                  using 60+ deterministic scam-signal rules plus LLM-based semantic analysis (Groq / Llama 3.3 70B) for scam-intent
+                  detection, with offline speech-to-text (Vosk, Hindi + English). Includes a graduated protection overlay, emergency
+                  alarm with trusted-contact alerts, and a guided "Digital Arrest" scam workflow with evidence capture and PDF reporting.
+                  Originally built in 36 hours at the IKIGAI 206 hackathon (Team Mythos); the web forensic lab runs entirely client-side
+                  via WebAssembly and ONNX Runtime Web, with no audio ever leaving the browser.`,
+    tech: ["Kotlin", "Jetpack Compose", "Android", "ONNX Runtime", "WebRTC", "Vosk (offline ASR)", "Groq API (Llama 3.3 70B)", "Room", "Gradle", "JavaScript", "WebAssembly", "HTML5", "CSS3"],
+    github: "https://github.com/VJ-veshwikjain2215/TrueVoice",
+    demo: "https://true-voice-nine.vercel.app",
+    featured: true,
+    image: "./assets/TrueVoice.png",
+    screenshot: trueVoiceImg,
+  },
+
+  {
+    id: "Secure-Crypt",
+    title: "Secure-Crypt",
+    subtitle: " — Multi-Algorithm Text Encryption & Decryption Web App",
+    description: ` A Spring Boot web application for encrypting and decrypting text using six different algorithms — three classical
+                  ciphers implemented from scratch (Caesar, Vigenère, XOR) and three industry-standard algorithms via the Java
+                  Cryptography Architecture (AES-128, DES, 3DES). Features password-based key derivation with PBKDF2, a random key
+                  generator with a live key-strength indicator, session-only encryption history, a dark/light mode toggle, and a REST
+                  API for encryption, decryption, key generation, and key-strength checks. Built as a mini-project for a Fundamentals
+                  of Cyber Security course.`,
+    tech: ["Java 21", "Spring Boot 3.3", "Maven", "HTML5", "CSS3", "JavaScript (ES6)", "Bootstrap 5"],
+    github: "https://github.com/VJ-veshwikjain2215/Secure-Crypt",
+    demo: "https://secure-crypt-three.vercel.app",
+    featured: false,
+    image: "./assets/Secure-Crypt.png",
+    screenshot: secureCryptImg,
   },
 
 ];
@@ -161,7 +202,7 @@ export const achievements = [
     type: "Certification",
     detail:
       "Completed a certification course covering core C and C++ programming concepts, including data structures and memory management.",
-},
+  },
 ];
 
 export const contactInfo = {
