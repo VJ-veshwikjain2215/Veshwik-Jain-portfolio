@@ -22,6 +22,7 @@ A personal developer portfolio with an animated pixel canvas, scroll reveals, de
 <img src="docs/images/mobile.png" alt="Responsive portfolio at a 390-pixel phone viewport" width="280" />
 
 </details>
+
 ## The experience
 
 This portfolio introduces my work in Java, Spring Boot, and full-stack development. It pairs a restrained black-and-white visual system with original canvas animation and practical project information.
