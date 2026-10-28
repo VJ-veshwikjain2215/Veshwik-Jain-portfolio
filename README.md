@@ -126,6 +126,6 @@ If this project gives you a useful idea for your own portfolio, a star is apprec
 
 Created for **Veshwik Jain**. The monochrome visual direction was inspired by [Christen Dijoux's portfolio](https://christendijoux.com/); this implementation uses its own components and procedural canvas artwork.
 
-Source code is available under the [MIT license](LICENSE). Personal biography, résumé, marksheets, photographs, project screenshots, and third-party names or marks are **not** licensed for reuse by that code license. Fonts and dependencies retain their respective licenses.
+Source code is available under the [MIT license](LICENSE). See [personal content and media terms](CONTENT-LICENSE.md). Personal biography, résumé, marksheets, photographs, project screenshots, and third-party names or marks are **not** licensed for reuse by that code license. Fonts and dependencies retain their respective licenses.
 
 [GitHub](https://github.com/VJ-veshwikjain2215) · [LinkedIn](https://www.linkedin.com/in/veshwik-jain/) · [Live site](https://veshwik-jain-portfolio.embarko.app/)
