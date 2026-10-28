@@ -58,7 +58,10 @@ export default function ContactForm() {
     try {
       const res = await fetch("https://formspree.io/f/xnjedlpn", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
         body: JSON.stringify(values),
       });
 
@@ -68,7 +71,7 @@ export default function ContactForm() {
       setValues(initialValues);
       setTouched({});
       setTimeout(() => setStatus("idle"), 3500);
-    } catch (err) {
+    } catch {
       setStatus("idle");
       alert("Something went wrong. Please try again or email me directly.");
     }
@@ -78,7 +81,10 @@ export default function ContactForm() {
     <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
-          <label htmlFor="name" className="label-caps mb-1.5 block text-text-secondary">
+          <label
+            htmlFor="name"
+            className="label-caps mb-1.5 block text-text-secondary"
+          >
             Name
           </label>
           <input
@@ -101,7 +107,10 @@ export default function ContactForm() {
         </div>
 
         <div>
-          <label htmlFor="email" className="label-caps mb-1.5 block text-text-secondary">
+          <label
+            htmlFor="email"
+            className="label-caps mb-1.5 block text-text-secondary"
+          >
             Email
           </label>
           <input
@@ -125,7 +134,10 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label htmlFor="subject" className="label-caps mb-1.5 block text-text-secondary">
+        <label
+          htmlFor="subject"
+          className="label-caps mb-1.5 block text-text-secondary"
+        >
           Subject
         </label>
         <input
@@ -148,7 +160,10 @@ export default function ContactForm() {
       </div>
 
       <div>
-        <label htmlFor="message" className="label-caps mb-1.5 block text-text-secondary">
+        <label
+          htmlFor="message"
+          className="label-caps mb-1.5 block text-text-secondary"
+        >
           Message
         </label>
         <textarea
@@ -191,12 +206,15 @@ export default function ContactForm() {
                 exit={{ opacity: 0, y: -4 }}
                 className="inline-flex items-center gap-2"
               >
-                <FiSend size={16} /> {status === "sending" ? "Sending..." : "Send message"}
+                <FiSend size={16} />{" "}
+                {status === "sending" ? "Sending..." : "Send message"}
               </motion.span>
             )}
           </AnimatePresence>
         </Button>
-        <span className="text-xs text-text-secondary">I usually reply within a day or two.</span>
+        <span className="text-xs text-text-secondary">
+          I usually reply within a day or two.
+        </span>
       </div>
     </form>
   );

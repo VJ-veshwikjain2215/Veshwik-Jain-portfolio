@@ -1,121 +1,131 @@
-# Veshwik Jain — Portfolio
+<div align="center">
 
-A premium, fully responsive personal portfolio built with **React (Vite)**, **Tailwind CSS v4**, **Framer Motion**, and **React Icons**. The design leans into a code-editor visual language (file-path section labels, a status bar, terminal-styled hero) rather than generic gradients or glassmorphism — see [Design notes](#design-notes) below.
+# Veshwik Jain · Portfolio
 
-## Tech stack
+**Backend thinking. Monochrome design. Built with React.**
 
-- **React 19 + Vite** — app shell and dev tooling
-- **Tailwind CSS v4** (via `@tailwindcss/vite`) — styling, using CSS-variable-based design tokens for instant light/dark theme switching
-- **Framer Motion** — scroll reveals, page/section transitions, micro-interactions
-- **React Icons** — iconography (`react-icons/fi`)
-- **React Router** — client-side routing (home + 404)
-- **GSAP** is installed and available if you want to add a bespoke animation later, but the current build achieves everything with Framer Motion alone to keep the bundle lean.
+A personal developer portfolio with an animated pixel canvas, scroll reveals, detailed project pages, and a responsive layout.
 
-## Getting started
+[Live portfolio](https://veshwik-jain-portfolio.embarko.app/) · [Explore the code](src/App.jsx) · [Run locally](#run-locally) · [Report a bug](../../issues/new?template=bug_report.yml)
+
+[![CI](https://github.com/VJ-veshwikjain2215/Veshwik-Jain-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/VJ-veshwikjain2215/Veshwik-Jain-portfolio/actions/workflows/ci.yml)
+[![Code license: MIT](https://img.shields.io/badge/code_license-MIT-white?labelColor=111111)](LICENSE)
+[![React](https://img.shields.io/badge/React-19-149eca?labelColor=111111)](https://react.dev/)
+
+</div>
+
+[![Veshwik Jain portfolio — desktop preview](docs/images/desktop.png)](https://veshwik-jain-portfolio.embarko.app/)
+
+<details>
+<summary>Phone preview</summary>
+
+<img src="docs/images/mobile.png" alt="Responsive portfolio at a 390-pixel phone viewport" width="280" />
+
+</details>
+## The experience
+
+This portfolio introduces my work in Java, Spring Boot, and full-stack development. It pairs a restrained black-and-white visual system with original canvas animation and practical project information.
+
+- **Animated pixel hero** — a procedural Canvas 2D graphic with no video or animation asset download.
+- **Project detail routes** — screenshots, context, technology lists, source links, and available live demos.
+- **Responsive navigation** — desktop anchors and a collapsible phone menu.
+- **Motion with an off switch** — scroll reveals and a moving text band respect the visitor's reduced-motion preference.
+- **Academic journey** — semester results, subjects, marksheets, milestones, and résumé links.
+- **Contact form** — client-side validation and delivery through Formspree, with success and failure feedback.
+
+### Selected work
+
+| Project                  | Focus                                           | Source                                                                   |
+| ------------------------ | ----------------------------------------------- | ------------------------------------------------------------------------ |
+| **TrueVoice**            | Voice authenticity and synthetic-voice defense  | [Repository](https://github.com/VJ-veshwikjain2215/TrueVoice)            |
+| **Secure-Crypt**         | Text encryption and decryption with Spring Boot | [Repository](https://github.com/VJ-veshwikjain2215/Secure-Crypt)         |
+| **RupeeRakshak**         | Full-stack personal finance management          | [Repository](https://github.com/VJ-veshwikjain2215/rupeerakshak)         |
+| **Civic Issue Reporter** | Civic reporting and complaint management        | [Repository](https://github.com/VJ-veshwikjain2215/Civic-Issue-Reporter) |
+
+These are projects showcased by the portfolio; their backends are maintained in their own repositories.
+
+## Built with
+
+| Layer     | Choice                                             |
+| --------- | -------------------------------------------------- |
+| UI        | React 19, React Router                             |
+| Styling   | Tailwind CSS 4 and custom responsive CSS           |
+| Animation | Framer Motion and Canvas 2D                        |
+| Tooling   | Vite, Oxlint, Prettier                             |
+| Forms     | Formspree                                          |
+| Hosting   | Embarko                                            |
+| Checks    | GitHub Actions: formatting, lint, production build |
+
+## Run locally
+
+Use **Node.js 22.12 or newer** and npm. Node 22 is used in CI.
 
 ```bash
-npm install
+git clone https://github.com/VJ-veshwikjain2215/Veshwik-Jain-portfolio.git
+cd Veshwik-Jain-portfolio
+npm ci
 npm run dev
 ```
 
-The dev server runs at `http://localhost:5173`.
+Open the Local URL printed by Vite, normally `http://localhost:5173`.
 
-Other scripts:
+| Command                | Purpose                                 |
+| ---------------------- | --------------------------------------- |
+| `npm run dev`          | Start the development server            |
+| `npm run build`        | Build the production site into `dist/`  |
+| `npm run preview`      | Serve the production build locally      |
+| `npm run lint`         | Check source with Oxlint                |
+| `npm run format`       | Format supported files                  |
+| `npm run format:check` | Check formatting without changing files |
+| `npm run check`        | Run formatting, lint, and build checks  |
 
-```bash
-npm run build     # production build to /dist
-npm run preview   # preview the production build locally
-npm run lint      # oxlint (fast ESLint-compatible linter)
+No secret is required to run the portfolio. Google Fonts loads the typefaces over the network; Formspree is required for actual contact-message delivery.
+
+## Make it yours
+
+The code is MIT licensed. Before publishing a fork, replace the personal content and documents with your own.
+
+1. Edit **[`src/constants/data.js`](src/constants/data.js)** for profile links, projects, skills, academic records, and achievements.
+2. Edit **[`src/App.jsx`](src/App.jsx)** for hero copy, profile facts, navigation, and section structure. Some presentation copy is intentionally local to its component.
+3. Change the visual system in **[`src/index.css`](src/index.css)**.
+4. Replace project images in **`src/assets/`**, the résumé at **`public/resume.pdf`**, and marksheets in **`public/marksheets/`**. Remove documents you do not want to publish.
+5. Replace the **Formspree form URL** in `src/components/ContactForm.jsx`. The included address belongs to this portfolio: do not send test messages to it.
+6. Update the page metadata, favicon, repository links, and deployment identity. Remove the original `appId` from **`embarko.json`** before deploying a fork.
+
+See [development and deployment notes](docs/DEVELOPMENT.md) for the architecture, verification checklist, and hosting details.
+
+## Project structure
+
+```text
+.github/               CI, dependency updates, issue and PR templates
+ docs/                 Screenshots and development notes
+ public/               Public documents and favicon
+ src/
+   App.jsx             Routes, homepage sections, canvas animation
+   components/         Shared contact form and button
+   constants/data.js   Portfolio content and project image imports
+   assets/             Project screenshots
+   index.css           Typography, layout, responsive styles, motion
+   main.jsx            React entry point
+ embarko.json          Existing Embarko app identity; no credentials
 ```
 
-## Folder structure
+## Accessibility and verification
 
-```
-src/
-  components/     Reusable UI: Navbar, Button, Modal, Cursor, StatusBar, ContactForm, etc.
-  sections/       One file per homepage section (Hero, About, Skills, Projects, ...)
-  pages/          Route-level components (Home, NotFound)
-  hooks/          useTheme, useActiveSection, useTypingEffect
-  constants/      data.js — all site copy lives here
-  animations/     Shared Framer Motion variants
-  utils/          Reserved for future helpers (currently empty)
-  assets/         Images you add (project screenshots, resume, etc.)
-public/
-  favicon.svg
-  robots.txt
-  resume.pdf      ← add your real résumé PDF here (see below)
-```
+The interface includes a skip link, semantic landmarks, keyboard focus indicators, labeled form controls, and descriptive links. CSS and the canvas respect `prefers-reduced-motion`.
 
-## Customizing your content
+The redesign was manually checked at desktop and phone widths, including navigation, project pages, direct-route reloads, and empty-form validation. CI checks code quality and build output; it does **not** claim to be a full accessibility audit or an end-to-end message-delivery test.
 
-**Everything you're likely to want to edit lives in `src/constants/data.js`:** your name, roles, bio, education timeline, skills, projects, achievements, and contact details. There's no content scattered across components — edit that one file and the whole site updates.
+## Contributing
 
-To add your résumé: drop a `resume.pdf` file into `/public` (replacing the placeholder note). The Résumé section's "View" button will preview it in a modal and "Download" will save it directly.
+Bug fixes, accessibility improvements, and performance improvements are welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a pull request. Use the [issue templates](../../issues/new/choose) to explain a reproducible problem or a focused idea.
 
-To add real project screenshots: replace `ProjectVisual` usage in `src/components/ProjectCard.jsx` with an `<img>` pointing at a file you add under `src/assets/`, or keep the generated code-window visuals — they're intentional, not a stand-in you're expected to remove.
+If this project gives you a useful idea for your own portfolio, a star is appreciated.
 
-## Design notes
+## Credits and license
 
-The brief explicitly ruled out gradients-everywhere, floating blobs, neon/cyberpunk, and glassmorphism — the common tells of an AI-generated portfolio. Instead:
+Created for **Veshwik Jain**. The monochrome visual direction was inspired by [Christen Dijoux's portfolio](https://christendijoux.com/); this implementation uses its own components and procedural canvas artwork.
 
-- **Signature element:** a fixed status bar at the bottom of the viewport, styled after a code editor's, showing the current section, theme, and a small "available for internships" indicator. It's both a wayfinding aid and the one deliberately distinctive idea in the design.
-- **Structural motif:** every section is introduced with a `$ cd ~/section-name` label instead of a numbered eyebrow — meaningful for a backend developer's portfolio rather than decorative.
-- **Texture:** a barely-there dot-grid ("graph paper") replaces gradient backgrounds; hairline 1px dividers replace heavy card shadows.
-- **Typography:** Space Grotesk (display), Inter (body), and JetBrains Mono (labels, code-styled UI) — the mono face is what gives the site its identity.
-- **Color:** exactly the two palettes specified in the brief, wired up as CSS custom properties that flip instantly when `.dark` is toggled on `<html>`, with a 300ms transition on background/text colors.
+Source code is available under the [MIT license](LICENSE). Personal biography, résumé, marksheets, photographs, project screenshots, and third-party names or marks are **not** licensed for reuse by that code license. Fonts and dependencies retain their respective licenses.
 
-## Theming
-
-Theme state lives in `src/hooks/useTheme.js`. It:
-
-1. Reads `localStorage.getItem('portfolio-theme')` on first load, falling back to the OS-level `prefers-color-scheme`.
-2. Toggles a `dark` class on `<html>`, which flips every CSS variable defined in `src/index.css`.
-3. Persists the choice back to `localStorage` on every change.
-
-All colors in components are written as Tailwind utilities like `bg-bg`, `text-text`, `bg-card`, `text-primary` — these are semantic aliases (see the `@theme` block in `src/index.css`) that resolve through CSS variables, so no component ever needs to know which theme is active.
-
-## Accessibility
-
-- Visible focus rings on every interactive element (`:focus-visible`)
-- `prefers-reduced-motion` is respected globally — animations collapse to near-instant
-- Form fields have associated `<label>`s, `aria-invalid`, and `aria-describedby` error messaging
-- The custom cursor and boot-sequence loading screen are skipped automatically on touch devices / reduced-motion preference (cursor)
-- Semantic landmarks (`<header>`, `<main>`/section `id`s, `<footer>`) and a real focus-trapped, `Escape`-to-close modal
-
-## Deployment
-
-### Vercel
-
-1. Push this project to a GitHub repository.
-2. In Vercel, **Add New Project** → import the repo.
-3. Framework preset: **Vite**. Build command: `npm run build`. Output directory: `dist`.
-4. Deploy — no environment variables are required.
-
-Or via CLI:
-
-```bash
-npm install -g vercel
-vercel
-```
-
-### Netlify
-
-1. Push this project to a GitHub repository.
-2. In Netlify, **Add new site → Import an existing project**.
-3. Build command: `npm run build`. Publish directory: `dist`.
-4. This repo includes a `netlify.toml` with a SPA redirect rule so client-side routes (like the 404 page) work correctly on refresh.
-
-Or via CLI:
-
-```bash
-npm install -g netlify-cli
-netlify deploy --build --prod
-```
-
-## Contact form
-
-The contact form validates on the client (required fields, email format, minimum message length) and currently **simulates** a send so it's fully demonstrable without a backend. To make it actually deliver messages, swap the `setTimeout` in `src/components/ContactForm.jsx` for a real request — e.g. to [Formspree](https://formspree.io), [Resend](https://resend.com), or your own API route.
-
----
-
-Built by hand, section by section — no page-builder, no template.
+[GitHub](https://github.com/VJ-veshwikjain2215) · [LinkedIn](https://www.linkedin.com/in/veshwik-jain/) · [Live site](https://veshwik-jain-portfolio.embarko.app/)

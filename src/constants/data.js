@@ -95,11 +95,11 @@ export const skillCategories = [
 ];
 
 export const projects = [
-
   {
     id: "TrueVoice",
     title: "TrueVoice",
-    subtitle: " — AI Voice Authenticity Detection & Synthetic Voice Defense Platform",
+    subtitle:
+      " — AI Voice Authenticity Detection & Synthetic Voice Defense Platform",
     description: ` AI-powered voice authenticity detection and synthetic voice (deepfake) defense platform, built as a dual-surface system:
                   an in-browser forensic lab and an Android real-time call interceptor. Combines biometric speaker verification
                   (Resemblyzer/GE2E voice embeddings) with an anti-spoofing detector (AASIST), calibrated per enrolled contact, to
@@ -109,7 +109,21 @@ export const projects = [
                   alarm with trusted-contact alerts, and a guided "Digital Arrest" scam workflow with evidence capture and PDF reporting.
                   Originally built in 36 hours at the IKIGAI 206 hackathon (Team Mythos); the web forensic lab runs entirely client-side
                   via WebAssembly and ONNX Runtime Web, with no audio ever leaving the browser.`,
-    tech: ["Kotlin", "Jetpack Compose", "Android", "ONNX Runtime", "WebRTC", "Vosk (offline ASR)", "Groq API (Llama 3.3 70B)", "Room", "Gradle", "JavaScript", "WebAssembly", "HTML5", "CSS3"],
+    tech: [
+      "Kotlin",
+      "Jetpack Compose",
+      "Android",
+      "ONNX Runtime",
+      "WebRTC",
+      "Vosk (offline ASR)",
+      "Groq API (Llama 3.3 70B)",
+      "Room",
+      "Gradle",
+      "JavaScript",
+      "WebAssembly",
+      "HTML5",
+      "CSS3",
+    ],
     github: "https://github.com/VJ-veshwikjain2215/TrueVoice",
     demo: "https://true-voice-nine.vercel.app",
     featured: true,
@@ -127,7 +141,15 @@ export const projects = [
                   generator with a live key-strength indicator, session-only encryption history, a dark/light mode toggle, and a REST
                   API for encryption, decryption, key generation, and key-strength checks. Built as a mini-project for a Fundamentals
                   of Cyber Security course.`,
-    tech: ["Java 21", "Spring Boot 3.3", "Maven", "HTML5", "CSS3", "JavaScript (ES6)", "Bootstrap 5"],
+    tech: [
+      "Java 21",
+      "Spring Boot 3.3",
+      "Maven",
+      "HTML5",
+      "CSS3",
+      "JavaScript (ES6)",
+      "Bootstrap 5",
+    ],
     github: "https://github.com/VJ-veshwikjain2215/Secure-Crypt",
     demo: "https://secure-crypt-three.vercel.app",
     featured: false,
@@ -144,7 +166,22 @@ export const projects = [
                   automatic transaction categorization, interactive financial dashboard, monthly income vs. expense analytics,
                   AI-driven financial insights, emergency fund recommendations, future income prediction, financial health score,
                   risk analysis, and personalized budgeting suggestions.`,
-    tech: ["React 18", "Vite 5", "Tailwind CSS", "Recharts", "Google OAuth", "Spring Boot 3.x (Java 21)", "Spring Security", "PostgreSQL", "JPA/Hibernate", "REST APIs", "Python FastAPI", "Docker", "Render", "Vercel"],
+    tech: [
+      "React 18",
+      "Vite 5",
+      "Tailwind CSS",
+      "Recharts",
+      "Google OAuth",
+      "Spring Boot 3.x (Java 21)",
+      "Spring Security",
+      "PostgreSQL",
+      "JPA/Hibernate",
+      "REST APIs",
+      "Python FastAPI",
+      "Docker",
+      "Render",
+      "Vercel",
+    ],
     github: "https://github.com/VJ-veshwikjain2215/rupeerakshak.git",
     demo: "",
     featured: false,
@@ -160,14 +197,23 @@ export const projects = [
                     garbage, water leakage, broken streetlights, and drainage issues. Features include secure user authentication, issue submission with
                     image upload and location details, real-time complaint tracking, status updates (Pending, In Progress, Resolved), role-based dashboards
                     for citizens and administrators, complaint categorization, search and filtering, and responsive UI for seamless access across devices.`,
-    tech: ["React 18", "Vite 5", "Tailwind CSS", "Spring Boot 3.x (Java 21)", "Spring Security", "MySQL", "JWT Authentication", "RESTAPIs", "Maven"],
+    tech: [
+      "React 18",
+      "Vite 5",
+      "Tailwind CSS",
+      "Spring Boot 3.x (Java 21)",
+      "Spring Security",
+      "MySQL",
+      "JWT Authentication",
+      "RESTAPIs",
+      "Maven",
+    ],
     github: "https://github.com/VJ-veshwikjain2215/Civic-Issue-Reporter",
     demo: "https://civic-issue-reporter-1-zxms.onrender.com/",
     featured: false,
     image: "./assets/Civic.png",
     screenshot: civicIssueImg,
   },
-
 ];
 
 export const achievements = [
@@ -211,7 +257,6 @@ export const contactInfo = {
   phone: profile.phone,
 };
 
-
 export const academicProgress = {
   intro:
     "SGPA, CGPA, and subjects for every semester — marksheets available to preview or download.",
@@ -221,7 +266,13 @@ export const academicProgress = {
       status: "Completed",
       sgpa: "6.19",
       cgpa: "6.19",
-      subjects: ["Maths I", "Physics", "Basic Electrical", "C Programming", "Engineering Graphics"],
+      subjects: [
+        "Maths I",
+        "Physics",
+        "Basic Electrical",
+        "C Programming",
+        "Engineering Graphics",
+      ],
       marksheetUrl: "/marksheets/1st_sem.pdf",
     },
     {
@@ -229,7 +280,13 @@ export const academicProgress = {
       status: "Completed",
       sgpa: "5.86",
       cgpa: "6.04",
-      subjects: ["Maths II", "Chemistry", "Data Structures", "OOP with Java", "Digital Electronics"],
+      subjects: [
+        "Maths II",
+        "Chemistry",
+        "Data Structures",
+        "OOP with Java",
+        "Digital Electronics",
+      ],
       marksheetUrl: "/marksheets/2nd_sem.pdf",
     },
     {
@@ -237,7 +294,13 @@ export const academicProgress = {
       status: "Completed",
       sgpa: "6.00",
       cgpa: "6.02",
-      subjects: ["DBMS", "OS", "Computer Networks", "Java Advanced", "Discrete Maths"],
+      subjects: [
+        "DBMS",
+        "OS",
+        "Computer Networks",
+        "Java Advanced",
+        "Discrete Maths",
+      ],
       marksheetUrl: "/marksheets/3rd_sem.pdf",
     },
     {

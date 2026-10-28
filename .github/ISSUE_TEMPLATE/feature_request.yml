@@ -1,0 +1,17 @@
+name: Improvement idea
+description: Suggest a focused improvement to the portfolio
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What visitor need would this address?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Suggested change
+      description: Explain the expected behavior and any alternatives.
+    validations:
+      required: true
