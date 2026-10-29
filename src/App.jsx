@@ -1,11 +1,10 @@
 import { useEffect, useRef, useState } from "react";
-import { Link, Route, Routes, useParams } from "react-router-dom";
+import { Link, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   profile,
   about,
   projects,
-  skillCategories,
   achievements,
   academicProgress,
 } from "./constants/data";
@@ -25,62 +24,160 @@ function Reveal({ children, className = "" }) {
     </motion.div>
   );
 }
-function Dither() {
+const capabilities = [
+  {
+    title: "Backend systems",
+    note: "APIs, business logic, and reliable data flows",
+    icon: "⌘",
+    tech: ["Java", "Spring Boot", "REST APIs"],
+    copy: "Clear application layers and dependable APIs, built around the problem the software needs to solve.",
+  },
+  {
+    title: "Web applications",
+    note: "Useful interfaces, from idea to interaction",
+    icon: "↗",
+    tech: ["React", "JavaScript", "HTML", "CSS"],
+    copy: "Responsive interfaces that connect the system underneath to a clear, useful experience on the screen.",
+  },
+  {
+    title: "Data & storage",
+    note: "Structured information, thoughtfully connected",
+    icon: "▤",
+    tech: ["MySQL", "DBMS", "SQL"],
+    copy: "Practical data models, understandable relationships, and the foundations that help an application stay predictable.",
+  },
+  {
+    title: "Developer workflow",
+    note: "Version control, tools, and continuous learning",
+    icon: "⟷",
+    tech: ["Git", "GitHub", "VS Code", "Linux", "Windows", "C/C++"],
+    copy: "Small iterations, meaningful checks, and the tools to turn a working idea into something that can be improved.",
+  },
+];
+const sceneNames = [
+  "Veshwik",
+  "Backend",
+  "Web apps",
+  "Data",
+  "Workflow",
+  "Ideas",
+];
+function Dither({ scene = 0 }) {
   const ref = useRef(null);
+  const previousPoints = useRef([]);
   useEffect(() => {
     const canvas = ref.current,
-      ctx = canvas.getContext("2d");
-    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    canvas.width = 680;
-    canvas.height = 680;
+      ctx = canvas.getContext("2d"),
+      reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    canvas.width = 720;
+    canvas.height = 720;
     let frame,
-      previous = 0,
+      last = 0,
       visible = true;
+    const particles = [];
+    const add = (x, y, color, size = 3) =>
+      particles.push({ x, y, color, size, seed: particles.length });
+    for (let row = -43; row <= 43; row++)
+      for (let col = -43; col <= 43; col++) {
+        const x = col * 7.8 + (row % 2) * 3.9,
+          y = row * 6.8,
+          r = Math.hypot(x, y),
+          jitter = Math.sin(col * 51 + row * 23) * 1.5;
+        if (scene === 0) {
+          if (
+            r < 205 + 7 * Math.sin(Math.atan2(y, x) * 5) &&
+            r > 84 + 5 * Math.sin(Math.atan2(y, x) * 3) &&
+            Math.hypot(x - 124, y + 151) > 67
+          )
+            add(
+              x + jitter,
+              y + 45,
+              `hsl(${146 + Math.round(y / 80)} 48% ${27 + (y + 205) / 22}%)`,
+              2.7 + Math.sin(row * col) * 0.4,
+            );
+          if (Math.hypot(x - 124, y + 151) < 54) add(x, y + 45, "#252528", 2.9);
+          if (Math.hypot(x - 65, y + 268) < 34) add(x, y + 45, "#b7865c", 2.6);
+          if (Math.hypot(x - 153, y + 244) < 13) add(x, y + 45, "#e3bb99", 2.4);
+        } else if (scene === 1) {
+          if (
+            Math.abs(x) < 164 &&
+            Math.abs(y) < 110 &&
+            (Math.abs(y) > 82 || Math.abs(x) > 139 || Math.abs(y % 45) < 7)
+          )
+            add(x, y, "#28864b", 2.8);
+        } else if (scene === 2) {
+          if (
+            Math.abs(x) < 210 &&
+            Math.abs(y) < 144 &&
+            (Math.abs(y) > 116 || Math.abs(x) > 181 || y < -83)
+          )
+            add(x, y, "#26854b", 2.8);
+          if (Math.abs(x) < 80 && y > 145 && y < 167) add(x, y, "#b7865c");
+        } else if (scene === 3) {
+          const yy = ((y + 180) % 110) - 55;
+          if (
+            Math.abs(y) < 180 &&
+            Math.abs(x) < 170 &&
+            Math.abs((x * x) / (170 * 170) + (yy * yy) / (45 * 45) - 1) < 0.2
+          )
+            add(x, y, "#247c48", 2.8);
+        } else if (scene === 4) {
+          if (
+            (Math.abs(x) > 80 && Math.abs(x) < 100 && Math.abs(y) < 160) ||
+            (Math.abs(y) > 145 &&
+              Math.abs(y) < 165 &&
+              Math.abs(x) > 80 &&
+              Math.abs(x) < 165)
+          )
+            add(x, y, "#2b9254", 2.8);
+        } else if (r < 205) {
+          const depth = Math.sqrt(Math.max(0, 1 - (r * r) / (205 * 205)));
+          add(x, y, depth > 0.6 ? "#27894c" : "#68be7d", 2.1 + depth * 1.1);
+        }
+      }
+    const origin = previousPoints.current.map((point) => ({ ...point }));
+    const begun = performance.now();
     const draw = (time) => {
       if (!visible) return;
-      if (!reduce && time - previous < 40) {
+      if (!reduce && time - last < 40) {
         frame = requestAnimationFrame(draw);
         return;
       }
-      previous = time;
-      const turn = reduce ? 0.45 : time / 14000;
-      ctx.clearRect(0, 0, 680, 680);
-      const dots = [];
-      for (let ring = 0; ring < 110; ring++) {
-        const u = (ring / 110) * Math.PI * 2;
-        for (let side = 0; side < 20; side++) {
-          const v = (side / 20) * Math.PI * 2;
-          const x = (188 + 61 * Math.cos(v)) * Math.cos(u),
-            y = (188 + 61 * Math.cos(v)) * Math.sin(u),
-            z = 61 * Math.sin(v);
-          const rx = x * Math.cos(turn) + z * Math.sin(turn),
-            rz = -x * Math.sin(turn) + z * Math.cos(turn);
-          const ry = y * 0.86 - rz * 0.51,
-            depth = y * 0.51 + rz * 0.86;
-          const perspective = 730 / (730 + depth);
-          dots.push({
-            x: 340 + (rx * 0.91 - ry * 0.25) * perspective,
-            y: 340 + (rx * 0.25 + ry * 0.91) * perspective,
-            depth,
-            size: 2.5 * perspective,
-          });
-        }
-      }
-      dots.sort((a, b) => b.depth - a.depth);
-      for (const p of dots) {
-        const shade = Math.round(85 + (p.depth + 160) * 0.26);
-        ctx.fillStyle = `rgb(30,${shade},78)`;
+      last = time;
+      ctx.clearRect(0, 0, 720, 720);
+      const t = reduce ? 0 : time / 2200;
+      const progress = reduce ? 1 : Math.min(1, (time - begun) / 1200);
+      const blend = 1 - Math.pow(1 - progress, 3);
+      const current = [];
+      for (let i = 0; i < particles.length; i++) {
+        const target = particles[i];
+        const from = origin.length ? origin[i % origin.length] : target;
+        const p = {
+          ...target,
+          x: from.x + (target.x - from.x) * blend,
+          y: from.y + (target.y - from.y) * blend,
+        };
+        current.push(p);
+        const drift = reduce ? 0 : Math.sin(t + p.seed * 0.03) * 1.7;
+        ctx.fillStyle = p.color;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.arc(
+          360 + p.x + drift,
+          350 + p.y + Math.cos(t + p.seed * 0.02) * 0.9,
+          p.size,
+          0,
+          Math.PI * 2,
+        );
         ctx.fill();
       }
+      previousPoints.current = current;
       if (!reduce) frame = requestAnimationFrame(draw);
     };
-    const observer = new IntersectionObserver(([entry]) => {
-      const wasVisible = visible;
-      visible = entry.isIntersecting;
+    const observer = new IntersectionObserver(([e]) => {
+      const before = visible;
+      visible = e.isIntersecting;
       if (!visible) cancelAnimationFrame(frame);
-      else if (!wasVisible) frame = requestAnimationFrame(draw);
+      else if (!before) frame = requestAnimationFrame(draw);
     });
     observer.observe(canvas);
     frame = requestAnimationFrame(draw);
@@ -88,18 +185,68 @@ function Dither() {
       observer.disconnect();
       cancelAnimationFrame(frame);
     };
+  }, [scene]);
+  return <canvas className="dither" ref={ref} aria-hidden="true" />;
+}
+function ScrollStatement({ children, dark = false }) {
+  const ref = useRef(null),
+    [progress, setProgress] = useState(0),
+    reduce = useReducedMotion();
+  const words = children.split(" ");
+  useEffect(() => {
+    let frame;
+    const update = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        if (!ref.current) return;
+        const r = ref.current.getBoundingClientRect();
+        setProgress(
+          Math.max(
+            0,
+            Math.min(
+              1,
+              (window.innerHeight * 0.84 - r.top) / (window.innerHeight * 0.65),
+            ),
+          ),
+        );
+      });
+    };
+    window.addEventListener("scroll", update, { passive: true });
+    update();
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", update);
+    };
   }, []);
-  return <canvas ref={ref} className="dither" aria-hidden="true" />;
+  return (
+    <p ref={ref} className={`statement ${dark ? "statement-dark" : ""}`}>
+      {words.map((word, i) => (
+        <span
+          key={i}
+          className={`${reduce || i < progress * words.length ? "on" : ""} ${["Java,", "reliable", "people.", "learning,"].includes(word) ? "highlight" : ""}`}
+        >
+          {word}{" "}
+        </span>
+      ))}
+    </p>
+  );
 }
 function Nav() {
+  const location = useLocation();
+  const currentSection =
+    location.pathname === "/about"
+      ? "about"
+      : location.pathname === "/"
+        ? location.hash.slice(1) || "home"
+        : "";
   const [open, setOpen] = useState(false);
   return (
     <header className="nav">
       <Link className="brand" to="/" aria-label="Veshwik Jain home">
-        <span className="brand-icon">
-          v<span>.</span>
+        <span className="brand-orb">
+          <i />
         </span>
-        veshwik<span className="brand-dot">.</span>
+        Veshwik<span className="brand-pip">·</span>
       </Link>
       <button
         className="menu-toggle"
@@ -114,154 +261,251 @@ function Nav() {
         aria-label="Main navigation"
       >
         {[
+          ["Home", "home"],
           ["About", "about"],
+          ["Capabilities", "capabilities"],
           ["Toolkit", "skills"],
           ["Projects", "projects"],
           ["Journey", "academics"],
         ].map(([label, id]) => (
-          <a href={`/#${id}`} key={id} onClick={() => setOpen(false)}>
+          <a
+            key={id}
+            className={id === currentSection ? "home-link" : ""}
+            href={`/#${id}`}
+            onClick={() => setOpen(false)}
+          >
             {label}
           </a>
         ))}
+        <Link
+          to="/contact"
+          className={location.pathname === "/contact" ? "home-link" : ""}
+          onClick={() => setOpen(false)}
+        >
+          Contact
+        </Link>
       </nav>
-      <a className="nav-status" href="/#contact" onClick={() => setOpen(false)}>
-        Let's talk <span>↗</span>
+      <a
+        className="nav-resume"
+        href={profile.resumeUrl}
+        target="_blank"
+        rel="noreferrer"
+      >
+        Résumé ↗
       </a>
+      <Link className="nav-status" to="/contact">
+        Let's talk <span>↗</span>
+      </Link>
     </header>
   );
 }
 function Heading({ label, children }) {
   return (
     <div className="section-heading">
-      <span className="eyebrow">{label}</span>
+      <p className="eyebrow">{label}</p>
       <h2>{children}</h2>
+    </div>
+  );
+}
+function CapabilityScene({ index }) {
+  return (
+    <div className={`capability-scene scene-${index}`}>
+      <span className="eyebrow">
+        {
+          [
+            "APPLICATION FLOW",
+            "INTERFACE PREVIEW",
+            "DATA MODEL",
+            "BUILD WORKFLOW",
+          ][index]
+        }
+      </span>
+      <div className="mini-window">
+        <div className="mini-toolbar">
+          <i />
+          <i />
+          <i />
+          <span>
+            {
+              [
+                "api.veshwik.dev",
+                "app.veshwik.dev",
+                "data.workspace",
+                "project.workspace",
+              ][index]
+            }
+          </span>
+        </div>
+        {index === 0 ? (
+          <>
+            <div className="flow-node">
+              <span>↗</span>
+              <b>Request received</b>
+              <small>REST endpoint</small>
+            </div>
+            <div className="flow-line" />
+            <div className="flow-node">
+              <span>⌘</span>
+              <b>Application logic</b>
+              <small>Java · Spring Boot</small>
+            </div>
+            <div className="flow-line" />
+            <div className="flow-node">
+              <span>✓</span>
+              <b>Response returned</b>
+              <small>Clear, structured data</small>
+            </div>
+          </>
+        ) : index === 1 ? (
+          <>
+            <div className="mock-heading">A clear next step.</div>
+            <div className="mock-bars">
+              <i />
+              <i />
+              <i />
+            </div>
+            <div className="mock-cards">
+              <span>Explore →</span>
+              <span>Build ↗</span>
+            </div>
+            <div className="mock-confirm">✓ Responsive by design</div>
+          </>
+        ) : index === 2 ? (
+          <>
+            <div className="schema-node">
+              <b>Application</b>
+              <small>id · name · status</small>
+            </div>
+            <div className="schema-connector" />
+            <div className="schema-pair">
+              <div className="schema-node">
+                <b>Users</b>
+                <small>id · email</small>
+              </div>
+              <div className="schema-node">
+                <b>Records</b>
+                <small>id · user_id</small>
+              </div>
+            </div>
+            <div className="mock-confirm">
+              Connected. Consistent. Understandable.
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="workflow-row">
+              <span>01</span>
+              <b>Define</b>
+              <small>Understand the problem</small>
+            </div>
+            <div className="workflow-row">
+              <span>02</span>
+              <b>Build</b>
+              <small>Small, clear iterations</small>
+            </div>
+            <div className="workflow-row">
+              <span>03</span>
+              <b>Check</b>
+              <small>Test the real flow</small>
+            </div>
+            <div className="workflow-row">
+              <span>04</span>
+              <b>Improve</b>
+              <small>Learn from what breaks</small>
+            </div>
+          </>
+        )}
+      </div>
+      <div className="scene-chips">
+        {capabilities[index].tech.slice(0, 4).map((t) => (
+          <span key={t}>{t}</span>
+        ))}
+      </div>
     </div>
   );
 }
 function Footer() {
   return (
     <footer>
-      <div className="footer-top">
-        <Link className="brand" to="/">
-          veshwik<span className="brand-dot">.</span>
-        </Link>
-        <p>
-          Thoughtful code. Useful systems.
-          <br />
-          Built with curiosity in Indore, India.
-        </p>
-        <div className="footer-links">
+      <div className="footer-grid">
+        <div>
+          <Link className="brand" to="/">
+            <span className="brand-orb">
+              <i />
+            </span>
+            Veshwik<span className="brand-pip">·</span>
+          </Link>
+          <p>
+            Backend & full-stack development.
+            <br />
+            Useful applications, built with Java, Spring Boot, and a curious
+            mind.
+          </p>
+        </div>
+        <div>
+          <h4>EXPLORE</h4>
+          <a href="/#home">Home</a>
+          <a href="/#about">About</a>
+          <a href="/#capabilities">Capabilities</a>
+          <a href="/#projects">Projects</a>
+          <Link to="/contact">Contact</Link>
+        </div>
+        <div>
+          <h4>RESOURCES</h4>
+          <a href={profile.resumeUrl} target="_blank" rel="noreferrer">
+            Résumé ↗
+          </a>
+          <a href="/#academics">Academic record</a>
+          <a href="/#faq">Questions</a>
           <a href={profile.social.github} target="_blank" rel="noreferrer">
             GitHub ↗
           </a>
+        </div>
+        <div>
+          <h4>CONTACT</h4>
+          <a href={profile.social.email}>{profile.email}</a>
+          <a href={`tel:${profile.phone.replaceAll(" ", "")}`}>
+            {profile.phone}
+          </a>
+          <p>
+            Indore, Madhya Pradesh
+            <br />
+            India
+          </p>
           <a href={profile.social.linkedin} target="_blank" rel="noreferrer">
             LinkedIn ↗
           </a>
-          <a href={profile.social.email}>Email ↗</a>
         </div>
       </div>
-      <div className="footer-wordmark">
-        Let's build <span>something good.</span>
+      <div className="footer-tagline">
+        <p className="eyebrow">JAVA · SPRING BOOT · REACT · INDORE</p>
+        <p>
+          Your next
+          <br />
+          <span>backend developer.</span>
+        </p>
       </div>
       <div className="footer-bottom">
-        <span>© {new Date().getFullYear()} Veshwik Jain</span>
-        <span>Java · Spring Boot · React</span>
+        <span>
+          © {new Date().getFullYear()} Veshwik Jain. All rights reserved.
+        </span>
         <a href="#top">Back to top ↑</a>
       </div>
     </footer>
   );
 }
 function Home() {
-  const [activeSkill, setActiveSkill] = useState(0);
-  const projectSection = useRef(null);
-  const projectTrack = useRef(null);
-  const [activeProject, setActiveProject] = useState(0);
-  const [isProjectPinned, setProjectPinned] = useState(false);
-  const reduceMotion = useReducedMotion();
-  const pinnedProjects = () =>
-    window.matchMedia("(min-width: 760px) and (min-height: 700px)").matches;
-  const moveProject = (direction) => {
-    const section = projectSection.current;
-    const track = projectTrack.current;
-    if (!track || !section) return;
-    const index = Math.max(
-      0,
-      Math.min(projects.length - 1, activeProject + direction),
-    );
-    if (pinnedProjects()) {
-      const pin = section.querySelector(".project-pin");
-      const start = section.getBoundingClientRect().top + window.scrollY - 104;
-      const distance = section.offsetHeight - pin.offsetHeight;
-      window.scrollTo({
-        top: start + ((index + 0.35) / projects.length) * distance,
-        behavior: reduceMotion ? "instant" : "smooth",
-      });
-    } else {
-      track.scrollTo({
-        left: index * track.clientWidth,
-        behavior: reduceMotion ? "instant" : "smooth",
-      });
-      setActiveProject(index);
-    }
-  };
-  const syncProject = () => {
-    const track = projectTrack.current;
-    if (track && !pinnedProjects())
-      setActiveProject(
-        Math.max(
-          0,
-          Math.min(
-            projects.length - 1,
-            Math.round(track.scrollLeft / track.clientWidth),
-          ),
-        ),
-      );
-  };
+  const [scene, setScene] = useState(0),
+    [activeSkill, setActiveSkill] = useState(0),
+    [activeCapability, setActiveCapability] = useState(0);
+  const reduce = useReducedMotion();
   useEffect(() => {
-    let frame;
-    const update = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        const section = projectSection.current;
-        const pinned = pinnedProjects();
-        setProjectPinned(pinned);
-        if (!section) return;
-        if (!pinned) {
-          const track = projectTrack.current;
-          if (track)
-            setActiveProject(
-              Math.max(
-                0,
-                Math.min(
-                  projects.length - 1,
-                  Math.round(track.scrollLeft / track.clientWidth),
-                ),
-              ),
-            );
-          return;
-        }
-        const pin = section.querySelector(".project-pin");
-        const distance = section.offsetHeight - pin.offsetHeight;
-        const progress = Math.max(
-          0,
-          Math.min(1, (104 - section.getBoundingClientRect().top) / distance),
-        );
-        setActiveProject(
-          Math.min(projects.length - 1, Math.floor(progress * projects.length)),
-        );
-        if (projectTrack.current) projectTrack.current.scrollLeft = 0;
-      });
-    };
-    window.addEventListener("scroll", update, { passive: true });
-    window.addEventListener("resize", update);
-    update();
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", update);
-      window.removeEventListener("resize", update);
-    };
-  }, []);
-  const [time, setTime] = useState("");
+    if (reduce) return;
+    const timer = setInterval(() => {
+      if (!document.hidden) setScene((v) => (v + 1) % 6);
+    }, 7500);
+    return () => clearInterval(timer);
+  }, [reduce, scene]);
   useEffect(() => {
     const hash = window.location.hash.slice(1);
     if (hash) {
@@ -271,481 +515,607 @@ function Home() {
       return () => cancelAnimationFrame(frame);
     }
   }, []);
-  useEffect(() => {
-    const tick = () =>
-      setTime(
-        new Intl.DateTimeFormat("en-GB", {
-          hour: "2-digit",
-          minute: "2-digit",
-          timeZone: "Asia/Kolkata",
-        }).format(new Date()),
-      );
-    tick();
-    const id = setInterval(tick, 60000);
-    return () => clearInterval(id);
-  }, []);
+  const faqs = [
+    [
+      "What kind of role are you looking for?",
+      "I am open to backend and full-stack internships where I can work with Java, Spring Boot, APIs, and real application problems.",
+    ],
+    [
+      "What do you enjoy building?",
+      "Dependable backend systems and useful web applications. My projects explore encryption, voice authenticity, personal finance, and civic reporting.",
+    ],
+    [
+      "Where can I see the code?",
+      "Each project links to its GitHub repository. You can also visit my GitHub profile to explore the source, documentation, and recent work.",
+    ],
+    [
+      "Are the project demos available?",
+      "Available demos are linked from the project cards. Some projects need backend services or sign-in; the project pages explain their context and technology.",
+    ],
+    [
+      "How can we get in touch?",
+      "Use the contact page, email me directly, or connect on LinkedIn. My résumé is also available from the navigation.",
+    ],
+  ];
   return (
     <>
       <section className="hero" id="home">
+        <div className="hero-dust" aria-hidden="true">
+          {Array.from({ length: 35 }, (_, i) => (
+            <i
+              key={i}
+              style={{
+                left: `${(i * 37) % 100}%`,
+                top: `${(i * 61) % 100}%`,
+                background: ["#3db663", "#b07040", "#353639", "#e5ba97"][i % 4],
+                animationDelay: `-${i * 0.7}s`,
+                width: 3 + (i % 5),
+                height: 3 + (i % 5),
+              }}
+            />
+          ))}
+        </div>
         <div className="hero-copy">
           <p className="eyebrow">
-            <span className="status-dot" /> VESHWIK JAIN · BACKEND & FULL-STACK
-            DEVELOPER
+            <i /> JAVA · SPRING BOOT · FULL-STACK DEVELOPMENT · INDIA
           </p>
           <h1>
-            Good ideas.
+            Your next
             <br />
-            Thoughtful code.
+            backend developer.
             <br />
-            <span>Real impact.</span>
+            <span>Veshwik Jain.</span>
           </h1>
           <p className="hero-description">
-            I'm Veshwik, an engineering student turning curious ideas into
-            dependable APIs and useful web experiences. Built with care, from
-            the data layer to the details you see.
+            I turn ideas, complex requirements and everyday problems into
+            dependable APIs, useful web applications and thoughtful digital
+            experiences. Built around the people using them, with Java and
+            Spring Boot at the core.
           </p>
           <div className="actions">
-            <a href="#contact" className="button dark">
+            <Link className="button dark" to="/contact">
               Let's talk <span>↗</span>
-            </a>
-            <a href="#projects" className="button soft">
-              Explore my work <span>↗</span>
+            </Link>
+            <a className="button soft" href="#projects">
+              See my work <span>↗</span>
             </a>
           </div>
-          <div className="hero-availability">
-            <span className="status-dot" /> Open to backend & full-stack
-            internships
+          <div className="hero-tags">
+            <span>Open to internships</span>
+            <span>Based in Indore, India</span>
           </div>
         </div>
         <div className="hero-visual">
-          <div className="orbit orbit-one" />
-          <div className="orbit orbit-two" />
-          <Dither />
-          <div className="floating-chip chip-top">
-            <span className="chip-symbol">↗</span>
+          <Dither scene={scene} />
+          <div className="scene-selector">
+            <span className="scene-brand-dot" />
+            <b>{sceneNames[scene]}</b>
             <div>
-              Always building.<small>Always learning.</small>
+              {sceneNames.map((name, i) => (
+                <button
+                  aria-label={`Show ${name} graphic`}
+                  aria-pressed={scene === i}
+                  key={name}
+                  onClick={() => setScene(i)}
+                />
+              ))}
             </div>
           </div>
-          <div className="floating-chip chip-bottom">
-            <span className="status-dot" />
-            <span>Indore, India</span>
-            <span className="chip-time">{time} IST</span>
-          </div>
         </div>
-        <a className="hero-scroll eyebrow" href="#about">
-          A LITTLE MORE ABOUT ME <span>↓</span>
+        <a href="#about" className="hero-hint">
+          <b />
+          SCROLL
         </a>
       </section>
-      <section className="section about-section" id="about">
-        <Reveal>
-          <p className="eyebrow">THE PERSON BEHIND THE CODE</p>
-          <h2 className="about-statement">
-            Curious by nature.
-            <br />
-            <span>Builder by choice.</span>
-          </h2>
-          <div className="about-grid">
-            <p className="about-lead">
-              I enjoy the part of software you don't always see—the logic, the
-              data, and the small decisions that make a system work.
-            </p>
-            <div className="body-copy">
-              {about.summary.map((text, i) => (
-                <p key={i}>{text}</p>
-              ))}
-              <a
-                className="text-link"
-                href={profile.resumeUrl}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Get to know my journey · Résumé ↗
-              </a>
-            </div>
-          </div>
-        </Reveal>
-        <div className="profile-ribbon">
-          <span>
-            <strong>Java & Spring Boot</strong>Backend at heart
-          </span>
-          <span>
-            <strong>
-              {String(projects.length).padStart(2, "0")} selected builds
-            </strong>
-            Learning by shipping
-          </span>
-          <span>
-            <strong>Indore, India</strong>Open to opportunities
-          </span>
-        </div>
+      <section className="section statement-section" id="about">
+        <p className="eyebrow">WHO I AM</p>
+        <ScrollStatement>
+          I turn curious ideas into reliable backend systems and useful web
+          applications. Built with Java, clear thinking and a focus on the
+          people using them.
+        </ScrollStatement>
+        <Link className="button soft" to="/about">
+          More about Veshwik <span>↗</span>
+        </Link>
       </section>
-      <section className="section toolkit-section" id="skills">
-        <Reveal>
-          <Heading label="WHAT I WORK WITH">
-            The right tools.
+      <section className="section serve-section" id="skills">
+        <div className="serve-side">
+          <Heading label="WHAT I BRING">
+            See where my
             <br />
-            <span>A thoughtful approach.</span>
+            skills fit.
           </Heading>
-          <p className="section-intro">
-            From the first line of Java to the interface people interact with.
-            Here's what I bring to a build.
+          <p className="lead">
+            Four parts of the software I enjoy building, from the logic behind
+            the screen to the experience in front of it.
           </p>
-        </Reveal>
-        <div className="toolkit-layout">
           <div
+            className="serve-tabs"
             role="tablist"
+            aria-label="Development skills"
             aria-orientation="vertical"
-            aria-label="Technical toolkit"
-            className="toolkit-tabs"
           >
-            {skillCategories.map((group, i) => (
+            {capabilities.map((c, i) => (
               <button
-                key={group.label}
                 role="tab"
                 id={`skill-tab-${i}`}
+                aria-controls="skill-panel"
                 aria-selected={activeSkill === i}
-                aria-controls={`skill-panel-${i}`}
                 tabIndex={activeSkill === i ? 0 : -1}
+                key={c.title}
                 onClick={() => setActiveSkill(i)}
-                onKeyDown={(event) => {
-                  if (
-                    ["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)
-                  ) {
-                    event.preventDefault();
+                onKeyDown={(e) => {
+                  if (["ArrowUp", "ArrowDown", "Home", "End"].includes(e.key)) {
+                    e.preventDefault();
                     const next =
-                      event.key === "Home"
+                      e.key === "Home"
                         ? 0
-                        : event.key === "End"
-                          ? skillCategories.length - 1
-                          : (i +
-                              (event.key === "ArrowDown" ? 1 : -1) +
-                              skillCategories.length) %
-                            skillCategories.length;
+                        : e.key === "End"
+                          ? 3
+                          : (i + (e.key === "ArrowDown" ? 1 : -1) + 4) % 4;
                     setActiveSkill(next);
-                    event.currentTarget.parentElement
+                    e.currentTarget.parentElement
                       .querySelectorAll("button")
                       [next].focus();
                   }
                 }}
               >
-                <small>{num(i)}</small>
-                <span>{group.label}</span>
-                <b>↗</b>
+                <span className="serve-icon">{c.icon}</span>
+                <b>{c.title}</b>
+                <small>{c.note}</small>
+                <i className="serve-progress" />
               </button>
             ))}
           </div>
-          <div
-            className="toolkit-panel"
-            role="tabpanel"
-            id={`skill-panel-${activeSkill}`}
-            aria-labelledby={`skill-tab-${activeSkill}`}
-          >
-            <span className="eyebrow">MY TOOLKIT / {num(activeSkill)}</span>
-            <div className="toolkit-art" aria-hidden="true">
-              <span>{["{ }", "↔", "▤", "⌘", ">_"][activeSkill]}</span>
-              <i />
-              <i />
-              <i />
-            </div>
-            <h3>{skillCategories[activeSkill].label}</h3>
-            <p>
-              Tools I use to learn, experiment, and turn ideas into working
-              applications.
-            </p>
-            <div className="tags">
-              {skillCategories[activeSkill].skills.map((skill) => (
-                <span className="tag" key={skill}>
-                  {skill}
-                </span>
-              ))}
-            </div>
+          <a href="#capabilities" className="button soft">
+            Explore my approach <span>↗</span>
+          </a>
+        </div>
+        <div
+          className="serve-stage"
+          role="tabpanel"
+          id="skill-panel"
+          aria-labelledby={`skill-tab-${activeSkill}`}
+        >
+          <div className="serve-stage-copy">
+            <h3>{capabilities[activeSkill].title}</h3>
+            <p>{capabilities[activeSkill].copy}</p>
           </div>
+          <CapabilityScene index={activeSkill} />
         </div>
       </section>
-      <section
-        id="projects"
-        className="section project-showcase"
-        ref={projectSection}
-      >
-        <div className="project-pin">
-          <Reveal>
-            <Heading label="SELECTED WORK">
-              Ideas made real.
-              <br />
-              Selected work.
-            </Heading>
-            <p className="section-intro">
-              Security tools, AI experiments, and full-stack applications.
-              Explore the thinking and technology behind each build.
-            </p>
-          </Reveal>
-          <div className="project-navigation">
-            <span className="eyebrow" aria-live="polite" aria-atomic="true">
-              {num(activeProject)} / {String(projects.length).padStart(2, "0")}{" "}
-              · SCROLL TO CHANGE PROJECT
-            </span>
-            <div className="project-navigation-buttons">
-              <button
-                type="button"
-                aria-label="Previous project"
-                aria-controls="project-track"
-                disabled={activeProject === 0}
-                onClick={() => moveProject(-1)}
-              >
-                ←
-              </button>
-              <button
-                type="button"
-                aria-label="Next project"
-                aria-controls="project-track"
-                disabled={activeProject === projects.length - 1}
-                onClick={() => moveProject(1)}
-              >
-                →
-              </button>
-            </div>
-          </div>
-          <div className="project-window">
-            <div
-              className="projects"
-              id="project-track"
-              ref={projectTrack}
-              role="region"
-              aria-label="Selected projects carousel"
-              tabIndex={0}
-              style={{ "--active-project": activeProject }}
-              onScroll={syncProject}
-              onKeyDown={(event) => {
-                if (event.target !== event.currentTarget) return;
-                if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
-                  event.preventDefault();
-                  moveProject(event.key === "ArrowRight" ? 1 : -1);
-                }
-              }}
-            >
-              {projects.map((p, i) => (
-                <article
-                  className="project"
-                  key={p.id}
-                  aria-label={p.title}
-                  inert={isProjectPinned && activeProject !== i}
-                >
-                  <Link
-                    className="project-image"
-                    to={`/project/${encodeURIComponent(p.id)}`}
-                    aria-label={`View ${p.title} project`}
-                  >
-                    <img
-                      src={p.screenshot}
-                      alt={`${p.title} application screenshot`}
-                      loading="lazy"
-                    />
-                    <span className="image-index">
-                      {num(i)} / {String(projects.length).padStart(2, "0")}
-                    </span>
-                    <span className="image-arrow">↗</span>
-                  </Link>
-                  <div className="project-info">
-                    <span className="eyebrow">{num(i)} / SELECTED PROJECT</span>
-                    <h3>
-                      <Link to={`/project/${encodeURIComponent(p.id)}`}>
-                        {p.title}
-                      </Link>
-                    </h3>
-                    <p className="project-subtitle">
-                      {p.subtitle.replace(/^ — /, "")}
-                    </p>
-                    <p className="project-summary">{p.showcaseDescription}</p>
-                    <span className="eyebrow project-stack-label">
-                      TECH STACK
-                    </span>
-                    <div className="tags">
-                      {p.tech.map((t) => (
-                        <span className="tag" key={t}>
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                    <div className="project-actions">
-                      <Link to={`/project/${encodeURIComponent(p.id)}`}>
-                        EXPLORE PROJECT ↗
-                      </Link>
-                      <a href={p.github} target="_blank" rel="noreferrer">
-                        CODE ↗
-                      </a>
-                      {p.demo && (
-                        <a href={p.demo} target="_blank" rel="noreferrer">
-                          LIVE SITE ↗
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="section build-process">
-        <Reveal>
-          <Heading label="HOW I THINK">
-            Make it clear.
-            <br />
-            <span>Then make it work.</span>
+      <section className="section" id="capabilities">
+        <div className="sec-head">
+          <Heading label="MY CAPABILITIES">
+            Four ways I<br />
+            turn ideas into code.
           </Heading>
-        </Reveal>
-        <div className="process-grid">
-          {[
-            [
-              "01",
-              "Understand the problem",
-              "Start with the person using it, the data it needs, and the smallest useful thing to build.",
-            ],
-            [
-              "02",
-              "Build with intention",
-              "Clear layers, practical choices, and an interface that makes the next step obvious.",
-            ],
-            [
-              "03",
-              "Test, learn, improve",
-              "Check real flows, understand what breaks, and make the next version better.",
-            ],
-          ].map(([number, title, copy]) => (
-            <Reveal className="process-card" key={number}>
-              <span className="process-number">{number}</span>
-              <h3>{title}</h3>
-              <p>{copy}</p>
+          <p className="lead">
+            From the API that powers an application to the interface someone
+            uses every day. Thoughtful choices at every layer.
+          </p>
+        </div>
+        <div className="expanding-panels">
+          {capabilities.map((c, i) => (
+            <div
+              key={c.title}
+              className={`expand-card ${activeCapability === i ? "is-open" : ""}`}
+            >
+              <button
+                className="expand-trigger"
+                aria-label={`Explore ${c.title}`}
+                aria-expanded={activeCapability === i}
+                aria-controls={`capability-${i}`}
+                onClick={() => setActiveCapability(i)}
+              >
+                <span>{num(i)}</span>
+                <b>{c.title}</b>
+                <i>↗</i>
+              </button>
+              <div
+                className="expand-body"
+                id={`capability-${i}`}
+                hidden={activeCapability !== i}
+              >
+                <div>
+                  <span className="eyebrow">{num(i)} / 04</span>
+                  <h3>{c.title}</h3>
+                  <p>{c.copy}</p>
+                  <ul>
+                    {c.tech.map((t) => (
+                      <li key={t}>{t}</li>
+                    ))}
+                  </ul>
+                  <a href="#projects" className="button soft">
+                    Explore the projects <span>↗</span>
+                  </a>
+                </div>
+                <CapabilityScene index={i} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+      <section className="section" id="projects">
+        <div className="sec-head">
+          <Heading label="PROJECT REFERENCE">
+            Ideas already
+            <br />
+            at work.
+          </Heading>
+          <p className="lead">
+            An encryption workbench. A voice authenticity experiment. A
+            personal-finance platform. A way to report civic issues.
+          </p>
+        </div>
+        <div className="work-grid">
+          {projects.map((p, i) => (
+            <Reveal className="work-card" key={p.id}>
+              <Link
+                className="work-frame"
+                to={`/project/${encodeURIComponent(p.id)}`}
+                aria-label={`View ${p.title} project`}
+              >
+                <img
+                  src={p.screenshot}
+                  alt={`${p.title} application screenshot`}
+                  loading="lazy"
+                />
+                <span className="work-chip">
+                  {["AI & Audio", "Security", "Finance", "Civic platform"][i]}
+                </span>
+                <span className="work-arrow">↗</span>
+              </Link>
+              <Link to={`/project/${encodeURIComponent(p.id)}`}>
+                <h3>{p.title}</h3>
+                <p>{p.showcaseDescription}</p>
+              </Link>
             </Reveal>
           ))}
+        </div>
+        <a
+          className="button soft work-more"
+          href={profile.social.github}
+          target="_blank"
+          rel="noreferrer"
+        >
+          All projects on GitHub <span>↗</span>
+        </a>
+      </section>
+      <section className="dark-section">
+        <div className="section">
+          <p className="eyebrow">HOW I WORK</p>
+          <ScrollStatement dark>
+            Built with curiosity, then improved through learning, testing and
+            attention to the details that matter.
+          </ScrollStatement>
+          <p className="dark-intro">
+            I enjoy software that is predictable, understandable, and useful.
+            These are the habits I bring to a project.
+          </p>
+          <div className="rings">
+            <div className="rings-line" />
+            {[
+              [
+                "01",
+                "Understand before building",
+                "Start with the problem, the person using the system, and what a useful first version needs to do.",
+              ],
+              [
+                "02",
+                "Make thoughtful choices",
+                "Keep the structure clear. Choose practical tools. Make the next step easier for whoever works on the code.",
+              ],
+              [
+                "03",
+                "Keep learning after launch",
+                "Check the real flow, understand what breaks, document what changed, and improve the next version.",
+              ],
+            ].map(([n, title, copy]) => (
+              <Reveal className="ring-item" key={n}>
+                <div className="ring-num">
+                  <b>{n}</b>
+                </div>
+                <h3>{title}</h3>
+                <p>{copy}</p>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
       <section className="section journey-section" id="academics">
-        <Reveal>
-          <Heading label="LEARNING, EVERY DAY">
-            A work in progress.
+        <div className="sec-head">
+          <Heading label="THE JOURNEY SO FAR">
+            Always learning.
             <br />
-            <span>And proud of it.</span>
+            Always building.
           </Heading>
-        </Reveal>
-        <div className="journey-grid">
-          <div className="journey-timeline">
-            <h3>The journey so far</h3>
-            {about.timeline.map((item) => (
-              <div className="timeline-item" key={item.year}>
-                <span className="eyebrow">{item.year}</span>
-                <h4>{item.title}</h4>
-                <p>{item.detail}</p>
-              </div>
-            ))}
-          </div>
-          <div className="academic-card">
-            <div className="academic-header">
-              <span className="eyebrow">ACADEMIC RECORD</span>
-              <span>↗</span>
+          <p className="lead">
+            Engineering coursework, side projects, hackathons, and the small
+            discoveries that connect them.
+          </p>
+        </div>
+        <div className="journey-rows">
+          {about.timeline.map((t) => (
+            <div key={t.year}>
+              <span className="journey-icon">↗</span>
+              <h3>{t.title}</h3>
+              <span className="eyebrow">{t.year}</span>
+              <p>{t.detail}</p>
             </div>
-            {academicProgress.semesters.map((semester) => (
-              <div className="semester" key={semester.sem}>
-                <div>
-                  <span className="eyebrow">
-                    SEMESTER {num(semester.sem - 1)}
-                  </span>
-                  <small>{semester.status}</small>
-                </div>
+          ))}
+          {achievements.slice(0, 3).map((a) => (
+            <div key={a.title}>
+              <span className="journey-icon">✓</span>
+              <h3>{a.title}</h3>
+              <span className="eyebrow">
+                {a.year} · {a.type}
+              </span>
+              <p>{a.detail}</p>
+            </div>
+          ))}
+        </div>
+        <details className="record-details">
+          <summary>
+            Academic record, subjects & marksheets <span>+</span>
+          </summary>
+          <div className="semester-list">
+            {academicProgress.semesters.map((s) => (
+              <div className="semester" key={s.sem}>
+                <b>Semester {s.sem}</b>
+                <span>{s.status}</span>
                 <strong>
-                  {semester.sgpa ?? "—"}
-                  <small> SGPA</small>
+                  {s.sgpa ?? "—"} <small>SGPA</small>
                 </strong>
-                <span className="semester-cgpa">
-                  CGPA {semester.cgpa ?? "—"}
-                </span>
-                {semester.marksheetUrl && (
-                  <a
-                    href={semester.marksheetUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
+                <span>CGPA {s.cgpa ?? "—"}</span>
+                {s.marksheetUrl && (
+                  <a href={s.marksheetUrl} target="_blank" rel="noreferrer">
                     Marksheet ↗
                   </a>
                 )}
-                {semester.subjects?.length > 0 && (
-                  <details className="semester-subjects">
-                    <summary>Subjects</summary>
-                    <p>{semester.subjects.join(" · ")}</p>
-                  </details>
-                )}
+                <p>{s.subjects?.join(" · ")}</p>
               </div>
             ))}
-            <a
-              className="text-link"
-              href={profile.resumeUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              View full résumé ↗
-            </a>
           </div>
+        </details>
+      </section>
+      <div className="values-marquee" aria-hidden="true">
+        <div>
+          Curious by nature · Thoughtful by design · Always building · Curious
+          by nature · Thoughtful by design · Always building ·
         </div>
-        <h3 className="milestone-heading">A few moments along the way.</h3>
-        <div className="milestone-grid">
-          {achievements.map((item) => (
-            <Reveal className="achievement" key={item.title}>
-              <span className="eyebrow">
-                {item.year} · {item.type ?? "MILESTONE"}
-              </span>
-              <h3>{item.title}</h3>
-              <p className="achievement-org">{item.org}</p>
-              <p>{item.detail ?? item.description}</p>
-            </Reveal>
+      </div>
+      <section className="section location-section">
+        <div>
+          <Heading label="BASED IN INDORE">
+            Building from Indore.
+            <br />
+            Open to what’s next.
+          </Heading>
+          <p className="lead">
+            I'm an engineering student looking for a backend or full-stack
+            internship—somewhere I can contribute, learn from a team, and work
+            on useful software.
+          </p>
+          <a
+            className="button soft"
+            href={profile.resumeUrl}
+            target="_blank"
+            rel="noreferrer"
+          >
+            Explore my résumé <span>↗</span>
+          </a>
+        </div>
+        <div
+          className="location-map"
+          aria-label="Indore connected to my areas of work"
+        >
+          <svg viewBox="0 0 600 400" aria-hidden="true">
+            <defs>
+              <pattern
+                id="mapdots"
+                width="10"
+                height="10"
+                patternUnits="userSpaceOnUse"
+              >
+                <circle cx="2" cy="2" r="1.5" fill="#799387" opacity=".45" />
+              </pattern>
+            </defs>
+            <path
+              d="M115 80l80-30 65 15 30-30 70 35 25 70 75 15-25 65-65 10-20 65-45 70-35-65-30-35-65-10-30-65-50-20z"
+              fill="url(#mapdots)"
+            />
+            <path
+              d="M275 185Q155 60 100 100M275 185Q420 70 485 100M275 185Q410 300 490 320"
+              fill="none"
+              stroke="#3db663"
+              strokeWidth="1.5"
+              strokeDasharray="5 5"
+            />
+            <circle cx="275" cy="185" r="30" fill="#3db663" opacity=".12" />
+            <circle cx="275" cy="185" r="8" fill="#3db663" />
+            <circle cx="100" cy="100" r="5" fill="#b07040" />
+            <circle cx="485" cy="100" r="5" fill="#3db663" />
+            <circle cx="490" cy="320" r="5" fill="#3db663" />
+          </svg>
+          <span className="map-home">● Indore, India</span>
+          <span className="map-label label-one">Backend systems</span>
+          <span className="map-label label-two">Useful applications</span>
+          <span className="map-label label-three">Continuous learning</span>
+        </div>
+      </section>
+      <section className="section faq-section" id="faq">
+        <div>
+          <Heading label="A FEW THINGS YOU MIGHT ASK">
+            Straight answers.
+            <br />
+            Before we talk.
+          </Heading>
+          <p className="lead">
+            Want to know a little more? Start here, or send me a message.
+          </p>
+          <Link className="button soft" to="/contact">
+            Ask me anything <span>↗</span>
+          </Link>
+        </div>
+        <div className="faq">
+          {faqs.map(([question, answer], i) => (
+            <details key={question} name="portfolio-faq" open={i === 0}>
+              <summary>
+                {question}
+                <span className="plus-minus" />
+              </summary>
+              <p>{answer}</p>
+            </details>
           ))}
         </div>
       </section>
-      <section className="section contact-section" id="contact">
-        <div className="contact-grid">
-          <div>
-            <p className="eyebrow">LET'S CONNECT</p>
-            <h2>
-              Have something
-              <br />
-              <span>good in mind?</span>
-            </h2>
-            <p className="contact-copy">
-              An internship, a useful idea, or a good conversation about
-              building things. I'd love to hear from you.
-            </p>
-            <a className="contact-email" href={profile.social.email}>
-              {profile.email} ↗
-            </a>
-            <div className="contact-details">
-              <span>Indore, India</span>
+      <section className="section cta-wrap">
+        <div className="cta">
+          <div className="cta-orb" />
+          <div className="cta-row">
+            <div>
+              <p className="eyebrow">LET'S TALK</p>
+              <h2>
+                Have something
+                <br />
+                good in mind?
+              </h2>
+              <div className="actions">
+                <Link className="button green" to="/contact">
+                  Let's talk <span>↗</span>
+                </Link>
+                <a className="button outline" href={profile.social.email}>
+                  Email me <span>↗</span>
+                </a>
+              </div>
+            </div>
+            <div className="contact-lines">
               <a href={`tel:${profile.phone.replaceAll(" ", "")}`}>
                 {profile.phone}
               </a>
+              <a href={profile.social.email}>{profile.email}</a>
+              <span>Indore, Madhya Pradesh, India</span>
             </div>
-            <div className="social-pills">
-              <a href={profile.social.github} target="_blank" rel="noreferrer">
-                GitHub ↗
-              </a>
-              <a
-                href={profile.social.linkedin}
-                target="_blank"
-                rel="noreferrer"
-              >
-                LinkedIn ↗
-              </a>
-              <a href={profile.resumeUrl} target="_blank" rel="noreferrer">
-                Résumé ↗
-              </a>
-            </div>
-          </div>
-          <div className="contact-form">
-            <ContactForm />
           </div>
         </div>
       </section>
     </>
+  );
+}
+function AboutPage() {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, []);
+  return (
+    <section className="section contact-page about-page">
+      <p className="eyebrow">A LITTLE MORE ABOUT ME</p>
+      <div className="contact-intro">
+        <h1>
+          Curious about
+          <br />
+          what’s underneath.
+        </h1>
+        <p className="body-copy">{profile.tagline}</p>
+      </div>
+      <div className="detail-grid">
+        <h2>Hello, I’m Veshwik.</h2>
+        <div>
+          {about.summary.map((text) => (
+            <p className="body-copy" key={text}>
+              {text}
+            </p>
+          ))}
+          <h3>What I’m working towards</h3>
+          <p className="body-copy">{about.goals}</p>
+          <div className="tags">
+            {about.interests.map((text) => (
+              <span className="tag" key={text}>
+                {text}
+              </span>
+            ))}
+          </div>
+          <div className="actions">
+            <a
+              className="button"
+              href={profile.resumeUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              Explore my résumé <span>↗</span>
+            </a>
+            <Link className="button soft" to="/contact">
+              Let’s talk <span>↗</span>
+            </Link>
+          </div>
+        </div>
+      </div>
+      <div className="section-head">
+        <h2>Learning along the way.</h2>
+      </div>
+      <div className="journey-rows">
+        {achievements.map((item) => (
+          <div key={item.title}>
+            <span className="journey-icon">✓</span>
+            <h3>{item.title}</h3>
+            <p className="eyebrow">
+              {item.year} · {item.type}
+            </p>
+            <p>{item.detail}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+function ContactPage() {
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }, []);
+  return (
+    <section className="section contact-page">
+      <Heading label="LET'S CONNECT">
+        Tell me what
+        <br />
+        you have in mind.
+      </Heading>
+      <div className="contact-grid">
+        <div>
+          <p className="lead">
+            An internship, a useful idea, or a conversation about building
+            things. I'd love to hear from you.
+          </p>
+          <a className="contact-email" href={profile.social.email}>
+            {profile.email} ↗
+          </a>
+          <a href={`tel:${profile.phone.replaceAll(" ", "")}`}>
+            {profile.phone}
+          </a>
+          <p>Indore, Madhya Pradesh, India</p>
+          <div className="actions">
+            <a
+              className="button soft"
+              href={profile.social.github}
+              target="_blank"
+              rel="noreferrer"
+            >
+              GitHub <span>↗</span>
+            </a>
+            <a
+              className="button soft"
+              href={profile.social.linkedin}
+              target="_blank"
+              rel="noreferrer"
+            >
+              LinkedIn <span>↗</span>
+            </a>
+          </div>
+        </div>
+        <div className="contact-form">
+          <ContactForm />
+        </div>
+      </div>
+    </section>
   );
 }
 function ProjectPage() {
@@ -823,6 +1193,7 @@ function ProjectPage() {
     </article>
   );
 }
+
 export default function App() {
   return (
     <div className="site-frame" id="top">
@@ -833,14 +1204,16 @@ export default function App() {
       <main id="main">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/about" element={<AboutPage />} />
+          <Route path="/contact" element={<ContactPage />} />
           <Route path="/project/:id" element={<ProjectPage />} />
           <Route
             path="*"
             element={
-              <section className="section">
-                <h1>PAGE NOT FOUND.</h1>
-                <Link className="button" to="/">
-                  BACK HOME ↗
+              <section className="section page-recovery">
+                <h1>Page not found.</h1>
+                <Link className="button soft" to="/">
+                  Back home ↗
                 </Link>
               </section>
             }
@@ -848,6 +1221,24 @@ export default function App() {
         </Routes>
       </main>
       <Footer />
+      <div className="floating-actions">
+        <button
+          aria-label="Back to top"
+          onClick={() =>
+            window.scrollTo({
+              top: 0,
+              behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
+                ? "instant"
+                : "smooth",
+            })
+          }
+        >
+          ↑
+        </button>
+        <a href={profile.social.email} aria-label="Email Veshwik Jain">
+          ✉
+        </a>
+      </div>
     </div>
   );
 }
