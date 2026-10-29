@@ -562,7 +562,7 @@ function Home() {
           <h1>
             Your next
             <br />
-            backend developer.
+            <span className="hero-role">backend developer.</span>
             <br />
             <span>Veshwik Jain.</span>
           </h1>
