@@ -470,19 +470,62 @@ h4 {
   color: #aaa;
   font-size: 13px;
 }
-.projects {
-  margin-top: 60px;
+.project-navigation {
+  margin-top: 45px;
   display: flex;
-  flex-direction: column;
-  gap: 50px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+.project-navigation .eyebrow {
+  color: #999;
+}
+.project-navigation-buttons {
+  display: flex;
+  gap: 8px;
+}
+.project-navigation button {
+  width: 48px;
+  height: 44px;
+  border: 1px solid var(--border);
+  background: #111;
+  color: #eee;
+  font-size: 24px;
+}
+.project-navigation button:hover:not(:disabled) {
+  background: #eee;
+  color: #111;
+}
+.project-navigation button:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+.projects {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 24px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 0;
+  overscroll-behavior-x: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #777 #181818;
+  padding-bottom: 18px;
 }
 .project {
+  flex: 0 0 90%;
+  min-width: 0;
   display: grid;
   grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
   border: 1px solid var(--border);
   padding: 24px;
   gap: 25px;
   background: #0c0c0c;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 .project-image {
   width: 100%;
@@ -741,14 +784,6 @@ h4 {
 }
 .text-data {
   font-family: var(--font-mono);
-}
-/* Native vertical scrolling: each project replaces the previous card upward.
-   Short screens and reduced-motion users keep the normal document flow. */
-@media (min-width: 760px) and (min-height: 850px) and (prefers-reduced-motion: no-preference) {
-  .project {
-    position: sticky;
-    top: 90px;
-  }
 }
 @media (min-width: 1600px) {
   .site-frame {
@@ -1019,10 +1054,23 @@ h4 {
     margin-left: 0;
     font-size: 12px;
   }
-  .projects {
+  .project-navigation {
     margin-top: 30px;
   }
+  .project-navigation .eyebrow {
+    font-size: 8px;
+    max-width: 180px;
+  }
+  .project-navigation button {
+    width: 40px;
+    height: 40px;
+  }
+  .projects {
+    margin-top: 18px;
+    gap: 14px;
+  }
   .project {
+    flex-basis: 94%;
     grid-template-columns: 1fr;
     gap: 25px;
     padding: 16px;

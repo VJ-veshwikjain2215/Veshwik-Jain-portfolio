@@ -147,6 +147,38 @@ function Footer() {
   );
 }
 function Home() {
+  const projectTrack = useRef(null);
+  const [activeProject, setActiveProject] = useState(0);
+  const reduceMotion = useReducedMotion();
+  const moveProject = (direction) => {
+    const track = projectTrack.current;
+    if (!track) return;
+    const index = Math.max(
+      0,
+      Math.min(projects.length - 1, activeProject + direction),
+    );
+    const cards = track.children;
+    track.scrollTo({
+      left: cards[index].offsetLeft - cards[0].offsetLeft,
+      behavior: reduceMotion ? "instant" : "smooth",
+    });
+    setActiveProject(index);
+  };
+  const syncProject = () => {
+    const track = projectTrack.current;
+    if (!track) return;
+    const cards = [...track.children];
+    const origin = cards[0].offsetLeft;
+    const nearest = cards.reduce(
+      (best, card, index) =>
+        Math.abs(card.offsetLeft - origin - track.scrollLeft) <
+        Math.abs(cards[best].offsetLeft - origin - track.scrollLeft)
+          ? index
+          : best,
+      0,
+    );
+    setActiveProject(nearest);
+  };
   const [time, setTime] = useState("");
   useEffect(() => {
     const hash = window.location.hash.slice(1);
@@ -357,7 +389,48 @@ function Home() {
             the thinking and technology behind each build.
           </p>
         </Reveal>
-        <div className="projects">
+        <div className="project-navigation">
+          <span className="eyebrow" aria-live="polite" aria-atomic="true">
+            {num(activeProject)} / {String(projects.length).padStart(2, "0")} ·
+            SWIPE OR SCROLL SIDEWAYS
+          </span>
+          <div className="project-navigation-buttons">
+            <button
+              type="button"
+              aria-label="Previous project"
+              aria-controls="project-track"
+              disabled={activeProject === 0}
+              onClick={() => moveProject(-1)}
+            >
+              ←
+            </button>
+            <button
+              type="button"
+              aria-label="Next project"
+              aria-controls="project-track"
+              disabled={activeProject === projects.length - 1}
+              onClick={() => moveProject(1)}
+            >
+              →
+            </button>
+          </div>
+        </div>
+        <div
+          className="projects"
+          id="project-track"
+          ref={projectTrack}
+          role="region"
+          aria-label="Selected projects carousel"
+          tabIndex={0}
+          onScroll={syncProject}
+          onKeyDown={(event) => {
+            if (event.target !== event.currentTarget) return;
+            if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+              event.preventDefault();
+              moveProject(event.key === "ArrowRight" ? 1 : -1);
+            }
+          }}
+        >
           {projects.map((p, i) => (
             <article className="project" key={p.id} aria-label={p.title}>
               <Link
