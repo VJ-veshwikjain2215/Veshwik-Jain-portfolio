@@ -28,41 +28,66 @@ function Reveal({ children, className = "" }) {
 function Dither() {
   const ref = useRef(null);
   useEffect(() => {
-    const c = ref.current,
-      ctx = c.getContext("2d"),
-      reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const canvas = ref.current,
+      ctx = canvas.getContext("2d");
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    canvas.width = 680;
+    canvas.height = 680;
     let frame,
-      last = 0;
-    c.width = 640;
-    c.height = 560;
-    function draw(time) {
-      if (time - last < 45 && !reduce) {
+      previous = 0,
+      visible = true;
+    const draw = (time) => {
+      if (!visible) return;
+      if (!reduce && time - previous < 40) {
         frame = requestAnimationFrame(draw);
         return;
       }
-      last = time;
-      const t = reduce ? 0 : time / 3500;
-      ctx.clearRect(0, 0, 640, 560);
-      for (let y = 0; y < 560; y += 7)
-        for (let x = 0; x < 640; x += 7) {
-          const dx = (x - 325) / 220,
-            dy = (y - 270) / 215,
-            r = Math.hypot(dx, dy),
-            a = Math.atan2(dy, dx),
-            edge = 1 + 0.09 * Math.sin(5 * a + t) + 0.04 * Math.cos(9 * a - t);
-          if (r > edge) continue;
-          const wave = Math.sin(r * 15 - t * 2 + Math.sin(a * 3 + t) * 2),
-            light = 0.45 + 0.3 * wave + 0.2 * Math.cos(a - t),
-            threshold = ((((x / 7) % 4) * 3 + ((y / 7) % 4) * 5) % 16) / 16;
-          if (light > threshold) {
-            ctx.fillStyle = `rgba(232,232,224,${0.45 + 0.5 * (1 - r / 1.3)})`;
-            ctx.fillRect(x, y, 4, 4);
-          }
+      previous = time;
+      const turn = reduce ? 0.45 : time / 14000;
+      ctx.clearRect(0, 0, 680, 680);
+      const dots = [];
+      for (let ring = 0; ring < 110; ring++) {
+        const u = (ring / 110) * Math.PI * 2;
+        for (let side = 0; side < 20; side++) {
+          const v = (side / 20) * Math.PI * 2;
+          const x = (188 + 61 * Math.cos(v)) * Math.cos(u),
+            y = (188 + 61 * Math.cos(v)) * Math.sin(u),
+            z = 61 * Math.sin(v);
+          const rx = x * Math.cos(turn) + z * Math.sin(turn),
+            rz = -x * Math.sin(turn) + z * Math.cos(turn);
+          const ry = y * 0.86 - rz * 0.51,
+            depth = y * 0.51 + rz * 0.86;
+          const perspective = 730 / (730 + depth);
+          dots.push({
+            x: 340 + (rx * 0.91 - ry * 0.25) * perspective,
+            y: 340 + (rx * 0.25 + ry * 0.91) * perspective,
+            depth,
+            size: 2.5 * perspective,
+          });
         }
+      }
+      dots.sort((a, b) => b.depth - a.depth);
+      for (const p of dots) {
+        const shade = Math.round(85 + (p.depth + 160) * 0.26);
+        ctx.fillStyle = `rgb(30,${shade},78)`;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
       if (!reduce) frame = requestAnimationFrame(draw);
-    }
+    };
+    const observer = new IntersectionObserver(([entry]) => {
+      const wasVisible = visible;
+      visible = entry.isIntersecting;
+      if (!visible) cancelAnimationFrame(frame);
+      else if (!wasVisible) frame = requestAnimationFrame(draw);
+    });
+    observer.observe(canvas);
     frame = requestAnimationFrame(draw);
-    return () => cancelAnimationFrame(frame);
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+    };
   }, []);
   return <canvas ref={ref} className="dither" aria-hidden="true" />;
 }
@@ -70,26 +95,11 @@ function Nav() {
   const [open, setOpen] = useState(false);
   return (
     <header className="nav">
-      <Link className="brand" to="/">
-        VESHWIK.JAIN
-      </Link>
-      <nav
-        aria-label="Main navigation"
-        className={open ? "nav-links open" : "nav-links"}
-      >
-        {[
-          ["ABOUT", "about"],
-          ["PROJECTS", "projects"],
-          ["ACADEMICS", "academics"],
-          ["CONTACT", "contact"],
-        ].map(([label, id], i) => (
-          <a key={id} href={`/#${id}`} onClick={() => setOpen(false)}>
-            <small>{num(i)}</small> {label}
-          </a>
-        ))}
-      </nav>
-      <Link className="monogram" to="/" aria-label="Veshwik Jain home">
-        VJ
+      <Link className="brand" to="/" aria-label="Veshwik Jain home">
+        <span className="brand-icon">
+          v<span>.</span>
+        </span>
+        veshwik<span className="brand-dot">.</span>
       </Link>
       <button
         className="menu-toggle"
@@ -97,10 +107,25 @@ function Nav() {
         aria-expanded={open}
         aria-label="Toggle navigation"
       >
-        {open ? "CLOSE −" : "MENU +"}
+        {open ? "Close ×" : "Menu ☰"}
       </button>
-      <a className="nav-status" href="/#contact">
-        LET'S TALK ↗
+      <nav
+        className={open ? "nav-links open" : "nav-links"}
+        aria-label="Main navigation"
+      >
+        {[
+          ["About", "about"],
+          ["Toolkit", "skills"],
+          ["Projects", "projects"],
+          ["Journey", "academics"],
+        ].map(([label, id]) => (
+          <a href={`/#${id}`} key={id} onClick={() => setOpen(false)}>
+            {label}
+          </a>
+        ))}
+      </nav>
+      <a className="nav-status" href="/#contact" onClick={() => setOpen(false)}>
+        Let's talk <span>↗</span>
       </a>
     </header>
   );
@@ -117,36 +142,37 @@ function Footer() {
   return (
     <footer>
       <div className="footer-top">
-        <span className="footer-logo">
-          VJ<span>✳</span>
-        </span>
-        <div>
-          <p className="eyebrow">BACKEND & FULL-STACK DEVELOPER</p>
-          <p>
-            Useful systems. Thoughtful code.
-            <br />
-            Built in Indore, India.
-          </p>
-        </div>
+        <Link className="brand" to="/">
+          veshwik<span className="brand-dot">.</span>
+        </Link>
+        <p>
+          Thoughtful code. Useful systems.
+          <br />
+          Built with curiosity in Indore, India.
+        </p>
         <div className="footer-links">
           <a href={profile.social.github} target="_blank" rel="noreferrer">
-            GITHUB ↗
+            GitHub ↗
           </a>
           <a href={profile.social.linkedin} target="_blank" rel="noreferrer">
-            LINKEDIN ↗
+            LinkedIn ↗
           </a>
-          <a href={profile.social.email}>EMAIL ↗</a>
+          <a href={profile.social.email}>Email ↗</a>
         </div>
       </div>
+      <div className="footer-wordmark">
+        Let's build <span>something good.</span>
+      </div>
       <div className="footer-bottom">
-        <span>© {new Date().getFullYear()} VESHWIK JAIN</span>
-        <span>DESIGN & CODE · REACT / MOTION</span>
-        <a href="#top">BACK TO TOP ↑</a>
+        <span>© {new Date().getFullYear()} Veshwik Jain</span>
+        <span>Java · Spring Boot · React</span>
+        <a href="#top">Back to top ↑</a>
       </div>
     </footer>
   );
 }
 function Home() {
+  const [activeSkill, setActiveSkill] = useState(0);
   const projectSection = useRef(null);
   const projectTrack = useRef(null);
   const [activeProject, setActiveProject] = useState(0);
@@ -164,7 +190,7 @@ function Home() {
     );
     if (pinnedProjects()) {
       const pin = section.querySelector(".project-pin");
-      const start = section.getBoundingClientRect().top + window.scrollY - 66;
+      const start = section.getBoundingClientRect().top + window.scrollY - 104;
       const distance = section.offsetHeight - pin.offsetHeight;
       window.scrollTo({
         top: start + ((index + 0.35) / projects.length) * distance,
@@ -218,7 +244,7 @@ function Home() {
         const distance = section.offsetHeight - pin.offsetHeight;
         const progress = Math.max(
           0,
-          Math.min(1, (66 - section.getBoundingClientRect().top) / distance),
+          Math.min(1, (104 - section.getBoundingClientRect().top) / distance),
         );
         setActiveProject(
           Math.min(projects.length - 1, Math.floor(progress * projects.length)),
@@ -261,176 +287,180 @@ function Home() {
   return (
     <>
       <section className="hero" id="home">
-        <div className="hero-meta">
-          <span>
-            VESHWIK JAIN
+        <div className="hero-copy">
+          <p className="eyebrow">
+            <span className="status-dot" /> VESHWIK JAIN · BACKEND & FULL-STACK
+            DEVELOPER
+          </p>
+          <h1>
+            Good ideas.
             <br />
-            <em>PORTFOLIO © {new Date().getFullYear()}</em>
-          </span>
-          <span>
-            INDORE
+            Thoughtful code.
             <br />
-            <em>MADHYA PRADESH, INDIA</em>
-          </span>
-          <span>
-            BACKEND & FULL-STACK DEVELOPER
-            <br />
-            <em>JAVA · SPRING BOOT · REACT</em>
-          </span>
-          <span className="local-time">
-            LOCAL TIME
-            <br />
-            <strong>{time} IST</strong>
-          </span>
+            <span>Real impact.</span>
+          </h1>
+          <p className="hero-description">
+            I'm Veshwik, an engineering student turning curious ideas into
+            dependable APIs and useful web experiences. Built with care, from
+            the data layer to the details you see.
+          </p>
+          <div className="actions">
+            <a href="#contact" className="button dark">
+              Let's talk <span>↗</span>
+            </a>
+            <a href="#projects" className="button soft">
+              Explore my work <span>↗</span>
+            </a>
+          </div>
+          <div className="hero-availability">
+            <span className="status-dot" /> Open to backend & full-stack
+            internships
+          </div>
         </div>
-        <div className="hero-stage">
+        <div className="hero-visual">
+          <div className="orbit orbit-one" />
+          <div className="orbit orbit-two" />
           <Dither />
-          <div className="hero-title">
-            <p className="eyebrow">
-              <span className="status-dot" /> [ 00 ] · OPEN TO INTERNSHIPS
-            </p>
-            <h1>
-              BUILDING
-              <br />
-              RELIABLE
-              <br />
-              BACKEND SYSTEMS.
-            </h1>
-          </div>
-          <div className="hero-intro">
-            <p>
-              I'm Veshwik, an engineering student building dependable APIs and
-              full-stack applications. From the data layer to the details people
-              see.
-            </p>
-            <div className="actions">
-              <a className="button" href="#projects">
-                SEE PROJECTS ↙
-              </a>
-              <a className="button light" href="#contact">
-                GET IN TOUCH ↗
-              </a>
+          <div className="floating-chip chip-top">
+            <span className="chip-symbol">↗</span>
+            <div>
+              Always building.<small>Always learning.</small>
             </div>
           </div>
+          <div className="floating-chip chip-bottom">
+            <span className="status-dot" />
+            <span>Indore, India</span>
+            <span className="chip-time">{time} IST</span>
+          </div>
         </div>
-        <div className="wordmark">
-          VESHWIK<span>JAIN</span>
-        </div>
-        <div className="hero-bottom eyebrow">
-          <span>
-            JAVA DEVELOPER & PROBLEM SOLVER — {new Date().getFullYear()}
-          </span>
-          <a href="#about">SCROLL ↓</a>
-        </div>
+        <a className="hero-scroll eyebrow" href="#about">
+          A LITTLE MORE ABOUT ME <span>↓</span>
+        </a>
       </section>
-      <section className="process-strip" aria-label="My working process">
-        <div className="process-steps">
-          {["DESIGN", "BUILD", "DEPLOY"].map((step, i) => (
-            <div className="process-step" key={step}>
-              <span className="eyebrow">{num(i)}</span>
-              <span className="process-name">{step}</span>
-              <span className="process-arrow" aria-hidden="true">
-                ↗
-              </span>
-            </div>
-          ))}
-        </div>
-        <p className="eyebrow">FROM A GOOD IDEA TO A SYSTEM THAT WORKS.</p>
-      </section>
-      <section id="about" className="section">
+      <section className="section about-section" id="about">
         <Reveal>
-          <Heading label="01 / ABOUT">
-            FROM CODE
+          <p className="eyebrow">THE PERSON BEHIND THE CODE</p>
+          <h2 className="about-statement">
+            Curious by nature.
             <br />
-            TO REAL-WORLD SYSTEMS.
-          </Heading>
-        </Reveal>
-        <div className="about-grid">
-          <Reveal>
+            <span>Builder by choice.</span>
+          </h2>
+          <div className="about-grid">
             <p className="about-lead">
-              Engineering student. Java developer. Curious about everything
-              underneath the interface.
+              I enjoy the part of software you don't always see—the logic, the
+              data, and the small decisions that make a system work.
             </p>
-            {about.summary.map((p) => (
-              <p className="body-copy" key={p}>
-                {p}
-              </p>
-            ))}
-            <p className="body-copy">{about.goals}</p>
-          </Reveal>
-          <Reveal className="profile-panel corner">
-            <p className="eyebrow">+ PROFILE</p>
-            {[
-              ["BASED IN", "INDORE, INDIA"],
-              ["FOCUS", "BACKEND / FULL-STACK"],
-              ["CORE STACK", "JAVA · SPRING BOOT"],
-              ["STATUS", "SEEKING INTERNSHIPS"],
-            ].map(([k, v]) => (
-              <div className="profile-row" key={k}>
-                <span>{k}</span>
-                <strong>{v}</strong>
-              </div>
-            ))}
-            <a
-              className="button light"
-              href={profile.resumeUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              VIEW RÉSUMÉ ↗
-            </a>
-            <a className="button" href={profile.resumeUrl} download>
-              DOWNLOAD RÉSUMÉ ↓
-            </a>
-          </Reveal>
-        </div>
-        <div className="expertise">
-          {[
-            [
-              "01",
-              "BACKEND ARCHITECTURE",
-              "Dependable APIs, clear application layers, and thoughtful data models.",
-            ],
-            [
-              "02",
-              "FULL-STACK DEVELOPMENT",
-              "Connecting Spring Boot services to useful, responsive React interfaces.",
-            ],
-            [
-              "03",
-              "LEARNING BY BUILDING",
-              "Hackathons, side projects, and working through the details that make systems reliable.",
-            ],
-          ].map(([n, title, desc]) => (
-            <Reveal key={n} className="expertise-item">
-              <span className="graphic-symbol">
-                {n === "01" ? "⌘" : n === "02" ? "⌁" : "✳"}
-              </span>
-              <p className="eyebrow"># {n} / FOCUS</p>
-              <h3>{title}</h3>
-              <p>{desc}</p>
-            </Reveal>
-          ))}
-        </div>
-        <div id="skills" className="skills">
-          <div className="subheading">
-            <h3>THE TOOLKIT</h3>
-            <span className="eyebrow">LANGUAGES / FRAMEWORKS / SYSTEMS</span>
+            <div className="body-copy">
+              {about.summary.map((text, i) => (
+                <p key={i}>{text}</p>
+              ))}
+              <a
+                className="text-link"
+                href={profile.resumeUrl}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Get to know my journey · Résumé ↗
+              </a>
+            </div>
           </div>
-          {skillCategories.map((c, i) => (
-            <Reveal className="skill-row" key={c.label}>
-              <span className="eyebrow">{num(i)}</span>
-              <h4>{c.label}</h4>
-              <div>
-                {c.skills.map((s) => (
-                  <span className="tag" key={s}>
-                    {s}
-                  </span>
-                ))}
-              </div>
-              <span>+</span>
-            </Reveal>
-          ))}
+        </Reveal>
+        <div className="profile-ribbon">
+          <span>
+            <strong>Java & Spring Boot</strong>Backend at heart
+          </span>
+          <span>
+            <strong>
+              {String(projects.length).padStart(2, "0")} selected builds
+            </strong>
+            Learning by shipping
+          </span>
+          <span>
+            <strong>Indore, India</strong>Open to opportunities
+          </span>
+        </div>
+      </section>
+      <section className="section toolkit-section" id="skills">
+        <Reveal>
+          <Heading label="WHAT I WORK WITH">
+            The right tools.
+            <br />
+            <span>A thoughtful approach.</span>
+          </Heading>
+          <p className="section-intro">
+            From the first line of Java to the interface people interact with.
+            Here's what I bring to a build.
+          </p>
+        </Reveal>
+        <div className="toolkit-layout">
+          <div
+            role="tablist"
+            aria-orientation="vertical"
+            aria-label="Technical toolkit"
+            className="toolkit-tabs"
+          >
+            {skillCategories.map((group, i) => (
+              <button
+                key={group.label}
+                role="tab"
+                id={`skill-tab-${i}`}
+                aria-selected={activeSkill === i}
+                aria-controls={`skill-panel-${i}`}
+                tabIndex={activeSkill === i ? 0 : -1}
+                onClick={() => setActiveSkill(i)}
+                onKeyDown={(event) => {
+                  if (
+                    ["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)
+                  ) {
+                    event.preventDefault();
+                    const next =
+                      event.key === "Home"
+                        ? 0
+                        : event.key === "End"
+                          ? skillCategories.length - 1
+                          : (i +
+                              (event.key === "ArrowDown" ? 1 : -1) +
+                              skillCategories.length) %
+                            skillCategories.length;
+                    setActiveSkill(next);
+                    event.currentTarget.parentElement
+                      .querySelectorAll("button")
+                      [next].focus();
+                  }
+                }}
+              >
+                <small>{num(i)}</small>
+                <span>{group.label}</span>
+                <b>↗</b>
+              </button>
+            ))}
+          </div>
+          <div
+            className="toolkit-panel"
+            role="tabpanel"
+            id={`skill-panel-${activeSkill}`}
+            aria-labelledby={`skill-tab-${activeSkill}`}
+          >
+            <span className="eyebrow">MY TOOLKIT / {num(activeSkill)}</span>
+            <div className="toolkit-art" aria-hidden="true">
+              <span>{["{ }", "↔", "▤", "⌘", ">_"][activeSkill]}</span>
+              <i />
+              <i />
+              <i />
+            </div>
+            <h3>{skillCategories[activeSkill].label}</h3>
+            <p>
+              Tools I use to learn, experiment, and turn ideas into working
+              applications.
+            </p>
+            <div className="tags">
+              {skillCategories[activeSkill].skills.map((skill) => (
+                <span className="tag" key={skill}>
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
       <section
@@ -440,10 +470,10 @@ function Home() {
       >
         <div className="project-pin">
           <Reveal>
-            <Heading label="02 / SELECTED WORK">
-              THINGS I'VE
+            <Heading label="SELECTED WORK">
+              Ideas made real.
               <br />
-              BUILT & SHIPPED.
+              Selected work.
             </Heading>
             <p className="section-intro">
               Security tools, AI experiments, and full-stack applications.
@@ -557,122 +587,160 @@ function Home() {
           </div>
         </div>
       </section>
-      <section id="academics" className="section">
+
+      <section className="section build-process">
         <Reveal>
-          <Heading label="03 / THE JOURNEY">
-            ALWAYS
-            <br />A WORK IN PROGRESS.
+          <Heading label="HOW I THINK">
+            Make it clear.
+            <br />
+            <span>Then make it work.</span>
           </Heading>
         </Reveal>
-        <div className="journey-grid">
-          <div>
-            <h3 className="subheading">LEARNING & BUILDING</h3>
-            {about.timeline.map((t) => (
-              <Reveal className="timeline-item" key={t.year}>
-                <span className="eyebrow">{t.year}</span>
-                <h4>{t.title}</h4>
-                <p>{t.detail}</p>
-              </Reveal>
-            ))}
-          </div>
-          <div>
-            <h3 className="subheading">ACADEMIC RECORD</h3>
-            {academicProgress.semesters.map((s) => (
-              <div className="semester" key={s.sem}>
-                <span className="eyebrow">SEM / 0{s.sem}</span>
-                <strong>
-                  {s.sgpa ?? "—"} <small>SGPA</small>
-                </strong>
-                <span className="eyebrow">
-                  {s.status} · CGPA {s.cgpa ?? "—"}
-                </span>
-                {s.marksheetUrl && (
-                  <a
-                    href={s.marksheetUrl}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`View semester ${s.sem} marksheet`}
-                  >
-                    MARKSHEET ↗
-                  </a>
-                )}
-                {s.subjects.length > 0 && (
-                  <p className="semester-subjects">{s.subjects.join(" / ")}</p>
-                )}
-              </div>
-            ))}
-            <a
-              className="button light"
-              href={profile.resumeUrl}
-              target="_blank"
-              rel="noreferrer"
-            >
-              VIEW FULL RÉSUMÉ ↗
-            </a>
-          </div>
-        </div>
-        <div className="achievements">
-          <h3 className="subheading">MILESTONES</h3>
-          {achievements.map((a, i) => (
-            <Reveal className="achievement" key={a.title}>
-              <span className="eyebrow">
-                {num(i)} / {a.year}
-              </span>
-              <div>
-                <h4>{a.title}</h4>
-                <p>{a.org}</p>
-                <p>{a.detail}</p>
-              </div>
-              <span className="eyebrow">{a.type}</span>
+        <div className="process-grid">
+          {[
+            [
+              "01",
+              "Understand the problem",
+              "Start with the person using it, the data it needs, and the smallest useful thing to build.",
+            ],
+            [
+              "02",
+              "Build with intention",
+              "Clear layers, practical choices, and an interface that makes the next step obvious.",
+            ],
+            [
+              "03",
+              "Test, learn, improve",
+              "Check real flows, understand what breaks, and make the next version better.",
+            ],
+          ].map(([number, title, copy]) => (
+            <Reveal className="process-card" key={number}>
+              <span className="process-number">{number}</span>
+              <h3>{title}</h3>
+              <p>{copy}</p>
             </Reveal>
           ))}
         </div>
       </section>
-      <section id="contact" className="section contact">
+      <section className="section journey-section" id="academics">
         <Reveal>
-          <Heading label="04 / CONTACT">
-            LET'S BUILD
+          <Heading label="LEARNING, EVERY DAY">
+            A work in progress.
             <br />
-            SOMETHING USEFUL.
+            <span>And proud of it.</span>
           </Heading>
         </Reveal>
+        <div className="journey-grid">
+          <div className="journey-timeline">
+            <h3>The journey so far</h3>
+            {about.timeline.map((item) => (
+              <div className="timeline-item" key={item.year}>
+                <span className="eyebrow">{item.year}</span>
+                <h4>{item.title}</h4>
+                <p>{item.detail}</p>
+              </div>
+            ))}
+          </div>
+          <div className="academic-card">
+            <div className="academic-header">
+              <span className="eyebrow">ACADEMIC RECORD</span>
+              <span>↗</span>
+            </div>
+            {academicProgress.semesters.map((semester) => (
+              <div className="semester" key={semester.sem}>
+                <div>
+                  <span className="eyebrow">
+                    SEMESTER {num(semester.sem - 1)}
+                  </span>
+                  <small>{semester.status}</small>
+                </div>
+                <strong>
+                  {semester.sgpa ?? "—"}
+                  <small> SGPA</small>
+                </strong>
+                <span className="semester-cgpa">
+                  CGPA {semester.cgpa ?? "—"}
+                </span>
+                {semester.marksheetUrl && (
+                  <a
+                    href={semester.marksheetUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    Marksheet ↗
+                  </a>
+                )}
+                {semester.subjects?.length > 0 && (
+                  <details className="semester-subjects">
+                    <summary>Subjects</summary>
+                    <p>{semester.subjects.join(" · ")}</p>
+                  </details>
+                )}
+              </div>
+            ))}
+            <a
+              className="text-link"
+              href={profile.resumeUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              View full résumé ↗
+            </a>
+          </div>
+        </div>
+        <h3 className="milestone-heading">A few moments along the way.</h3>
+        <div className="milestone-grid">
+          {achievements.map((item) => (
+            <Reveal className="achievement" key={item.title}>
+              <span className="eyebrow">
+                {item.year} · {item.type ?? "MILESTONE"}
+              </span>
+              <h3>{item.title}</h3>
+              <p className="achievement-org">{item.org}</p>
+              <p>{item.detail ?? item.description}</p>
+            </Reveal>
+          ))}
+        </div>
+      </section>
+      <section className="section contact-section" id="contact">
         <div className="contact-grid">
           <div>
+            <p className="eyebrow">LET'S CONNECT</p>
+            <h2>
+              Have something
+              <br />
+              <span>good in mind?</span>
+            </h2>
+            <p className="contact-copy">
+              An internship, a useful idea, or a good conversation about
+              building things. I'd love to hear from you.
+            </p>
             <a className="contact-email" href={profile.social.email}>
               {profile.email} ↗
             </a>
-            <p>
-              Open to backend and full-stack internships, thoughtful projects,
-              and good conversations.
-            </p>
             <div className="contact-details">
-              <span className="eyebrow">BASE</span>
-              <span>{profile.location}</span>
-              <span className="eyebrow">PHONE</span>
+              <span>Indore, India</span>
               <a href={`tel:${profile.phone.replaceAll(" ", "")}`}>
                 {profile.phone}
               </a>
-              <span className="eyebrow">ELSEWHERE</span>
-              <div>
-                <a
-                  href={profile.social.github}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  GITHUB ↗
-                </a>{" "}
-                /{" "}
-                <a
-                  href={profile.social.linkedin}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  LINKEDIN ↗
-                </a>
-              </div>
+            </div>
+            <div className="social-pills">
+              <a href={profile.social.github} target="_blank" rel="noreferrer">
+                GitHub ↗
+              </a>
+              <a
+                href={profile.social.linkedin}
+                target="_blank"
+                rel="noreferrer"
+              >
+                LinkedIn ↗
+              </a>
+              <a href={profile.resumeUrl} target="_blank" rel="noreferrer">
+                Résumé ↗
+              </a>
             </div>
           </div>
-          <div className="contact-form corner">
+          <div className="contact-form">
             <ContactForm />
           </div>
         </div>

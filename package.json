@@ -29,7 +29,7 @@
     "tailwindcss": "^4.3.3",
     "vite": "^8.1.1"
   },
-  "description": "Monochrome developer portfolio with an animated canvas hero, project pages, and responsive React UI.",
+  "description": "Light-and-green developer portfolio with a procedural dot sculpture, pinned project showcase, and responsive React UI.",
   "license": "MIT",
   "engines": {
     "node": ">=22.12.0"

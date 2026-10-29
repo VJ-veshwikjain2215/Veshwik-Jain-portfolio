@@ -1,7 +1,4 @@
-/**
- * Shared button component. Flat, bordered surfaces with a restrained
- * color shift on hover — no ripples, glows, or shadow pop.
- */
+/** Shared form button; colors follow the portfolio theme tokens. */
 export default function Button({
   as: Component = "button",
   variant = "primary",

@@ -6,13 +6,13 @@
 
 Project details resolve from the `id` in `src/constants/data.js`. Unknown project IDs and unknown routes show a recovery link. The contact form validates input and posts to Formspree; it does not host a server in this repository.
 
-The canvas runs through `requestAnimationFrame`, throttles its draw rate, and cancels its frame when unmounted. Reduced-motion visitors receive a still graphic. Motion preferences also disable the moving text band and reveal transitions.
+The canvas runs through `requestAnimationFrame`, throttles its draw rate, and cancels its frame when unmounted. Reduced-motion visitors receive a still graphic. The canvas pauses offscreen. Motion preferences also disable project slide transitions and reveal transitions.
 
 ## Content and styling
 
-Most structured content is in `src/constants/data.js`. Hero and section presentation copy also lives in `src/App.jsx`. Typography and layout are defined in `src/index.css`, using Barlow Condensed, Inter, and IBM Plex Mono from Google Fonts.
+Most structured content is in `src/constants/data.js`. Hero and section presentation copy also lives in `src/App.jsx`. Typography and layout are defined in `src/index.css`, using Outfit, DM Sans, and IBM Plex Mono from Google Fonts.
 
-The current design has one monochrome theme. It has no theme-switcher, chat assistant, authentication, database, or backend API.
+The current design has one light theme with green accents, rounded surfaces, and a floating navigation bar. It has no theme-switcher, chat assistant, authentication, database, or backend API.
 
 ## Manual verification
 
