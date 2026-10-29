@@ -2135,3 +2135,83 @@ footer {
     bottom: 0;
   }
 }
+
+/* Size the introduction to its column and available screen height. */
+.hero h1 > .hero-role {
+  color: inherit;
+}
+@media (min-width: 761px) {
+  .hero {
+    min-height: 100svh;
+    height: auto;
+    padding-top: clamp(108px, 14svh, 144px);
+    padding-bottom: 48px;
+    align-items: center;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  }
+  .hero-copy {
+    container-type: inline-size;
+    gap: clamp(14px, 2.6svh, 24px);
+  }
+  .hero h1 {
+    font-size: clamp(34px, min(10cqw, 9svh), 72px);
+    line-height: 0.98;
+  }
+  .hero-role {
+    white-space: nowrap;
+  }
+  .hero-description {
+    font-size: clamp(16px, 1.35vw, 18px);
+    line-height: 1.5;
+    max-width: 48ch;
+    margin: 0;
+  }
+  .hero-visual {
+    top: 108px;
+    bottom: 42px;
+    width: 44%;
+  }
+  .dither {
+    top: 50%;
+    left: 50%;
+    width: min(125%, calc(100svh - 130px));
+    height: auto;
+    max-height: 100%;
+    object-fit: contain;
+    transform: translate(-50%, -50%);
+  }
+  .scene-selector {
+    bottom: 0;
+  }
+}
+@media (min-width: 761px) and (max-height: 620px) {
+  .hero {
+    padding-top: 100px;
+    padding-bottom: 26px;
+  }
+  .hero-copy {
+    gap: 12px;
+  }
+  .hero-description {
+    font-size: 16px;
+    line-height: 1.45;
+    max-width: 50ch;
+  }
+  .hero .button {
+    padding: 10px 14px 10px 20px;
+  }
+  .hero .button > span {
+    width: 30px;
+    height: 30px;
+  }
+  .hero-tags {
+    font-size: 10px;
+  }
+  .hero-tags > span {
+    padding: 4px 10px;
+  }
+  .hero-visual {
+    top: 100px;
+    bottom: 26px;
+  }
+}
