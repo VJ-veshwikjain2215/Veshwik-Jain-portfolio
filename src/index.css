@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&family=Teko:wght@600;700&display=swap");
 @import "tailwindcss";
 @theme {
   --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
@@ -241,10 +241,10 @@ h4 {
   background: #fff;
 }
 .wordmark {
-  font-family: var(--font-display);
-  font-size: clamp(70px, 20.6vw, 350px);
-  font-weight: 900;
-  letter-spacing: -0.035em;
+  font-family: "Teko", "Impact", sans-serif;
+  font-size: clamp(70px, 20vw, 340px);
+  font-weight: 600;
+  letter-spacing: -0.025em;
   line-height: 0.83;
   display: flex;
   align-items: flex-end;
@@ -269,33 +269,44 @@ h4 {
   background: #090909bd;
   border-top: 1px solid var(--border);
 }
-.marquee {
-  padding: 70px 0;
+.process-strip {
+  border-block: 1px solid var(--border);
+  padding: 45px 30px 28px;
+  background: #0d0d0c;
+}
+.process-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.process-step {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 14px;
+  padding: 12px 24px 24px;
+  border-left: 1px solid var(--border);
+}
+.process-step:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+.process-step .eyebrow {
+  grid-column: 1 / -1;
+  color: #83837c;
+}
+.process-name {
+  font: 500 clamp(34px, 7.3vw, 115px)/1 var(--font-display);
+  letter-spacing: -0.025em;
+}
+.process-arrow {
+  font: 300 clamp(24px, 4vw, 58px)/1 var(--font-display);
+  align-self: end;
+  color: #7e7e77;
+}
+.process-strip > p {
+  margin-top: 24px;
+  padding-top: 20px;
   border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  overflow: hidden;
-  background: radial-gradient(ellipse at 50% 30%, #1b1b19, transparent 65%);
-}
-.marquee > div {
-  font: 300 clamp(75px, 10vw, 160px)/1 var(--font-display);
-  white-space: nowrap;
-  width: max-content;
-  animation: marquee 35s linear infinite;
-}
-.marquee span {
-  font-size: 0.5em;
-  color: #777;
-  padding: 0 35px;
-}
-.marquee i {
-  font-style: normal;
-  color: transparent;
-  -webkit-text-stroke: 1px #888;
-}
-.marquee p {
-  text-align: center;
-  margin-top: 30px;
-  color: #aaa;
+  color: #92928b;
 }
 .section {
   padding: 90px 30px;
@@ -461,19 +472,25 @@ h4 {
 }
 .projects {
   margin-top: 60px;
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
 }
 .project {
   display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  border-top: 1px solid var(--border);
-  padding: 38px 0;
-  gap: 45px;
+  grid-template-columns: minmax(0, 1fr);
+  border: 1px solid var(--border);
+  padding: 24px;
+  gap: 25px;
+  background: #0c0c0c;
 }
 .project-image {
+  width: 100%;
   position: relative;
   display: block;
   min-width: 0;
-  aspect-ratio: 1.55;
+  aspect-ratio: 2.2;
+  max-height: 46vh;
   overflow: hidden;
   background: #181818;
   border: 1px solid var(--border);
@@ -519,12 +536,12 @@ h4 {
 }
 .project-info h3 {
   font-size: clamp(34px, 4vw, 62px);
-  margin: 20px 0;
+  margin: 12px 0;
 }
 .project-info > p {
   color: #aaa;
   font-size: 13px;
-  max-width: 360px;
+  max-width: 650px;
 }
 .project-info .tags {
   margin: 22px 0;
@@ -688,7 +705,7 @@ h4 {
 }
 .project-page h1 {
   font-size: clamp(65px, 12vw, 180px);
-  margin: 20px 0;
+  margin: 12px 0;
 }
 .project-kicker {
   margin-top: 50px;
@@ -725,9 +742,12 @@ h4 {
 .text-data {
   font-family: var(--font-mono);
 }
-@keyframes marquee {
-  to {
-    transform: translateX(-50%);
+/* Native vertical scrolling: each project replaces the previous card upward.
+   Short screens and reduced-motion users keep the normal document flow. */
+@media (min-width: 760px) and (min-height: 850px) and (prefers-reduced-motion: no-preference) {
+  .project {
+    position: sticky;
+    top: 90px;
   }
 }
 @media (min-width: 1600px) {
@@ -909,14 +929,21 @@ h4 {
     padding: 14px 16px;
     gap: 15px;
   }
-  .marquee {
-    padding: 45px 0;
+  .process-strip {
+    padding: 25px 18px 20px;
   }
-  .marquee p {
+  .process-step {
+    padding: 8px 12px 15px;
+    gap: 10px;
+  }
+  .process-arrow {
+    display: none;
+  }
+  .process-name {
+    font-size: clamp(30px, 9vw, 48px);
+  }
+  .process-strip > p {
     font-size: 8px;
-  }
-  .marquee span {
-    padding: 0 15px;
   }
   .section {
     padding: 55px 18px;
@@ -998,7 +1025,7 @@ h4 {
   .project {
     grid-template-columns: 1fr;
     gap: 25px;
-    padding: 28px 0;
+    padding: 16px;
   }
   .project-info h3 {
     font-size: 43px;

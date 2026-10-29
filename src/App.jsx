@@ -235,14 +235,20 @@ function Home() {
           <a href="#about">SCROLL ↓</a>
         </div>
       </section>
-      <div className="marquee" aria-hidden="true">
-        <div>
-          DESIGN <span>✳</span> BUILD <span>✳</span> DEPLOY <span>✳</span>{" "}
-          <i>DESIGN</i> <span>✳</span> BUILD <span>✳</span> DEPLOY{" "}
-          <span>✳</span>
+      <section className="process-strip" aria-label="My working process">
+        <div className="process-steps">
+          {["DESIGN", "BUILD", "DEPLOY"].map((step, i) => (
+            <div className="process-step" key={step}>
+              <span className="eyebrow">{num(i)}</span>
+              <span className="process-name">{step}</span>
+              <span className="process-arrow" aria-hidden="true">
+                ↗
+              </span>
+            </div>
+          ))}
         </div>
         <p className="eyebrow">FROM A GOOD IDEA TO A SYSTEM THAT WORKS.</p>
-      </div>
+      </section>
       <section id="about" className="section">
         <Reveal>
           <Heading label="01 / ABOUT">
@@ -353,7 +359,7 @@ function Home() {
         </Reveal>
         <div className="projects">
           {projects.map((p, i) => (
-            <Reveal className="project" key={p.id}>
+            <article className="project" key={p.id} aria-label={p.title}>
               <Link
                 className="project-image"
                 to={`/project/${encodeURIComponent(p.id)}`}
@@ -364,7 +370,9 @@ function Home() {
                   alt={`${p.title} application screenshot`}
                   loading="lazy"
                 />
-                <span className="image-index">{num(i)} / 04</span>
+                <span className="image-index">
+                  {num(i)} / {String(projects.length).padStart(2, "0")}
+                </span>
                 <span className="image-arrow">↗</span>
               </Link>
               <div className="project-info">
@@ -396,7 +404,7 @@ function Home() {
                   )}
                 </div>
               </div>
-            </Reveal>
+            </article>
           ))}
         </div>
       </section>
