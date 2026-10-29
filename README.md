@@ -2,9 +2,9 @@
 
 # Veshwik Jain · Portfolio
 
-**Backend thinking. Monochrome design. Built with React.**
+**Good ideas. Thoughtful code. Built with React.**
 
-A personal developer portfolio with an animated pixel canvas, scroll reveals, detailed project pages, and a responsive layout.
+A personal developer portfolio with an animated dot sculpture, scroll reveals, detailed project pages, and a responsive layout.
 
 [Live portfolio](https://veshwikjain.embarko.app/) · [Explore the code](src/App.jsx) · [Run locally](#run-locally) · [Report a bug](../../issues/new?template=bug_report.yml)
 
@@ -25,12 +25,14 @@ A personal developer portfolio with an animated pixel canvas, scroll reveals, de
 
 ## The experience
 
-This portfolio introduces my work in Java, Spring Boot, and full-stack development. It pairs a restrained black-and-white visual system with original canvas animation and practical project information.
+This portfolio introduces my work in Java, Spring Boot, and full-stack development. It pairs a light-and-green visual system with original canvas animation and practical project information.
 
-- **Animated pixel hero** — a procedural Canvas 2D graphic with no video or animation asset download.
+- **Animated dot hero** — a procedural Canvas 2D graphic with no video or animation asset download.
+- **Interactive toolkit** — accessible category tabs with keyboard navigation.
+- **Pinned project showcase** — full previews beside descriptions and tech stacks; scrolling advances through projects on desktop.
 - **Project detail routes** — screenshots, context, technology lists, source links, and available live demos.
 - **Responsive navigation** — desktop anchors and a collapsible phone menu.
-- **Motion with an off switch** — scroll reveals and a moving text band respect the visitor's reduced-motion preference.
+- **Motion with an off switch** — the procedural graphic, project slide transitions, and scroll reveals respect reduced-motion preferences.
 - **Academic journey** — semester results, subjects, marksheets, milestones, and résumé links.
 - **Contact form** — client-side validation and delivery through Formspree, with success and failure feedback.
 
@@ -130,3 +132,7 @@ Created for **Veshwik Jain**. The monochrome visual direction was inspired by [C
 Source code is available under the [MIT license](LICENSE). See [personal content and media terms](CONTENT-LICENSE.md). Personal biography, résumé, marksheets, photographs, project screenshots, and third-party names or marks are **not** licensed for reuse by that code license. Fonts and dependencies retain their respective licenses.
 
 [GitHub](https://github.com/VJ-veshwikjain2215) · [LinkedIn](https://www.linkedin.com/in/veshwik-jain/) · [Live site](https://veshwikjain.embarko.app/)
+
+## Design update
+
+The current light-and-green redesign is inspired by the visual direction of [Potadot](https://potadot.com.my/), adapted with original portfolio content and a code-generated dot sculpture. See [redesign notes](docs/REDESIGN.md) for implementation and verification.
