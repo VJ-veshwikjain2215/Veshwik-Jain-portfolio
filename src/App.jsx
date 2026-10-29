@@ -147,38 +147,80 @@ function Footer() {
   );
 }
 function Home() {
+  const projectSection = useRef(null);
   const projectTrack = useRef(null);
   const [activeProject, setActiveProject] = useState(0);
+  const [isProjectPinned, setProjectPinned] = useState(false);
   const reduceMotion = useReducedMotion();
+  const pinnedProjects = () =>
+    window.matchMedia("(min-width: 760px) and (min-height: 700px)").matches;
   const moveProject = (direction) => {
+    const section = projectSection.current;
     const track = projectTrack.current;
-    if (!track) return;
+    if (!track || !section) return;
     const index = Math.max(
       0,
       Math.min(projects.length - 1, activeProject + direction),
     );
-    const cards = track.children;
-    track.scrollTo({
-      left: cards[index].offsetLeft - cards[0].offsetLeft,
-      behavior: reduceMotion ? "instant" : "smooth",
-    });
-    setActiveProject(index);
+    if (pinnedProjects()) {
+      const pin = section.querySelector(".project-pin");
+      const start = section.getBoundingClientRect().top + window.scrollY - 66;
+      const distance = section.offsetHeight - pin.offsetHeight;
+      window.scrollTo({
+        top: start + ((index + 0.35) / projects.length) * distance,
+        behavior: reduceMotion ? "instant" : "smooth",
+      });
+    } else {
+      track.scrollTo({
+        left: index * track.clientWidth,
+        behavior: reduceMotion ? "instant" : "smooth",
+      });
+      setActiveProject(index);
+    }
   };
   const syncProject = () => {
     const track = projectTrack.current;
-    if (!track) return;
-    const cards = [...track.children];
-    const origin = cards[0].offsetLeft;
-    const nearest = cards.reduce(
-      (best, card, index) =>
-        Math.abs(card.offsetLeft - origin - track.scrollLeft) <
-        Math.abs(cards[best].offsetLeft - origin - track.scrollLeft)
-          ? index
-          : best,
-      0,
-    );
-    setActiveProject(nearest);
+    if (track && !pinnedProjects())
+      setActiveProject(
+        Math.max(
+          0,
+          Math.min(
+            projects.length - 1,
+            Math.round(track.scrollLeft / track.clientWidth),
+          ),
+        ),
+      );
   };
+  useEffect(() => {
+    let frame;
+    const update = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const section = projectSection.current;
+        const pinned = pinnedProjects();
+        setProjectPinned(pinned);
+        if (!section || !pinned) return;
+        const pin = section.querySelector(".project-pin");
+        const distance = section.offsetHeight - pin.offsetHeight;
+        const progress = Math.max(
+          0,
+          Math.min(1, (66 - section.getBoundingClientRect().top) / distance),
+        );
+        setActiveProject(
+          Math.min(projects.length - 1, Math.floor(progress * projects.length)),
+        );
+        if (projectTrack.current) projectTrack.current.scrollLeft = 0;
+      });
+    };
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
+    };
+  }, []);
   const [time, setTime] = useState("");
   useEffect(() => {
     const hash = window.location.hash.slice(1);
@@ -377,108 +419,128 @@ function Home() {
           ))}
         </div>
       </section>
-      <section id="projects" className="section">
-        <Reveal>
-          <Heading label="02 / SELECTED WORK">
-            THINGS I'VE
-            <br />
-            BUILT & SHIPPED.
-          </Heading>
-          <p className="section-intro">
-            Security tools, AI experiments, and full-stack applications. Explore
-            the thinking and technology behind each build.
-          </p>
-        </Reveal>
-        <div className="project-navigation">
-          <span className="eyebrow" aria-live="polite" aria-atomic="true">
-            {num(activeProject)} / {String(projects.length).padStart(2, "0")} ·
-            SWIPE OR SCROLL SIDEWAYS
-          </span>
-          <div className="project-navigation-buttons">
-            <button
-              type="button"
-              aria-label="Previous project"
-              aria-controls="project-track"
-              disabled={activeProject === 0}
-              onClick={() => moveProject(-1)}
-            >
-              ←
-            </button>
-            <button
-              type="button"
-              aria-label="Next project"
-              aria-controls="project-track"
-              disabled={activeProject === projects.length - 1}
-              onClick={() => moveProject(1)}
-            >
-              →
-            </button>
-          </div>
-        </div>
-        <div
-          className="projects"
-          id="project-track"
-          ref={projectTrack}
-          role="region"
-          aria-label="Selected projects carousel"
-          tabIndex={0}
-          onScroll={syncProject}
-          onKeyDown={(event) => {
-            if (event.target !== event.currentTarget) return;
-            if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
-              event.preventDefault();
-              moveProject(event.key === "ArrowRight" ? 1 : -1);
-            }
-          }}
-        >
-          {projects.map((p, i) => (
-            <article className="project" key={p.id} aria-label={p.title}>
-              <Link
-                className="project-image"
-                to={`/project/${encodeURIComponent(p.id)}`}
-                aria-label={`View ${p.title} project`}
+      <section
+        id="projects"
+        className="section project-showcase"
+        ref={projectSection}
+      >
+        <div className="project-pin">
+          <Reveal>
+            <Heading label="02 / SELECTED WORK">
+              THINGS I'VE
+              <br />
+              BUILT & SHIPPED.
+            </Heading>
+            <p className="section-intro">
+              Security tools, AI experiments, and full-stack applications.
+              Explore the thinking and technology behind each build.
+            </p>
+          </Reveal>
+          <div className="project-navigation">
+            <span className="eyebrow" aria-live="polite" aria-atomic="true">
+              {num(activeProject)} / {String(projects.length).padStart(2, "0")}{" "}
+              · SCROLL TO CHANGE PROJECT
+            </span>
+            <div className="project-navigation-buttons">
+              <button
+                type="button"
+                aria-label="Previous project"
+                aria-controls="project-track"
+                disabled={activeProject === 0}
+                onClick={() => moveProject(-1)}
               >
-                <img
-                  src={p.screenshot}
-                  alt={`${p.title} application screenshot`}
-                  loading="lazy"
-                />
-                <span className="image-index">
-                  {num(i)} / {String(projects.length).padStart(2, "0")}
-                </span>
-                <span className="image-arrow">↗</span>
-              </Link>
-              <div className="project-info">
-                <span className="eyebrow">{num(i)} / SELECTED PROJECT</span>
-                <h3>
-                  <Link to={`/project/${encodeURIComponent(p.id)}`}>
-                    {p.title}
-                  </Link>
-                </h3>
-                <p>{p.subtitle.replace(/^ — /, "")}</p>
-                <div className="tags">
-                  {p.tech.slice(0, 5).map((t) => (
-                    <span className="tag" key={t}>
-                      {t}
+                ←
+              </button>
+              <button
+                type="button"
+                aria-label="Next project"
+                aria-controls="project-track"
+                disabled={activeProject === projects.length - 1}
+                onClick={() => moveProject(1)}
+              >
+                →
+              </button>
+            </div>
+          </div>
+          <div className="project-window">
+            <div
+              className="projects"
+              id="project-track"
+              ref={projectTrack}
+              role="region"
+              aria-label="Selected projects carousel"
+              tabIndex={0}
+              style={{ "--active-project": activeProject }}
+              onScroll={syncProject}
+              onKeyDown={(event) => {
+                if (event.target !== event.currentTarget) return;
+                if (event.key === "ArrowRight" || event.key === "ArrowLeft") {
+                  event.preventDefault();
+                  moveProject(event.key === "ArrowRight" ? 1 : -1);
+                }
+              }}
+            >
+              {projects.map((p, i) => (
+                <article
+                  className="project"
+                  key={p.id}
+                  aria-label={p.title}
+                  inert={isProjectPinned && activeProject !== i}
+                >
+                  <Link
+                    className="project-image"
+                    to={`/project/${encodeURIComponent(p.id)}`}
+                    aria-label={`View ${p.title} project`}
+                  >
+                    <img
+                      src={p.screenshot}
+                      alt={`${p.title} application screenshot`}
+                      loading="lazy"
+                    />
+                    <span className="image-index">
+                      {num(i)} / {String(projects.length).padStart(2, "0")}
                     </span>
-                  ))}
-                </div>
-                <div className="project-actions">
-                  <Link to={`/project/${encodeURIComponent(p.id)}`}>
-                    EXPLORE PROJECT ↗
+                    <span className="image-arrow">↗</span>
                   </Link>
-                  <a href={p.github} target="_blank" rel="noreferrer">
-                    CODE ↗
-                  </a>
-                  {p.demo && (
-                    <a href={p.demo} target="_blank" rel="noreferrer">
-                      LIVE SITE ↗
-                    </a>
-                  )}
-                </div>
-              </div>
-            </article>
-          ))}
+                  <div className="project-info">
+                    <span className="eyebrow">{num(i)} / SELECTED PROJECT</span>
+                    <h3>
+                      <Link to={`/project/${encodeURIComponent(p.id)}`}>
+                        {p.title}
+                      </Link>
+                    </h3>
+                    <p className="project-subtitle">
+                      {p.subtitle.replace(/^ — /, "")}
+                    </p>
+                    <p className="project-summary">{p.showcaseDescription}</p>
+                    <span className="eyebrow project-stack-label">
+                      TECH STACK
+                    </span>
+                    <div className="tags">
+                      {p.tech.map((t) => (
+                        <span className="tag" key={t}>
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="project-actions">
+                      <Link to={`/project/${encodeURIComponent(p.id)}`}>
+                        EXPLORE PROJECT ↗
+                      </Link>
+                      <a href={p.github} target="_blank" rel="noreferrer">
+                        CODE ↗
+                      </a>
+                      {p.demo && (
+                        <a href={p.demo} target="_blank" rel="noreferrer">
+                          LIVE SITE ↗
+                        </a>
+                      )}
+                    </div>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
       <section id="academics" className="section">
