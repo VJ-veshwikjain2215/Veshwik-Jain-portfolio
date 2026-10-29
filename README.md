@@ -27,14 +27,14 @@ A personal developer portfolio with an animated dot sculpture, scroll reveals, d
 
 This portfolio introduces my work in Java, Spring Boot, and full-stack development. It pairs a light-and-green visual system with original canvas animation and practical project information.
 
-- **Animated dot hero** — a procedural Canvas 2D graphic with no video or animation asset download.
-- **Interactive toolkit** — accessible category tabs with keyboard navigation.
-- **Pinned project showcase** — full previews beside descriptions and tech stacks; scrolling advances through projects on desktop.
+- **Morphing particle hero** — six procedural Canvas 2D compositions with automatic rotation and manual controls.
+- **Interactive capabilities** — keyboard-accessible toolkit tabs, expanding service panels, and scroll-revealed statements.
+- **Staggered project grid** — large application previews, category labels, project summaries, and linked case studies.
 - **Project detail routes** — screenshots, context, technology lists, source links, and available live demos.
 - **Responsive navigation** — desktop anchors and a collapsible phone menu.
-- **Motion with an off switch** — the procedural graphic, project slide transitions, and scroll reveals respect reduced-motion preferences.
+- **Motion with an off switch** — the procedural graphic, shape rotation, and scroll reveals respect reduced-motion preferences.
 - **Academic journey** — semester results, subjects, marksheets, milestones, and résumé links.
-- **Contact form** — client-side validation and delivery through Formspree, with success and failure feedback.
+- **Dedicated about and contact pages** — biography, certifications, and a contact form with client-side validation and delivery through Formspree, with success and failure feedback.
 
 ### Selected work
 
@@ -127,7 +127,7 @@ If this project gives you a useful idea for your own portfolio, a star is apprec
 
 ## Credits and license
 
-Created for **Veshwik Jain**. The monochrome visual direction was inspired by [Christen Dijoux's portfolio](https://christendijoux.com/); this implementation uses its own components and procedural canvas artwork.
+Created for **Veshwik Jain**. The current layout, typography, surfaces, colors, and interaction patterns follow [Potadot](https://potadot.com.my/). Personal content, application components, illustrative mockups, and procedural particle artwork are implemented for this portfolio.
 
 Source code is available under the [MIT license](LICENSE). See [personal content and media terms](CONTENT-LICENSE.md). Personal biography, résumé, marksheets, photographs, project screenshots, and third-party names or marks are **not** licensed for reuse by that code license. Fonts and dependencies retain their respective licenses.
 
@@ -135,4 +135,4 @@ Source code is available under the [MIT license](LICENSE). See [personal content
 
 ## Design update
 
-The current light-and-green redesign is inspired by the visual direction of [Potadot](https://potadot.com.my/), adapted with original portfolio content and a code-generated dot sculpture. See [redesign notes](docs/REDESIGN.md) for implementation and verification.
+The current redesign closely follows the section structure and visual system of [Potadot](https://potadot.com.my/), with Veshwik’s portfolio content and code-generated particle compositions. See [redesign notes](docs/REDESIGN.md) for implementation and verification.

@@ -1,25 +1,25 @@
-# Light-and-green portfolio redesign
+# Reference-matched portfolio redesign
 
 29 October 2026
 
-The new visual direction takes inspiration from [Potadot](https://potadot.com.my/): a light background, green accents, floating pill navigation, geometric headings, soft surfaces, and dot-based motion. The portfolio uses its own content, graphics, and layout adaptations rather than copied agency text, brand artwork, or customer claims.
+This update replaces the first light/green interpretation with a much closer implementation of [Potadot](https://potadot.com.my/). It follows the reference’s actual section order, font families, color values, pill navigation, raised surfaces, spacing, and interaction patterns, using Veshwik’s own content. It does not reuse the agency’s brand, client claims, copy, or proprietary image assets.
 
-## Shipped design
+## What changed
 
-- New hero with Outfit headings, a procedural rotating dot torus, local time, availability, and project/contact calls to action.
-- New About composition, profile ribbon, keyboard-accessible toolkit tabs, process cards, journey timeline, academic card, milestone grid, contact layout, and footer.
-- Preserved pinned project interaction: desktop scrolling advances through full previews with details beside them. Narrow/short screens use a swipeable layout.
-- Consistent restyling for project detail pages, unknown-route recovery, form controls, favicon, and social preview.
-- Updated SecureCrypt preview to the current workbench and refreshed GitHub screenshots and documentation.
+- Fixed first-screen hero composition with Outfit at the measured desktop scale, Figtree body text, JetBrains Mono labels, background particles, and a six-scene Canvas 2D graphic. Shapes morph automatically and can be selected manually.
+- Large scroll-revealed introduction, followed by a split skills section with keyboard-accessible tabs and illustrative application previews.
+- Four expanding horizontal capability panels, including alternating dark teal panels. Phone layouts use vertical panels.
+- Staggered two-column project grid with application screenshots, labels, summaries, and case-study routes. The previous pinned horizontal carousel has been removed to follow the new reference.
+- Full-width dark teal values section, connected numbered circles, six-item journey grid, large moving typography, location illustration, FAQ, rounded call to action, and multi-column footer.
+- Dedicated `/about` and `/contact` pages. The about page retains the full biography and all four achievements; the homepage retains semester records, subjects, and marksheets.
+- Restyled project pages, form controls, social preview, and responsive navigation.
 
-## Interaction and content checks
+## Validation
 
-- Desktop and 390px phone layout checks, including contained page width.
-- Toolkit mouse and arrow-key navigation; mobile menu opens and closes on navigation.
-- Scroll-driven projects remain pinned at the new header offset; project detail navigation works.
-- Résumé, three marksheet links, semester subjects, grades, and milestone content retained.
-- Empty contact form displays validation without sending data. Live message delivery was not exercised.
-- Reduced-motion branch keeps the canvas static and removes slide/reveal animation. Canvas rendering pauses offscreen and cleans up on unmount.
-- Formatting, lint, and production compilation run through the existing CI workflow.
+Formatting, lint, and production compilation run through the existing CI workflow. Manual checks cover desktop and phone layout, contained page width, toolkit arrow keys, all four capability panels, project navigation, FAQ disclosure, mobile navigation, and empty-form validation. Contact-message delivery is not exercised.
 
-The redesign changes presentation and interaction. It does not add authentication, analytics, a database, or new contact-delivery services.
+The reduced-motion branch disables automatic scene rotation, uses static particles, and removes reveal and marquee animation. Canvas rendering pauses offscreen and cancels pending animation frames on unmount.
+
+## Scope and limits
+
+The page is closely matched to the reference’s design system and layout; its wording, graphics, subject matter, project imagery, and page lengths differ because this is a personal developer portfolio. No analytics, authentication, database, or new messaging service is added.
