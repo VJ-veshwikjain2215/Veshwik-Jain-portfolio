@@ -299,9 +299,12 @@ export default function ContactForm() {
                 setCode(event.target.value.replace(/\D/g, ""));
                 setNotice("");
               }}
-              aria-describedby="code-help"
+              aria-describedby="code-help code-delivery-help"
               className={FIELD_CLASS}
             />
+            <p id="code-delivery-help" className="text-sm text-text-secondary">
+              Can't find the code? Check your Spam or Junk folder.
+            </p>
             <button
               type="button"
               disabled={seconds > 0}
