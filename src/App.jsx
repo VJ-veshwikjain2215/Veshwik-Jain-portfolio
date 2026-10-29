@@ -199,7 +199,21 @@ function Home() {
         const section = projectSection.current;
         const pinned = pinnedProjects();
         setProjectPinned(pinned);
-        if (!section || !pinned) return;
+        if (!section) return;
+        if (!pinned) {
+          const track = projectTrack.current;
+          if (track)
+            setActiveProject(
+              Math.max(
+                0,
+                Math.min(
+                  projects.length - 1,
+                  Math.round(track.scrollLeft / track.clientWidth),
+                ),
+              ),
+            );
+          return;
+        }
         const pin = section.querySelector(".project-pin");
         const distance = section.offsetHeight - pin.offsetHeight;
         const progress = Math.max(
