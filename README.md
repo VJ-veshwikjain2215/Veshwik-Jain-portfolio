@@ -6,7 +6,7 @@
 
 A personal developer portfolio with an animated pixel canvas, scroll reveals, detailed project pages, and a responsive layout.
 
-[Live portfolio](https://veshwik-jain-portfolio.embarko.app/) · [Explore the code](src/App.jsx) · [Run locally](#run-locally) · [Report a bug](../../issues/new?template=bug_report.yml)
+[Live portfolio](https://veshwikjain.embarko.app/) · [Explore the code](src/App.jsx) · [Run locally](#run-locally) · [Report a bug](../../issues/new?template=bug_report.yml)
 
 [![CI](https://github.com/VJ-veshwikjain2215/Veshwik-Jain-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/VJ-veshwikjain2215/Veshwik-Jain-portfolio/actions/workflows/ci.yml)
 [![Code license: MIT](https://img.shields.io/badge/code_license-MIT-white?labelColor=111111)](LICENSE)
@@ -14,7 +14,7 @@ A personal developer portfolio with an animated pixel canvas, scroll reveals, de
 
 </div>
 
-[![Veshwik Jain portfolio — desktop preview](docs/images/desktop.png)](https://veshwik-jain-portfolio.embarko.app/)
+[![Veshwik Jain portfolio — desktop preview](docs/images/desktop.png)](https://veshwikjain.embarko.app/)
 
 <details>
 <summary>Phone preview</summary>
@@ -129,4 +129,4 @@ Created for **Veshwik Jain**. The monochrome visual direction was inspired by [C
 
 Source code is available under the [MIT license](LICENSE). See [personal content and media terms](CONTENT-LICENSE.md). Personal biography, résumé, marksheets, photographs, project screenshots, and third-party names or marks are **not** licensed for reuse by that code license. Fonts and dependencies retain their respective licenses.
 
-[GitHub](https://github.com/VJ-veshwikjain2215) · [LinkedIn](https://www.linkedin.com/in/veshwik-jain/) · [Live site](https://veshwik-jain-portfolio.embarko.app/)
+[GitHub](https://github.com/VJ-veshwikjain2215) · [LinkedIn](https://www.linkedin.com/in/veshwik-jain/) · [Live site](https://veshwikjain.embarko.app/)
