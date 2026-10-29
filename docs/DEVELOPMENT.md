@@ -4,7 +4,7 @@
 
 `src/main.jsx` mounts the application with React Strict Mode and BrowserRouter. `src/App.jsx` contains the homepage composition, the about/contact and project detail routes, navigation, shared footer, scroll reveals, and a procedural Canvas 2D hero.
 
-Project details resolve from the `id` in `src/constants/data.js`. Unknown project IDs and unknown routes show a recovery link. The prepared contact form requests an emailed code and submits verified messages through the standalone Node/SMTP service in `contact-api/`. The live frontend remains unchanged until setup and delivery testing are complete. See [email verification setup](EMAIL-VERIFICATION.md).
+Project details resolve from the `id` in `src/constants/data.js`. Unknown project IDs and unknown routes show a recovery link. The contact form requests an emailed code and submits verified messages through the standalone Node/SMTP service in `contact-api/`. See [email verification setup](EMAIL-VERIFICATION.md).
 
 The canvas runs through `requestAnimationFrame`, uses display-synchronized frames and reuses particle buffers, and cancels its frame when unmounted. Reduced-motion visitors receive a still graphic. The canvas pauses offscreen. Motion preferences also disable shape rotation and reveal transitions.
 

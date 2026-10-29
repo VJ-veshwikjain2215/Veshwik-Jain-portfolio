@@ -34,7 +34,7 @@ This portfolio introduces my work in Java, Spring Boot, and full-stack developme
 - **Responsive navigation** — desktop anchors and a collapsible phone menu.
 - **Motion with an off switch** — the procedural graphic, shape rotation, and scroll reveals respect reduced-motion preferences.
 - **Academic journey** — semester results, subjects, marksheets, milestones, and résumé links.
-- **Dedicated about and contact pages** — biography, certifications, and a prepared contact flow that confirms an emailed code before sending the message through the separate SMTP backend.
+- **Dedicated about and contact pages** — biography, certifications, and a contact flow that confirms an emailed code before sending the message through the separate SMTP backend.
 
 ### Selected work
 

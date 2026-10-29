@@ -1,8 +1,8 @@
 # Contact email verification setup
 
-Prepared 30 October 2026. The verification backend is deployed; the portfolio frontend stays on its existing live form until sender setup and a real delivery check are complete.
+30 October 2026. The portfolio uses a separate, claimed contact backend for email-code verification and SMTP notifications. The account owner confirmed receipt of a real Gmail verification email during activation.
 
-## What is prepared
+## How it works
 
 - Backend: `https://veshwikjain-contact.embarko.app` (claimed Embarko app).
 - Health: `/health` returns `emailConfigured: false` until all SMTP settings exist. It does not expose credentials.
@@ -13,28 +13,28 @@ Prepared 30 October 2026. The verification backend is deployed; the portfolio fr
 
 ## Complete Gmail setup
 
-The existing Gmail address is prepared as the default sender and recipient; another SMTP provider can be substituted before activation.
+The existing Gmail address is configured as the sender and recipient. Another SMTP provider can be substituted through backend environment settings.
 
 1. In the sender's Google Account, enable 2-Step Verification if needed. The account owner must perform sign-in and security changes themselves.
 2. Open [Google App Passwords](https://myaccount.google.com/apppasswords). Create a dedicated app password for the portfolio. Some accounts cannot use app passwords; see [Google's requirements](https://support.google.com/accounts/answer/185833). Do not use the normal Google password.
-3. Open the [contact backend's environment settings](https://embarko.ai/app/projects/cmvtxvphv05xl7blwr35tylx8/environment). Add `SMTP_PASS` with that app password and apply/restart. The other non-secret Gmail settings have already been prepared.
+3. Open the [contact backend's environment settings](https://embarko.ai/app/projects/cmvtxvphv05xl7blwr35tylx8/environment). Add `SMTP_PASS` with that app password and apply/restart. The other non-secret Gmail settings are already configured.
 4. Check `/health` and a real code delivery to an inbox you own. Enter that code in the new form and confirm the owner receives one message with the verified sender as Reply-To. A healthy status or successful SMTP connection alone does not verify delivery.
 5. After those checks, merge and deploy the portfolio frontend using the prepared API address in `src/config.js`.
-6. Disable the old Formspree form `xnjedlpn` in its dashboard after cutover. That previously public endpoint cannot be protected by the new backend and should not remain as an alternative submission path.
+6. If you control the old Formspree form `xnjedlpn`, disable it in its dashboard after cutover. The portfolio no longer calls it. That third-party endpoint is managed separately and is not protected by this backend.
 
 Google recommends OAuth where an application supports it. This small SMTP service uses a dedicated app password; revoke it when no longer needed. [Google app-password guidance](https://support.google.com/accounts/answer/185833).
 
 ## Backend configuration
 
-| Key                       | Purpose                                                 |
-| ------------------------- | ------------------------------------------------------- |
-| `SMTP_HOST`               | SMTP server, prepared as `smtp.gmail.com`               |
-| `SMTP_PORT`               | TLS port, prepared as `465`; `587` requires STARTTLS    |
-| `SMTP_USER`               | Sender account, prepared as the portfolio Gmail address |
-| `SMTP_PASS`               | Secret app password, deliberately unset                 |
-| `CONTACT_FROM`            | Authorized sender address                               |
-| `CONTACT_TO`              | Owner inbox for verified messages                       |
-| `CONTACT_ALLOWED_ORIGINS` | Comma-separated exact allowed frontend origins          |
+| Key                       | Purpose                                                      |
+| ------------------------- | ------------------------------------------------------------ |
+| `SMTP_HOST`               | SMTP server, prepared as `smtp.gmail.com`                    |
+| `SMTP_PORT`               | TLS port, prepared as `465`; `587` requires STARTTLS         |
+| `SMTP_USER`               | Sender account, prepared as the portfolio Gmail address      |
+| `SMTP_PASS`               | Secret app password; stored only in backend hosting settings |
+| `CONTACT_FROM`            | Authorized sender address                                    |
+| `CONTACT_TO`              | Owner inbox for verified messages                            |
+| `CONTACT_ALLOWED_ORIGINS` | Comma-separated exact allowed frontend origins               |
 
 `contact-api/package.json` starts a standalone Node service. Deploy that directory on its own, excluding `.env*`, dependencies, and test files. Its own `embarko.json` preserves the backend app identity; the root identity still points to the portfolio frontend.
 
