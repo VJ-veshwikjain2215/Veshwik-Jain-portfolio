@@ -503,7 +503,7 @@ function Home() {
     if (reduce) return;
     const timer = setInterval(() => {
       if (!document.hidden) setScene((v) => (v + 1) % 6);
-    }, 7500);
+    }, 10000);
     return () => clearInterval(timer);
   }, [reduce, scene]);
   useEffect(() => {
