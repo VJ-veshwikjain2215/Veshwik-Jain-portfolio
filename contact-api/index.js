@@ -17,7 +17,14 @@ const transport = smtpReady
       port: smtpPort,
       secure: smtpPort === 465,
       requireTLS: true,
-      auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+      auth: {
+        user: process.env.SMTP_USER,
+        // Google displays app passwords in groups; pasted spaces are not part of the password.
+        pass:
+          process.env.SMTP_HOST === "smtp.gmail.com"
+            ? process.env.SMTP_PASS.replace(/\s+/g, "")
+            : process.env.SMTP_PASS,
+      },
       connectionTimeout: 10000,
       greetingTimeout: 10000,
       socketTimeout: 15000,
@@ -27,8 +34,33 @@ const transport = smtpReady
 const service = createVerificationService({
   sendMail: transport
     ? async (message) => {
-        const result = await transport.sendMail(message);
-        if (result.rejected?.length) throw new Error("Delivery rejected");
+        try {
+          const result = await transport.sendMail(message);
+          if (result.rejected?.length) throw new Error("Delivery rejected");
+        } catch (error) {
+          const safeCodes = [
+            "EAUTH",
+            "ECONNECTION",
+            "ESOCKET",
+            "ETIMEDOUT",
+            "EDNS",
+            "EENVELOPE",
+            "EMESSAGE",
+            "ESTREAM",
+          ];
+          console.warn(
+            "SMTP delivery failed",
+            JSON.stringify({
+              code: safeCodes.includes(error.code)
+                ? error.code
+                : "DELIVERY_ERROR",
+              responseCode: Number.isInteger(error.responseCode)
+                ? error.responseCode
+                : undefined,
+            }),
+          );
+          throw error;
+        }
       }
     : undefined,
   from: smtpReady ? normalizeEmail(process.env.CONTACT_FROM) : undefined,
