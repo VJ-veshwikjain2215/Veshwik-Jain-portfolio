@@ -6,7 +6,7 @@
 
 Project details resolve from the `id` in `src/constants/data.js`. Unknown project IDs and unknown routes show a recovery link. The contact form validates input and posts to Formspree; it does not host a server in this repository.
 
-The canvas runs through `requestAnimationFrame`, throttles its draw rate, and cancels its frame when unmounted. Reduced-motion visitors receive a still graphic. The canvas pauses offscreen. Motion preferences also disable shape rotation and reveal transitions.
+The canvas runs through `requestAnimationFrame`, uses display-synchronized frames and reuses particle buffers, and cancels its frame when unmounted. Reduced-motion visitors receive a still graphic. The canvas pauses offscreen. Motion preferences also disable shape rotation and reveal transitions.
 
 ## Content and styling
 

@@ -65,18 +65,23 @@ const sceneNames = [
 function Dither({ scene = 0 }) {
   const ref = useRef(null);
   const previousPoints = useRef([]);
+  const reduce = useReducedMotion();
   useEffect(() => {
     const canvas = ref.current,
-      ctx = canvas.getContext("2d"),
-      reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-    canvas.width = 720;
-    canvas.height = 720;
+      ctx = canvas.getContext("2d");
+    if (canvas.width !== 720) canvas.width = 720;
+    if (canvas.height !== 720) canvas.height = 720;
     let frame,
-      last = 0,
       visible = true;
     const particles = [];
-    const add = (x, y, color, size = 3) =>
-      particles.push({ x, y, color, size, seed: particles.length });
+    const add = (x, y, color, size = 3) => {
+      ctx.fillStyle = color;
+      const channels = ctx.fillStyle.match(/^#(..)(..)(..)$/);
+      const rgb = channels
+        ? channels.slice(1).map((value) => parseInt(value, 16))
+        : [40, 134, 75];
+      particles.push({ x, y, color: rgb, size });
+    };
     for (let row = -43; row <= 43; row++)
       for (let col = -43; col <= 43; col++) {
         const x = col * 7.8 + (row % 2) * 3.9,
@@ -135,35 +140,45 @@ function Dither({ scene = 0 }) {
           add(x, y, depth > 0.6 ? "#27894c" : "#68be7d", 2.1 + depth * 1.1);
         }
       }
-    const origin = previousPoints.current.map((point) => ({ ...point }));
+    // A fixed particle pool prevents dots appearing or disappearing at scene changes.
+    const targets = Array.from({ length: 2048 }, (_, i) => ({
+      ...particles[Math.floor((i * particles.length) / 2048)],
+      seed: i,
+    }));
+    const origin = previousPoints.current.map((point) => ({
+      ...point,
+      color: [...point.color],
+    }));
+    const current = targets.map((point) => ({
+      ...point,
+      color: [...point.color],
+    }));
     const begun = performance.now();
     const draw = (time) => {
       if (!visible) return;
-      if (!reduce && time - last < 40) {
-        frame = requestAnimationFrame(draw);
-        return;
-      }
-      last = time;
       ctx.clearRect(0, 0, 720, 720);
       const t = reduce ? 0 : time / 2200;
-      const progress = reduce ? 1 : Math.min(1, (time - begun) / 1200);
-      const blend = 1 - Math.pow(1 - progress, 3);
-      const current = [];
-      for (let i = 0; i < particles.length; i++) {
-        const target = particles[i];
-        const from = origin.length ? origin[i % origin.length] : target;
-        const p = {
-          ...target,
-          x: from.x + (target.x - from.x) * blend,
-          y: from.y + (target.y - from.y) * blend,
-        };
-        current.push(p);
+      const progress = reduce ? 1 : Math.min(1, (time - begun) / 1400);
+      // Smooth acceleration and deceleration, with no abrupt start or stop.
+      const blend = progress ** 3 * (progress * (progress * 6 - 15) + 10);
+      for (let i = 0; i < targets.length; i++) {
+        const target = targets[i],
+          from = origin[i] || target,
+          p = current[i];
+        p.x = from.x + (target.x - from.x) * blend;
+        p.y = from.y + (target.y - from.y) * blend;
+        p.size = from.size + (target.size - from.size) * blend;
+        for (let channel = 0; channel < 3; channel++) {
+          p.color[channel] =
+            from.color[channel] +
+            (target.color[channel] - from.color[channel]) * blend;
+        }
         const drift = reduce ? 0 : Math.sin(t + p.seed * 0.03) * 1.7;
-        ctx.fillStyle = p.color;
+        ctx.fillStyle = `rgb(${Math.round(p.color[0])}, ${Math.round(p.color[1])}, ${Math.round(p.color[2])})`;
         ctx.beginPath();
         ctx.arc(
           360 + p.x + drift,
-          350 + p.y + Math.cos(t + p.seed * 0.02) * 0.9,
+          350 + p.y + (reduce ? 0 : Math.cos(t + p.seed * 0.02) * 0.9),
           p.size,
           0,
           Math.PI * 2,
@@ -185,7 +200,7 @@ function Dither({ scene = 0 }) {
       observer.disconnect();
       cancelAnimationFrame(frame);
     };
-  }, [scene]);
+  }, [scene, reduce]);
   return <canvas className="dither" ref={ref} aria-hidden="true" />;
 }
 function ScrollStatement({ children, dark = false }) {
@@ -503,7 +518,7 @@ function Home() {
     if (reduce) return;
     const timer = setInterval(() => {
       if (!document.hidden) setScene((v) => (v + 1) % 6);
-    }, 10000);
+    }, 3000);
     return () => clearInterval(timer);
   }, [reduce, scene]);
   useEffect(() => {
