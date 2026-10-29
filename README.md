@@ -34,7 +34,7 @@ This portfolio introduces my work in Java, Spring Boot, and full-stack developme
 - **Responsive navigation** — desktop anchors and a collapsible phone menu.
 - **Motion with an off switch** — the procedural graphic, shape rotation, and scroll reveals respect reduced-motion preferences.
 - **Academic journey** — semester results, subjects, marksheets, milestones, and résumé links.
-- **Dedicated about and contact pages** — biography, certifications, and a contact form with client-side validation and delivery through Formspree, with success and failure feedback.
+- **Dedicated about and contact pages** — biography, certifications, and a contact flow that confirms an emailed code before sending the message through the separate SMTP backend.
 
 ### Selected work
 
@@ -55,7 +55,7 @@ These are projects showcased by the portfolio; their backends are maintained in 
 | Styling   | Tailwind CSS 4 and custom responsive CSS           |
 | Animation | Framer Motion and Canvas 2D                        |
 | Tooling   | Vite, Oxlint, Prettier                             |
-| Forms     | Formspree                                          |
+| Forms     | Email-code verification and SMTP                   |
 | Hosting   | Embarko                                            |
 | Checks    | GitHub Actions: formatting, lint, production build |
 
@@ -82,7 +82,7 @@ Open the Local URL printed by Vite, normally `http://localhost:5173`.
 | `npm run format:check` | Check formatting without changing files |
 | `npm run check`        | Run formatting, lint, and build checks  |
 
-No secret is required to run the portfolio. Google Fonts loads the typefaces over the network; Formspree is required for actual contact-message delivery.
+No secret is required to run the portfolio. Google Fonts loads the typefaces over the network. Actual code and message delivery requires SMTP settings on the separate contact backend. See [email setup](docs/EMAIL-VERIFICATION.md); credentials stay outside the frontend.
 
 ## Make it yours
 
@@ -92,7 +92,7 @@ The code is MIT licensed. Before publishing a fork, replace the personal content
 2. Edit **[`src/App.jsx`](src/App.jsx)** for hero copy, profile facts, navigation, and section structure. Some presentation copy is intentionally local to its component.
 3. Change the visual system in **[`src/index.css`](src/index.css)**.
 4. Replace project images in **`src/assets/`**, the résumé at **`public/resume.pdf`**, and marksheets in **`public/marksheets/`**. Remove documents you do not want to publish.
-5. Replace the **Formspree form URL** in `src/components/ContactForm.jsx`. The included address belongs to this portfolio: do not send test messages to it.
+5. Configure your own SMTP sender and notification inbox in the backend hosting settings, and replace the public API address in `src/config.js`. See [verification setup](docs/EMAIL-VERIFICATION.md). Do not send test messages to the original owner.
 6. Update the page metadata, favicon, repository links, and deployment identity. Remove the original `appId` from **`embarko.json`** before deploying a fork.
 
 See [development and deployment notes](docs/DEVELOPMENT.md) for the architecture, verification checklist, and hosting details.
