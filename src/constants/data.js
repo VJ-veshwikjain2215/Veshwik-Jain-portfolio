@@ -98,6 +98,8 @@ export const projects = [
   {
     id: "TrueVoice",
     title: "TrueVoice",
+    showcaseDescription:
+      "An audio forensic lab and Android voice-defense project combining speaker verification, synthetic-voice detection, and scam-risk signals.",
     subtitle:
       " — AI Voice Authenticity Detection & Synthetic Voice Defense Platform",
     description: ` AI-powered voice authenticity detection and synthetic voice (deepfake) defense platform, built as a dual-surface system:
@@ -134,13 +136,10 @@ export const projects = [
   {
     id: "Secure-Crypt",
     title: "Secure-Crypt",
+    showcaseDescription:
+      "A browser-local AES-GCM workbench with an interoperable Java API, classical cipher experiments, explicit legacy decryption, and automated regression checks.",
     subtitle: " — Multi-Algorithm Text Encryption & Decryption Web App",
-    description: ` A Spring Boot web application for encrypting and decrypting text using six different algorithms — three classical
-                  ciphers implemented from scratch (Caesar, Vigenère, XOR) and three industry-standard algorithms via the Java
-                  Cryptography Architecture (AES-128, DES, 3DES). Features password-based key derivation with PBKDF2, a random key
-                  generator with a live key-strength indicator, session-only encryption history, a dark/light mode toggle, and a REST
-                  API for encryption, decryption, key generation, and key-strength checks. Built as a mini-project for a Fundamentals
-                  of Cyber Security course.`,
+    description: `An educational encryption workbench with browser-local authenticated AES-GCM, explicit legacy AES-CBC decryption, and an interoperable Java API. Includes classical cipher experiments, local random-key generation, metadata-only session history, light/dark themes, and automated Java and browser cryptography regression checks.`,
     tech: [
       "Java 21",
       "Spring Boot 3.3",
@@ -148,10 +147,10 @@ export const projects = [
       "HTML5",
       "CSS3",
       "JavaScript (ES6)",
-      "Bootstrap 5",
+      "Web Crypto",
     ],
     github: "https://github.com/VJ-veshwikjain2215/Secure-Crypt",
-    demo: "https://secure-crypt-three.vercel.app",
+    demo: "https://veshwik-secure-crypt.embarko.app/",
     featured: false,
     image: "./assets/Secure-Crypt.png",
     screenshot: secureCryptImg,
@@ -160,6 +159,8 @@ export const projects = [
   {
     id: "RupeeRakshak",
     title: "RupeeRakshak",
+    showcaseDescription:
+      "A personal-finance platform for tracking expenses, importing bank statements, visualizing spending, and exploring AI-assisted financial insights.",
     subtitle: " — AI-Powered Personal Finance Management Platform",
     description: ` Full-stack AI-powered personal finance platform designed to help users manage expenses, analyze spending habits,
                   and build financial stability. Features include secure Google OAuth authentication, CSV bank statement import,
@@ -192,6 +193,8 @@ export const projects = [
   {
     id: "Civic Issue Reporter",
     title: "Civic Issue Reporter",
+    showcaseDescription:
+      "A civic reporting platform with image and location submissions, complaint tracking, and role-based dashboards for citizens and administrators.",
     subtitle: " — Smart Civic Complaint Management Platform",
     description: ` Full-stack civic issue reporting platform that enables citizens to report public infrastructure problems such as potholes,
                     garbage, water leakage, broken streetlights, and drainage issues. Features include secure user authentication, issue submission with
