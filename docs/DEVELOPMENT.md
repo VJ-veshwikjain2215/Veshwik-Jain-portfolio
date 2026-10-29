@@ -31,7 +31,7 @@ The automated checks cover formatting, lint, and production compilation. Browser
 
 ## Deployment
 
-The current production site is [veshwik-jain-portfolio.embarko.app](https://veshwik-jain-portfolio.embarko.app/).
+The current production site is [veshwikjain.embarko.app](https://veshwikjain.embarko.app/).
 
 Embarko builds the Vite source and serves its output. Upload source with `package.json` at the root; exclude `.git`, `node_modules`, `dist`, and `.env` files. No Dockerfile or custom Node server is needed. Follow the [Embarko quickstart](https://embarko.ai/docs/quickstart.md) for the current API contract.
 
