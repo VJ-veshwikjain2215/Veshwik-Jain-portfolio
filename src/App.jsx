@@ -9,6 +9,7 @@ import {
   academicProgress,
 } from "./constants/data";
 import ContactForm from "./components/ContactForm";
+import HeroParticles from "./components/HeroParticles";
 const num = (i) => String(i + 1).padStart(2, "0");
 function Reveal({ children, className = "" }) {
   const reduce = useReducedMotion();
@@ -54,155 +55,6 @@ const capabilities = [
     copy: "Small iterations, meaningful checks, and the tools to turn a working idea into something that can be improved.",
   },
 ];
-const sceneNames = [
-  "Veshwik",
-  "Backend",
-  "Web apps",
-  "Data",
-  "Workflow",
-  "Ideas",
-];
-function Dither({ scene = 0 }) {
-  const ref = useRef(null);
-  const previousPoints = useRef([]);
-  const reduce = useReducedMotion();
-  useEffect(() => {
-    const canvas = ref.current,
-      ctx = canvas.getContext("2d");
-    if (canvas.width !== 720) canvas.width = 720;
-    if (canvas.height !== 720) canvas.height = 720;
-    let frame,
-      visible = true;
-    const particles = [];
-    const add = (x, y, color, size = 3) => {
-      ctx.fillStyle = color;
-      const channels = ctx.fillStyle.match(/^#(..)(..)(..)$/);
-      const rgb = channels
-        ? channels.slice(1).map((value) => parseInt(value, 16))
-        : [40, 134, 75];
-      particles.push({ x, y, color: rgb, size });
-    };
-    for (let row = -43; row <= 43; row++)
-      for (let col = -43; col <= 43; col++) {
-        const x = col * 7.8 + (row % 2) * 3.9,
-          y = row * 6.8,
-          r = Math.hypot(x, y),
-          jitter = Math.sin(col * 51 + row * 23) * 1.5;
-        if (scene === 0) {
-          if (
-            r < 205 + 7 * Math.sin(Math.atan2(y, x) * 5) &&
-            r > 84 + 5 * Math.sin(Math.atan2(y, x) * 3) &&
-            Math.hypot(x - 124, y + 151) > 67
-          )
-            add(
-              x + jitter,
-              y + 45,
-              `hsl(${146 + Math.round(y / 80)} 48% ${27 + (y + 205) / 22}%)`,
-              2.7 + Math.sin(row * col) * 0.4,
-            );
-          if (Math.hypot(x - 124, y + 151) < 54) add(x, y + 45, "#252528", 2.9);
-          if (Math.hypot(x - 65, y + 268) < 34) add(x, y + 45, "#b7865c", 2.6);
-          if (Math.hypot(x - 153, y + 244) < 13) add(x, y + 45, "#e3bb99", 2.4);
-        } else if (scene === 1) {
-          if (
-            Math.abs(x) < 164 &&
-            Math.abs(y) < 110 &&
-            (Math.abs(y) > 82 || Math.abs(x) > 139 || Math.abs(y % 45) < 7)
-          )
-            add(x, y, "#28864b", 2.8);
-        } else if (scene === 2) {
-          if (
-            Math.abs(x) < 210 &&
-            Math.abs(y) < 144 &&
-            (Math.abs(y) > 116 || Math.abs(x) > 181 || y < -83)
-          )
-            add(x, y, "#26854b", 2.8);
-          if (Math.abs(x) < 80 && y > 145 && y < 167) add(x, y, "#b7865c");
-        } else if (scene === 3) {
-          const yy = ((y + 180) % 110) - 55;
-          if (
-            Math.abs(y) < 180 &&
-            Math.abs(x) < 170 &&
-            Math.abs((x * x) / (170 * 170) + (yy * yy) / (45 * 45) - 1) < 0.2
-          )
-            add(x, y, "#247c48", 2.8);
-        } else if (scene === 4) {
-          if (
-            (Math.abs(x) > 80 && Math.abs(x) < 100 && Math.abs(y) < 160) ||
-            (Math.abs(y) > 145 &&
-              Math.abs(y) < 165 &&
-              Math.abs(x) > 80 &&
-              Math.abs(x) < 165)
-          )
-            add(x, y, "#2b9254", 2.8);
-        } else if (r < 205) {
-          const depth = Math.sqrt(Math.max(0, 1 - (r * r) / (205 * 205)));
-          add(x, y, depth > 0.6 ? "#27894c" : "#68be7d", 2.1 + depth * 1.1);
-        }
-      }
-    // A fixed particle pool prevents dots appearing or disappearing at scene changes.
-    const targets = Array.from({ length: 2048 }, (_, i) => ({
-      ...particles[Math.floor((i * particles.length) / 2048)],
-      seed: i,
-    }));
-    const origin = previousPoints.current.map((point) => ({
-      ...point,
-      color: [...point.color],
-    }));
-    const current = targets.map((point) => ({
-      ...point,
-      color: [...point.color],
-    }));
-    const begun = performance.now();
-    const draw = (time) => {
-      if (!visible) return;
-      ctx.clearRect(0, 0, 720, 720);
-      const t = reduce ? 0 : time / 2200;
-      const progress = reduce ? 1 : Math.min(1, (time - begun) / 1400);
-      // Smooth acceleration and deceleration, with no abrupt start or stop.
-      const blend = progress ** 3 * (progress * (progress * 6 - 15) + 10);
-      for (let i = 0; i < targets.length; i++) {
-        const target = targets[i],
-          from = origin[i] || target,
-          p = current[i];
-        p.x = from.x + (target.x - from.x) * blend;
-        p.y = from.y + (target.y - from.y) * blend;
-        p.size = from.size + (target.size - from.size) * blend;
-        for (let channel = 0; channel < 3; channel++) {
-          p.color[channel] =
-            from.color[channel] +
-            (target.color[channel] - from.color[channel]) * blend;
-        }
-        const drift = reduce ? 0 : Math.sin(t + p.seed * 0.03) * 1.7;
-        ctx.fillStyle = `rgb(${Math.round(p.color[0])}, ${Math.round(p.color[1])}, ${Math.round(p.color[2])})`;
-        ctx.beginPath();
-        ctx.arc(
-          360 + p.x + drift,
-          350 + p.y + (reduce ? 0 : Math.cos(t + p.seed * 0.02) * 0.9),
-          p.size,
-          0,
-          Math.PI * 2,
-        );
-        ctx.fill();
-      }
-      previousPoints.current = current;
-      if (!reduce) frame = requestAnimationFrame(draw);
-    };
-    const observer = new IntersectionObserver(([e]) => {
-      const before = visible;
-      visible = e.isIntersecting;
-      if (!visible) cancelAnimationFrame(frame);
-      else if (!before) frame = requestAnimationFrame(draw);
-    });
-    observer.observe(canvas);
-    frame = requestAnimationFrame(draw);
-    return () => {
-      observer.disconnect();
-      cancelAnimationFrame(frame);
-    };
-  }, [scene, reduce]);
-  return <canvas className="dither" ref={ref} aria-hidden="true" />;
-}
 function ScrollStatement({ children, dark = false }) {
   const ref = useRef(null),
     [progress, setProgress] = useState(0),
@@ -510,17 +362,8 @@ function Footer() {
   );
 }
 function Home() {
-  const [scene, setScene] = useState(0),
-    [activeSkill, setActiveSkill] = useState(0),
+  const [activeSkill, setActiveSkill] = useState(0),
     [activeCapability, setActiveCapability] = useState(0);
-  const reduce = useReducedMotion();
-  useEffect(() => {
-    if (reduce) return;
-    const timer = setInterval(() => {
-      if (!document.hidden) setScene((v) => (v + 1) % 6);
-    }, 3000);
-    return () => clearInterval(timer);
-  }, [reduce, scene]);
   useEffect(() => {
     const hash = window.location.hash.slice(1);
     if (hash) {
@@ -601,21 +444,7 @@ function Home() {
           </div>
         </div>
         <div className="hero-visual">
-          <Dither scene={scene} />
-          <div className="scene-selector">
-            <span className="scene-brand-dot" />
-            <b>{sceneNames[scene]}</b>
-            <div>
-              {sceneNames.map((name, i) => (
-                <button
-                  aria-label={`Show ${name} graphic`}
-                  aria-pressed={scene === i}
-                  key={name}
-                  onClick={() => setScene(i)}
-                />
-              ))}
-            </div>
-          </div>
+          <HeroParticles />
         </div>
         <a href="#about" className="hero-hint">
           <b />

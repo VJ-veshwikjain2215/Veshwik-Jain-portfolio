@@ -393,12 +393,6 @@ h3 {
   display: grid;
   place-items: center;
 }
-.dither {
-  position: relative;
-  width: 138%;
-  max-width: none;
-  left: -10%;
-}
 .scene-selector {
   position: absolute;
   bottom: -28px;
@@ -1737,13 +1731,6 @@ footer {
     height: min(84vw, 390px);
     margin-top: 0;
   }
-  .dither {
-    height: 125%;
-    width: auto;
-    left: auto;
-    max-width: 130%;
-    object-fit: contain;
-  }
   .scene-selector {
     bottom: 0;
     left: 14%;
@@ -2097,13 +2084,6 @@ footer {
     top: 120px;
     bottom: 30px;
   }
-  .dither {
-    position: absolute;
-    width: 138%;
-    height: auto;
-    left: -20%;
-    top: -18%;
-  }
   .scene-selector {
     bottom: 0;
     left: 10%;
@@ -2171,15 +2151,6 @@ footer {
     bottom: 42px;
     width: 44%;
   }
-  .dither {
-    top: 50%;
-    left: 50%;
-    width: min(125%, calc(100svh - 130px));
-    height: auto;
-    max-height: 100%;
-    object-fit: contain;
-    transform: translate(-50%, -50%);
-  }
   .scene-selector {
     bottom: 0;
   }
@@ -2213,5 +2184,105 @@ footer {
   .hero-visual {
     top: 100px;
     bottom: 26px;
+  }
+}
+
+/* Perspective particle stage: the canvas owns its display-pixel resolution. */
+.hero-visual .hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  transform: none;
+  touch-action: pan-y;
+}
+.particle-selector {
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  min-width: 260px;
+  white-space: nowrap;
+}
+.particle-selector b {
+  animation: particle-caption 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.scene-number {
+  display: grid;
+  place-items: center;
+  color: white;
+  font: 9px var(--font-mono);
+}
+.scene-number::after {
+  display: none;
+}
+.particle-selector button {
+  position: relative;
+  overflow: hidden;
+}
+.particle-selector button[aria-pressed="true"] {
+  background: #cbd0d7;
+}
+.particle-selector button[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--green);
+  border-radius: inherit;
+  transform-origin: left;
+  transform: scaleX(var(--scene-progress, 0));
+}
+.particle-cursor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--ink);
+  color: white;
+  font: 8px var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  pointer-events: none;
+  opacity: 0;
+  z-index: 3;
+  transition: opacity 0.2s;
+  will-change: transform;
+}
+.particle-help {
+  position: absolute;
+  bottom: -23px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 0.02em;
+}
+@keyframes particle-caption {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (hover: hover) and (pointer: fine) {
+  .hero-canvas {
+    cursor: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .particle-cursor {
+    display: none;
+  }
+  .particle-help {
+    display: none;
   }
 }

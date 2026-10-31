@@ -23,3 +23,9 @@ The reduced-motion branch disables automatic scene rotation, uses static particl
 ## Scope and limits
 
 The page is closely matched to the reference’s design system and layout; its wording, graphics, subject matter, project imagery, and page lengths differ because this is a personal developer portfolio. No analytics, authentication, database, or new messaging service is added.
+
+## Particle motion update � 31 October 2026
+
+Replaced the flat six-scene morph with a new perspective particle renderer following the supplied Potadot recording. The five scenes are the personal mark, backend monitor, storefront, phone, and website layout. Particles use a staggered lattice, depth shading, spring motion, a left-to-right transition wave, curved lift, and velocity trails. Clicking changes scenes, moving the pointer repels nearby particles, and dragging rotates the illustration before it eases back. Pulse rings mark completed transitions.
+
+The prior three-second automatic timing is retained. The canvas covers the full hero rather than clipping animation to the illustration column. Scene controls have accessible names and pressed states; reduced-motion visitors get static scenes with manual selection. Rendering pauses outside the viewport and in hidden tabs. The renderer and masks are implemented in this repository, using the portfolio's own branding and labels.
