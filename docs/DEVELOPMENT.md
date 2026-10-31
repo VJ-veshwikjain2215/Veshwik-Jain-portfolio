@@ -2,11 +2,13 @@
 
 ## Architecture
 
-`src/main.jsx` mounts the application with React Strict Mode and BrowserRouter. `src/App.jsx` contains the homepage composition, the about/contact and project detail routes, navigation, shared footer, scroll reveals, and a procedural Canvas 2D hero.
+`src/main.jsx` mounts the application with React Strict Mode and BrowserRouter. `src/App.jsx` contains the homepage composition, the about/contact and project detail routes, navigation, shared footer, and scroll reveals. `src/components/HeroParticles.jsx` connects the accessible scene controls to the standalone Canvas 2D renderer in `src/lib/particleStage.js`.
 
 Project details resolve from the `id` in `src/constants/data.js`. Unknown project IDs and unknown routes show a recovery link. The contact form requests an emailed code and submits verified messages through the standalone Node/SMTP service in `contact-api/`. See [email verification setup](EMAIL-VERIFICATION.md).
 
-The canvas runs through `requestAnimationFrame`, uses display-synchronized frames and reuses particle buffers, and cancels its frame when unmounted. Reduced-motion visitors receive a still graphic. The canvas pauses offscreen. Motion preferences also disable shape rotation and reveal transitions.
+The renderer samples five procedural masks into a reusable particle pool. It uses perspective projection, depth shading, spring attraction, cursor repulsion, drag rotation, curved staggered morphs, and velocity trails. The cycle advances every three seconds of active animation time; manual selection restarts that interval. The full-hero drawing surface prevents the illustration column from clipping trails.
+
+Rendering runs through `requestAnimationFrame`, caps display resolution at 2�, pauses offscreen and in hidden tabs, and disconnects observers and listeners on unmount. Reduced-motion visitors receive a still graphic with manual scene controls. Motion preferences also disable reveal transitions.
 
 ## Content and styling
 
@@ -24,6 +26,7 @@ After a meaningful interaction or layout change:
 - Open `/about` and `/contact`.
 - Open each project page and reload a deep link such as `/project/TrueVoice`.
 - Return to the project list and check the next-project link.
+- Check all five hero scene buttons, click-to-change, cursor repulsion, drag rotation, and the three-second cycle. Scroll away and return, and resize the window.
 - Check keyboard focus, the skip link, and reduced-motion behavior.
 - Open the résumé and marksheet links.
 - Submit an empty contact form and confirm field validation. Only test actual delivery with an inbox and SMTP sender you control.

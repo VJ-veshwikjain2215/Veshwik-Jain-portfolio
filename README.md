@@ -27,7 +27,7 @@ A personal developer portfolio with an animated dot sculpture, scroll reveals, d
 
 This portfolio introduces my work in Java, Spring Boot, and full-stack development. It pairs a light-and-green visual system with original canvas animation and practical project information.
 
-- **Morphing particle hero** — six procedural Canvas 2D compositions with automatic rotation and manual controls.
+- **Morphing particle hero** — five shaded particle scenes with perspective, curved morphs, drag rotation, and a three-second automatic cycle.
 - **Interactive capabilities** — keyboard-accessible toolkit tabs, expanding service panels, and scroll-revealed statements.
 - **Staggered project grid** — large application previews, category labels, project summaries, and linked case studies.
 - **Project detail routes** — screenshots, context, technology lists, source links, and available live demos.
