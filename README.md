@@ -38,12 +38,13 @@ This portfolio introduces my work in Java, Spring Boot, and full-stack developme
 
 ### Selected work
 
-| Project                  | Focus                                           | Source                                                                   |
-| ------------------------ | ----------------------------------------------- | ------------------------------------------------------------------------ |
-| **TrueVoice**            | Voice authenticity and synthetic-voice defense  | [Repository](https://github.com/VJ-veshwikjain2215/TrueVoice)            |
-| **Secure-Crypt**         | Text encryption and decryption with Spring Boot | [Repository](https://github.com/VJ-veshwikjain2215/Secure-Crypt)         |
-| **RupeeRakshak**         | Full-stack personal finance management          | [Repository](https://github.com/VJ-veshwikjain2215/FlowFund)             |
-| **Civic Issue Reporter** | Civic reporting and complaint management        | [Repository](https://github.com/VJ-veshwikjain2215/Civic-Issue-Reporter) |
+| Project                  | Focus                                                  | Source                                                                   |
+| ------------------------ | ------------------------------------------------------ | ------------------------------------------------------------------------ |
+| **CountCheck**           | Inventory count reconciliation with private workspaces | [Repository](https://github.com/VJ-veshwikjain2215/CountCheck)           |
+| **TrueVoice**            | Voice authenticity and synthetic-voice defense         | [Repository](https://github.com/VJ-veshwikjain2215/TrueVoice)            |
+| **Secure-Crypt**         | Text encryption and decryption with Spring Boot        | [Repository](https://github.com/VJ-veshwikjain2215/Secure-Crypt)         |
+| **RupeeRakshak**         | Full-stack personal finance management                 | [Repository](https://github.com/VJ-veshwikjain2215/FlowFund)             |
+| **Civic Issue Reporter** | Civic reporting and complaint management               | [Repository](https://github.com/VJ-veshwikjain2215/Civic-Issue-Reporter) |
 
 These are projects showcased by the portfolio; their backends are maintained in their own repositories.
 

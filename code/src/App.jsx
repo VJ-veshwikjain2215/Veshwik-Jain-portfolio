@@ -588,26 +588,24 @@ function Home() {
             at work.
           </Heading>
           <p className="lead">
-            An encryption workbench. A voice authenticity experiment. A
-            personal-finance platform. A way to report civic issues.
+            Inventory counts you can review. An encryption workbench. A voice
+            authenticity experiment. Personal finance and civic reporting.
           </p>
         </div>
         <div className="work-grid">
-          {projects.map((p, i) => (
+          {projects.map((p) => (
             <Reveal className="work-card" key={p.id}>
               <Link
-                className="work-frame"
+                className={`work-frame${p.illustration ? " project-illustration" : ""}`}
                 to={`/project/${encodeURIComponent(p.id)}`}
                 aria-label={`View ${p.title} project`}
               >
                 <img
                   src={p.screenshot}
-                  alt={`${p.title} application screenshot`}
+                  alt={p.imageAlt || `${p.title} application screenshot`}
                   loading="lazy"
                 />
-                <span className="work-chip">
-                  {["AI & Audio", "Security", "Finance", "Civic platform"][i]}
-                </span>
+                <span className="work-chip">{p.category}</span>
                 <span className="work-arrow">↗</span>
               </Link>
               <Link to={`/project/${encodeURIComponent(p.id)}`}>
@@ -1014,9 +1012,9 @@ function ProjectPage() {
       <h1>{p.title}</h1>
       <p className="project-subtitle">{p.subtitle.replace(/^ — /, "")}</p>
       <img
-        className="detail-image"
+        className={`detail-image${p.illustration ? " project-illustration" : ""}`}
         src={p.screenshot}
-        alt={`${p.title} application screenshot`}
+        alt={p.imageAlt || `${p.title} application screenshot`}
       />
       <div className="detail-grid">
         <h2>THE BUILD.</h2>

@@ -7,6 +7,7 @@ import civicIssueImg from "../assets/civic-issue.png";
 import rupeeRakshakImg from "../assets/RupeeRakshak.png";
 import trueVoiceImg from "../assets/TrueVoice.png";
 import secureCryptImg from "../assets/Secure-Crypt.png";
+import countCheckImg from "../assets/CountCheck.svg";
 export const profile = {
   name: "Veshwik Jain",
   roles: [
@@ -96,8 +97,39 @@ export const skillCategories = [
 
 export const projects = [
   {
+    id: "CountCheck",
+    title: "CountCheck",
+    category: "Inventory & operations",
+    showcaseDescription:
+      "An inventory reconciliation website with private business workspaces, a searchable product catalog, safe count submissions, and a reviewable history.",
+    subtitle: " — Inventory Count Reconciliation",
+    description:
+      "CountCheck helps businesses compare recorded inventory with physical stock and keep a clear, timestamped observation of each difference. Private workspaces include a searchable product catalog, count notes, differences-only history, and CSV export. Idempotent submissions protect against duplicate observations during retries. Account controls include password changes, one-time recovery codes, and workspace deletion. Built with Java and Spring Boot, backed by PostgreSQL on Neon, and published on Embarko. Counts are manual observations and do not automatically adjust inventory.",
+    tech: [
+      "Java 21",
+      "Spring Boot 4.1",
+      "Thymeleaf",
+      "Spring Security",
+      "PostgreSQL",
+      "JDBC",
+      "Flyway",
+      "CSS",
+      "JavaScript",
+      "Maven",
+      "Neon",
+      "Embarko",
+    ],
+    github: "https://github.com/VJ-veshwikjain2215/CountCheck",
+    demo: "https://countcheck.embarko.app/",
+    featured: true,
+    screenshot: countCheckImg,
+    imageAlt: "CountCheck — Every count matters, project brand illustration",
+    illustration: true,
+  },
+  {
     id: "TrueVoice",
     title: "TrueVoice",
+    category: "AI & Audio",
     showcaseDescription:
       "An audio forensic lab and Android voice-defense project combining speaker verification, synthetic-voice detection, and scam-risk signals.",
     subtitle:
@@ -136,6 +168,7 @@ export const projects = [
   {
     id: "Secure-Crypt",
     title: "Secure-Crypt",
+    category: "Security",
     showcaseDescription:
       "A browser-local AES-GCM workbench with an interoperable Java API, classical cipher experiments, explicit legacy decryption, and automated regression checks.",
     subtitle: " — Multi-Algorithm Text Encryption & Decryption Web App",
@@ -159,6 +192,7 @@ export const projects = [
   {
     id: "RupeeRakshak",
     title: "RupeeRakshak",
+    category: "Finance",
     showcaseDescription:
       "A personal-finance platform for tracking expenses, importing bank statements, visualizing spending, and exploring AI-assisted financial insights.",
     subtitle: " — AI-Powered Personal Finance Management Platform",
@@ -193,6 +227,7 @@ export const projects = [
   {
     id: "Civic Issue Reporter",
     title: "Civic Issue Reporter",
+    category: "Civic platform",
     showcaseDescription:
       "A civic reporting platform with image and location submissions, complaint tracking, and role-based dashboards for citizens and administrators.",
     subtitle: " — Smart Civic Complaint Management Platform",

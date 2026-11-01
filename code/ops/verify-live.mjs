@@ -28,6 +28,7 @@ for (const script of scripts) {
   bundle += await reply.text();
 }
 for (const [url, title] of [
+  ["https://countcheck.embarko.app/", /CountCheck/i],
   ["https://veshwik-truevoice.embarko.app/", /TrueVoice/i],
   ["https://veshwik-secure-crypt.embarko.app/", /SecureCrypt/i],
   ["https://veshwik-civic-reporter.embarko.app/", /Civic Issue Reporter/i],
@@ -55,6 +56,7 @@ check(
 for (const path of [
   "/about",
   "/contact",
+  "/project/CountCheck",
   "/project/TrueVoice",
   "/project/Secure-Crypt",
   "/project/RupeeRakshak",
