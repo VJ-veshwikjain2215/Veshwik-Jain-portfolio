@@ -2415,6 +2415,8 @@ footer {
 @media (prefers-reduced-motion: reduce) {
   .button:hover,
   .button:active,
+  .work-frame img,
+  .work-card:hover img,
   .work-card:hover .work-frame,
   .work-card:hover .work-arrow {
     transform: none;
