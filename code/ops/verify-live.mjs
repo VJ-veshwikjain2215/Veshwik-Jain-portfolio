@@ -151,7 +151,7 @@ for (const action of ["request-code", "submit"]) {
     body: "{}",
   });
   check(
-    reply.status === 400 && (await reply.json()).code === "invalid",
+    reply.status === 400 && (await reply.json()).code === "email",
     `contact rejects empty ${action} payload without sending email`,
   );
 }
