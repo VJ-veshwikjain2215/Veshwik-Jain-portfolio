@@ -961,6 +961,14 @@ h3 {
 .work-card:hover img {
   transform: scale(1);
 }
+.project-illustration {
+  background: #234b37;
+}
+.work-frame.project-illustration img,
+.detail-image.project-illustration {
+  object-fit: contain;
+  transform: none;
+}
 .work-chip {
   position: absolute;
   top: 18px;

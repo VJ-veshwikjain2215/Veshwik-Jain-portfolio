@@ -21,8 +21,20 @@ function open(path = "/") {
 
 describe("portfolio navigation and features", () => {
   it("opens verified live projects directly from the project section and keeps FlowFund source-only", () => {
-    open();
+    const { container } = open();
+    const firstCard = container.querySelector("#projects .work-card");
+    expect(
+      within(firstCard).getByRole("heading", { level: 3 }).textContent,
+    ).toBe("CountCheck");
+    expect(within(firstCard).getByText("Inventory & operations")).toBeTruthy();
+    expect(
+      within(firstCard)
+        .getByRole("link", { name: "View CountCheck source code" })
+        .getAttribute("href"),
+    ).toBe("https://github.com/VJ-veshwikjain2215/CountCheck");
+    expect(container.querySelectorAll("#projects .work-card")).toHaveLength(5);
     const expected = {
+      CountCheck: "https://countcheck.embarko.app/",
       TrueVoice: "https://veshwik-truevoice.embarko.app/",
       "Secure-Crypt": "https://veshwik-secure-crypt.embarko.app/",
       "Civic Issue Reporter": "https://veshwik-civic-reporter.embarko.app/",
@@ -145,6 +157,7 @@ describe("portfolio navigation and features", () => {
   });
 
   it.each([
+    ["CountCheck", "https://countcheck.embarko.app/"],
     ["TrueVoice", "https://veshwik-truevoice.embarko.app/"],
     ["Secure-Crypt", "https://veshwik-secure-crypt.embarko.app/"],
     ["Civic Issue Reporter", "https://veshwik-civic-reporter.embarko.app/"],
