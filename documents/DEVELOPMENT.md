@@ -36,7 +36,7 @@ After a meaningful interaction or layout change:
 - Submit an empty contact form and confirm field validation. Only test actual delivery with an inbox and SMTP sender you control.
 - Run `npm run check`.
 
-The automated checks cover formatting, lint, contact verification tests, and production compilation. Browser and delivery checks are manual.
+The automated checks cover formatting, lint, backend contact verification, DOM interaction tests, and production compilation. Run `npm run test:ui` for navigation, project links, keyboard controls, and contact-form state tests; Canvas drawing and network delivery are mocked. See [feature verification](feature-verification.md) for the current coverage and limits. Visual browser and real delivery checks remain manual.
 
 ## Deployment
 

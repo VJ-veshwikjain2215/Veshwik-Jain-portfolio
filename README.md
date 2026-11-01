@@ -42,7 +42,7 @@ This portfolio introduces my work in Java, Spring Boot, and full-stack developme
 | ------------------------ | ----------------------------------------------- | ------------------------------------------------------------------------ |
 | **TrueVoice**            | Voice authenticity and synthetic-voice defense  | [Repository](https://github.com/VJ-veshwikjain2215/TrueVoice)            |
 | **Secure-Crypt**         | Text encryption and decryption with Spring Boot | [Repository](https://github.com/VJ-veshwikjain2215/Secure-Crypt)         |
-| **RupeeRakshak**         | Full-stack personal finance management          | [Repository](https://github.com/VJ-veshwikjain2215/rupeerakshak)         |
+| **RupeeRakshak**         | Full-stack personal finance management          | [Repository](https://github.com/VJ-veshwikjain2215/FlowFund)             |
 | **Civic Issue Reporter** | Civic reporting and complaint management        | [Repository](https://github.com/VJ-veshwikjain2215/Civic-Issue-Reporter) |
 
 These are projects showcased by the portfolio; their backends are maintained in their own repositories.
@@ -82,7 +82,9 @@ Open the Local URL printed by Vite, normally `http://localhost:5173`.
 | `npm run lint`         | Check source with Oxlint                |
 | `npm run format`       | Format supported files                  |
 | `npm run format:check` | Check formatting without changing files |
-| `npm run check`        | Run formatting, lint, and build checks  |
+| `npm run test`         | Run backend and DOM interaction tests   |
+| `npm run test:ui`      | Check navigation and form interactions  |
+| `npm run check`        | Run formatting, lint, tests, and build  |
 
 No secret is required to run the portfolio. Google Fonts loads the typefaces over the network. Actual code and message delivery requires SMTP settings on the separate contact backend. See [email setup](documents/EMAIL-VERIFICATION.md); credentials stay outside the frontend.
 
@@ -128,7 +130,9 @@ CONTENT-LICENSE.md      Personal content and media terms
 
 The interface includes a skip link, semantic landmarks, keyboard focus indicators, labeled form controls, and descriptive links. CSS and the canvas respect `prefers-reduced-motion`.
 
-The redesign was manually checked at desktop and phone widths, including navigation, project pages, direct-route reloads, and empty-form validation. CI checks code quality and build output; it does **not** claim to be a full accessibility audit or an end-to-end message-delivery test.
+The redesign was manually checked at desktop and phone widths, including navigation, project pages, direct-route reloads, and empty-form validation. See the [current feature checks](documents/feature-verification.md) for project-link verification, automated interaction coverage, and remaining browser checks.
+
+CI checks code quality, backend tests, DOM interaction tests, and build output; it does **not** claim to be a full accessibility audit or an end-to-end message-delivery test.
 
 ## Contributing
 
