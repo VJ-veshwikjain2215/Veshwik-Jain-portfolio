@@ -110,74 +110,95 @@ describe("portfolio navigation and features", () => {
       expect(link.rel).toContain("noreferrer");
   });
 
-  it("switches toolkit tabs by keyboard and capability panels by click", async () => {
+  it("filters the actual tech stack with keyboard-accessible categories", async () => {
     open();
     const user = userEvent.setup();
-    const tabs = screen.getAllByRole("tab");
-    expect(screen.getByRole("tabpanel").dataset.theme).toBe("light");
+    const tabs = within(
+      screen.getByRole("tablist", { name: "Technology categories" }),
+    ).getAllByRole("tab");
+    const panel = screen.getByRole("tabpanel");
+    expect(within(panel).getAllByRole("heading", { level: 3 })).toHaveLength(5);
+    expect(within(panel).getAllByRole("listitem")).toHaveLength(18);
+    for (const label of panel.querySelectorAll(".tech-label")) {
+      expect(label.textContent.trim()).not.toBe("");
+      expect(label.querySelector("svg").getAttribute("aria-hidden")).toBe(
+        "true",
+      );
+    }
     tabs[0].focus();
-    await user.keyboard("{ArrowDown}");
+    await user.keyboard("{ArrowRight}");
     expect(document.activeElement).toBe(tabs[1]);
     expect(tabs[1].getAttribute("aria-selected")).toBe("true");
-    expect(tabs[1].dataset.theme).toBe("dark");
-    expect(screen.getByRole("tabpanel").dataset.theme).toBe("dark");
-    for (const tech of ["React", "JavaScript", "HTML", "CSS"]) {
-      expect(
-        within(screen.getByRole("tabpanel"))
-          .getByText(tech)
-          .closest(".tech-label")
-          .querySelector("svg"),
-      ).toBeTruthy();
-    }
-    expect(screen.getByRole("tabpanel").getAttribute("aria-labelledby")).toBe(
-      tabs[1].id,
-    );
+    expect(panel.getAttribute("aria-labelledby")).toBe(tabs[1].id);
+    expect(within(panel).getByText("Kotlin")).toBeTruthy();
+    expect(within(panel).queryByText("React")).toBeNull();
+    await user.keyboard("{ArrowRight}");
+    expect(within(panel).getByRole("heading").textContent).toBe("Interface");
+    expect(panel.querySelector(".toolkit-card").dataset.theme).toBe("dark");
+    expect(within(panel).getByText("React")).toBeTruthy();
     await user.keyboard("{End}");
-    expect(document.activeElement).toBe(tabs[3]);
-    expect(screen.getByRole("tabpanel").dataset.theme).toBe("dark");
-    for (const tech of ["GitHub", "VS Code", "Linux"])
-      expect(within(screen.getByRole("tabpanel")).getByText(tech)).toBeTruthy();
-    await user.keyboard("{ArrowUp}");
-    expect(screen.getByRole("tabpanel").dataset.theme).toBe("light");
-    for (const tech of ["MySQL", "DBMS", "SQL"])
-      expect(
-        within(screen.getByRole("tabpanel"))
-          .getByText(tech)
-          .closest(".tech-label")
-          .querySelector("svg"),
-      ).toBeTruthy();
+    expect(document.activeElement).toBe(tabs[5]);
+    expect(within(panel).getByText("GitHub Actions")).toBeTruthy();
+    await user.keyboard("{ArrowLeft}");
+    expect(within(panel).getByText("PostgreSQL")).toBeTruthy();
+    expect(panel.querySelector(".toolkit-card").dataset.theme).toBe("light");
     await user.keyboard("{Home}");
     expect(document.activeElement).toBe(tabs[0]);
-    for (const tech of ["Java", "Spring Boot", "REST APIs"])
-      expect(
-        within(screen.getByRole("tabpanel"))
-          .getByText(tech)
-          .closest(".tech-label")
-          .querySelector("svg"),
-      ).toBeTruthy();
-    const trigger = screen.getByRole("button", {
-      name: "Explore Data & storage",
+    expect(within(panel).getAllByRole("listitem")).toHaveLength(18);
+    await user.click(tabs[3]);
+    expect(within(panel).getByText("Express")).toBeTruthy();
+    expect(screen.getByRole("status").textContent).toContain("4 technologies");
+  });
+
+  it("explains outcomes with project evidence rather than repeating the toolkit", async () => {
+    open();
+    const user = userEvent.setup();
+    const section = screen.getByRole("region", {
+      name: /Useful outcomes\.\s*Working examples\./,
     });
-    await user.click(trigger);
-    expect(trigger.getAttribute("aria-expanded")).toBe("true");
-    expect(trigger.closest(".expand-card").dataset.theme).toBe("light");
-    await user.click(
-      screen.getByRole("button", { name: "Explore Web applications" }),
+    const triggers = within(section).getAllByRole("button");
+    expect(triggers).toHaveLength(3);
+    expect(triggers[0].getAttribute("aria-expanded")).toBe("true");
+    expect(section.querySelector(".tech-label")).toBeNull();
+    const first = document.getElementById(
+      triggers[0].getAttribute("aria-controls"),
+    );
+    const countcheck = within(first).getByRole("link", { name: /CountCheck/ });
+    expect(countcheck.getAttribute("href")).toBe("/project/CountCheck");
+    expect(
+      within(first)
+        .getByRole("link", { name: /Civic Issue Reporter/ })
+        .getAttribute("href"),
+    ).toBe("/project/Civic%20Issue%20Reporter");
+    triggers[1].focus();
+    await user.keyboard("{Enter}");
+    expect(triggers[1].getAttribute("aria-expanded")).toBe("true");
+    expect(first.hidden).toBe(true);
+    const second = document.getElementById(
+      triggers[1].getAttribute("aria-controls"),
     );
     expect(
-      screen
-        .getByRole("button", { name: "Explore Web applications" })
-        .closest(".expand-card").dataset.theme,
-    ).toBe("dark");
-    await user.click(trigger);
+      within(second)
+        .getByRole("link", { name: /Secure-Crypt/ })
+        .getAttribute("href"),
+    ).toBe("/project/Secure-Crypt");
+    await user.click(triggers[2]);
+    const third = document.getElementById(
+      triggers[2].getAttribute("aria-controls"),
+    );
     expect(
-      document.getElementById(trigger.getAttribute("aria-controls")).hidden,
-    ).toBe(false);
-    expect(
-      screen
-        .getByRole("button", { name: "Explore Backend systems" })
-        .getAttribute("aria-expanded"),
-    ).toBe("false");
+      within(third)
+        .getByRole("link", { name: /Portfolio contact flow/ })
+        .getAttribute("href"),
+    ).toBe("/contact");
+    await user.keyboard(" ");
+    expect(third.hidden).toBe(true);
+    expect(within(section).queryByRole("link")).toBeNull();
+    await user.click(triggers[0]);
+    await user.click(within(first).getByRole("link", { name: /CountCheck/ }));
+    expect(screen.getByRole("heading", { level: 1 }).textContent).toContain(
+      "CountCheck",
+    );
   });
 
   it("toggles navigation and reaches about/contact routes", async () => {
@@ -296,7 +317,7 @@ describe("portfolio navigation and features", () => {
         .setup()
         .click(screen.getByRole("link", { name: /BACK HOME/i }));
       expect(
-        screen.getByRole("tablist", { name: "Development skills" }),
+        screen.getByRole("tablist", { name: "Technology categories" }),
       ).toBeTruthy();
     },
   );

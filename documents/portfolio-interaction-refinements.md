@@ -2,6 +2,8 @@
 
 2 November 2026. Implements the owner's five requested refinements within the current design.
 
+The later [distinct Toolkit and Capabilities refinement](toolkit-capabilities.md) supersedes item 5 and its section-specific verification details below. The cursor, project-grid, navigation, and Journey/How I Work refinements remain applicable.
+
 ## Behavior
 
 1. A single black CLICK circle lives in a body portal and tracks the pointer across all routes, the navbar, footer and forms. Desktop native cursors are hidden only after the custom cursor is positioned. The overlay ignores pointer events. Touch/coarse devices keep native behavior; Tab, window exit/blur and cleanup restore it. Pointer movement uses refs and at most one pending frame, with immediate tracking under reduced motion. The hero renderer keeps its scenes, cycle, drag and repulsion behavior; only its cursor overlay ownership changed.
