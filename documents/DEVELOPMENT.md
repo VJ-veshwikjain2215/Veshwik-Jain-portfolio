@@ -55,3 +55,7 @@ The included Netlify and Vercel configuration files provide SPA fallback routing
 ## Dependency maintenance
 
 Dependabot opens grouped npm updates and GitHub Actions updates weekly. Review update notes and run the checks before merging. Do not use forced major-version security upgrades without checking compatibility.
+
+## Portfolio interaction components
+
+`SiteCursor.jsx` owns the desktop pointer in a body portal; the particle renderer no longer owns a cursor overlay. `ProjectGrid.jsx` keeps projects in stable pairs and changes the active card on hover/focus. `TechnologyLabel.jsx` renders the shared SVG technology labels, and `Reveal.jsx` provides the reduced-motion-aware entrance wrapper. See [interaction refinements](portfolio-interaction-refinements.md) for responsive fallbacks, behavior and verification limits.

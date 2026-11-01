@@ -11,51 +11,50 @@ import {
 import ContactForm from "./components/ContactForm";
 import HeroParticles from "./components/HeroParticles";
 import ScrollStatement from "./components/ScrollStatement";
+import Reveal from "./components/Reveal";
+import SiteCursor from "./components/SiteCursor";
+import ProjectGrid from "./components/ProjectGrid";
+import TechnologyLabel from "./components/TechnologyLabel";
+import {
+  LuServer,
+  LuPanelsTopLeft,
+  LuDatabase,
+  LuGitBranch,
+  LuCheck,
+} from "react-icons/lu";
+import { TbApi } from "react-icons/tb";
+import { FaJava } from "react-icons/fa6";
 const num = (i) => String(i + 1).padStart(2, "0");
-function Reveal({ children, className = "", delay = 0 }) {
-  const reduce = useReducedMotion();
-  return (
-    <motion.div
-      className={className}
-      initial={reduce ? false : { opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.08, margin: "0px 0px -24px 0px" }}
-      transition={{
-        duration: reduce ? 0 : 0.56,
-        delay: reduce ? 0 : delay,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-    >
-      {children}
-    </motion.div>
-  );
-}
 const capabilities = [
   {
     title: "Backend systems",
     note: "APIs, business logic, and reliable data flows",
-    icon: "⌘",
+    icon: LuServer,
+    theme: "light",
     tech: ["Java", "Spring Boot", "REST APIs"],
     copy: "Clear application layers and dependable APIs, built around the problem the software needs to solve.",
   },
   {
     title: "Web applications",
     note: "Useful interfaces, from idea to interaction",
-    icon: "↗",
+    icon: LuPanelsTopLeft,
+    theme: "dark",
     tech: ["React", "JavaScript", "HTML", "CSS"],
     copy: "Responsive interfaces that connect the system underneath to a clear, useful experience on the screen.",
   },
   {
     title: "Data & storage",
     note: "Structured information, thoughtfully connected",
-    icon: "▤",
+    icon: LuDatabase,
+    theme: "light",
     tech: ["MySQL", "DBMS", "SQL"],
     copy: "Practical data models, understandable relationships, and the foundations that help an application stay predictable.",
   },
   {
     title: "Developer workflow",
     note: "Version control, tools, and continuous learning",
-    icon: "⟷",
+    icon: LuGitBranch,
+    theme: "dark",
     tech: ["Git", "GitHub", "VS Code", "Linux", "Windows", "C/C++"],
     copy: "Small iterations, meaningful checks, and the tools to turn a working idea into something that can be improved.",
   },
@@ -120,8 +119,8 @@ function Nav() {
         {[
           ["Home", "home"],
           ["About", "about"],
-          ["Capabilities", "capabilities"],
           ["Toolkit", "skills"],
+          ["Capabilities", "capabilities"],
           ["Projects", "projects"],
           ["Journey", "academics"],
         ].map(([label, id]) => (
@@ -168,7 +167,10 @@ function Heading({ label, children }) {
 }
 function CapabilityScene({ index }) {
   return (
-    <div className={`capability-scene scene-${index}`}>
+    <div
+      className={`capability-scene scene-${index}`}
+      data-theme={capabilities[index].theme}
+    >
       <span className="eyebrow">
         {
           [
@@ -198,19 +200,25 @@ function CapabilityScene({ index }) {
         {index === 0 ? (
           <>
             <div className="flow-node">
-              <span>↗</span>
+              <span>
+                <TbApi aria-hidden="true" />
+              </span>
               <b>Request received</b>
               <small>REST endpoint</small>
             </div>
             <div className="flow-line" />
             <div className="flow-node">
-              <span>⌘</span>
+              <span>
+                <FaJava aria-hidden="true" />
+              </span>
               <b>Application logic</b>
               <small>Java · Spring Boot</small>
             </div>
             <div className="flow-line" />
             <div className="flow-node">
-              <span>✓</span>
+              <span>
+                <LuCheck aria-hidden="true" />
+              </span>
               <b>Response returned</b>
               <small>Clear, structured data</small>
             </div>
@@ -276,8 +284,8 @@ function CapabilityScene({ index }) {
         )}
       </div>
       <div className="scene-chips">
-        {capabilities[index].tech.slice(0, 4).map((t) => (
-          <span key={t}>{t}</span>
+        {capabilities[index].tech.map((t) => (
+          <TechnologyLabel name={t} key={t} />
         ))}
       </div>
     </div>
@@ -356,6 +364,7 @@ function Footer() {
 function Home() {
   const [activeSkill, setActiveSkill] = useState(0),
     [activeCapability, setActiveCapability] = useState(0);
+  const reducedMotion = useReducedMotion();
   useEffect(() => {
     const hash = window.location.hash.slice(1);
     if (hash) {
@@ -474,6 +483,7 @@ function Home() {
             {capabilities.map((c, i) => (
               <button
                 role="tab"
+                data-theme={c.theme}
                 id={`skill-tab-${i}`}
                 aria-controls="skill-panel"
                 aria-selected={activeSkill === i}
@@ -496,7 +506,9 @@ function Home() {
                   }
                 }}
               >
-                <span className="serve-icon">{c.icon}</span>
+                <span className="serve-icon">
+                  <c.icon aria-hidden="true" />
+                </span>
                 <b>{c.title}</b>
                 <small>{c.note}</small>
                 <i className="serve-progress" />
@@ -509,6 +521,7 @@ function Home() {
         </div>
         <div
           className="serve-stage"
+          data-theme={capabilities[activeSkill].theme}
           role="tabpanel"
           id="skill-panel"
           aria-labelledby={`skill-tab-${activeSkill}`}
@@ -536,6 +549,7 @@ function Home() {
             <div
               key={c.title}
               className={`expand-card ${activeCapability === i ? "is-open" : ""}`}
+              data-theme={c.theme}
             >
               <button
                 className="expand-trigger"
@@ -557,9 +571,11 @@ function Home() {
                   <span className="eyebrow">{num(i)} / 04</span>
                   <h3>{c.title}</h3>
                   <p>{c.copy}</p>
-                  <ul>
+                  <ul className="tech-list">
                     {c.tech.map((t) => (
-                      <li key={t}>{t}</li>
+                      <li key={t}>
+                        <TechnologyLabel name={t} />
+                      </li>
                     ))}
                   </ul>
                   <a href="#projects" className="button soft">
@@ -584,55 +600,7 @@ function Home() {
             authenticity experiment. Personal finance and civic reporting.
           </p>
         </div>
-        <div className="work-grid">
-          {projects.map((p, index) => (
-            <Reveal className="work-card" key={p.id} delay={(index % 2) * 0.08}>
-              <Link
-                className={`work-frame${p.illustration ? " project-illustration" : ""}${p.imageFit === "contain" ? " image-contain" : ""}`}
-                to={`/project/${encodeURIComponent(p.id)}`}
-                aria-label={`View ${p.title} project`}
-              >
-                <img
-                  src={p.screenshot}
-                  alt={p.imageAlt || `${p.title} application screenshot`}
-                  loading="lazy"
-                />
-                <span className="work-chip">{p.category}</span>
-                <span className="work-arrow">↗</span>
-              </Link>
-              <Link to={`/project/${encodeURIComponent(p.id)}`}>
-                <h3>{p.title}</h3>
-                <p>{p.showcaseDescription}</p>
-              </Link>
-              <div className="actions project-links">
-                {p.demo ? (
-                  <a
-                    className="button soft"
-                    href={p.demo}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={`Open ${p.title} live site`}
-                  >
-                    Live site ↗
-                  </a>
-                ) : (
-                  <span className="project-availability">
-                    No public live site
-                  </span>
-                )}
-                <a
-                  className="button soft"
-                  href={p.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  aria-label={`View ${p.title} source code`}
-                >
-                  View code ↗
-                </a>
-              </div>
-            </Reveal>
-          ))}
-        </div>
+        <ProjectGrid projects={projects} />
         <a
           className="button soft work-more"
           href={profile.social.github}
@@ -644,17 +612,30 @@ function Home() {
       </section>
       <section className="dark-section">
         <div className="section">
-          <p className="eyebrow">HOW I WORK</p>
-          <ScrollStatement dark>
-            Built with curiosity, then improved through learning, testing and
-            attention to the details that matter.
-          </ScrollStatement>
-          <p className="dark-intro">
-            I enjoy software that is predictable, understandable, and useful.
-            These are the habits I bring to a project.
-          </p>
+          <Reveal className="work-introduction">
+            <p className="eyebrow">HOW I WORK</p>
+            <ScrollStatement dark>
+              Built with curiosity, then improved through learning, testing and
+              attention to the details that matter.
+            </ScrollStatement>
+            <p className="dark-intro">
+              I enjoy software that is predictable, understandable, and useful.
+              These are the habits I bring to a project.
+            </p>
+          </Reveal>
           <div className="rings">
-            <div className="rings-line" />
+            <motion.div
+              className="rings-line"
+              aria-hidden="true"
+              initial={reducedMotion ? false : { scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: reducedMotion ? 0 : 0.8,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+              style={{ transformOrigin: "left center" }}
+            />
             {[
               [
                 "01",
@@ -671,8 +652,8 @@ function Home() {
                 "Keep learning after launch",
                 "Check the real flow, understand what breaks, document what changed, and improve the next version.",
               ],
-            ].map(([n, title, copy]) => (
-              <Reveal className="ring-item" key={n}>
+            ].map(([n, title, copy], index) => (
+              <Reveal className="ring-item" key={n} delay={index * 0.08}>
                 <div className="ring-num">
                   <b>{n}</b>
                 </div>
@@ -684,7 +665,7 @@ function Home() {
         </div>
       </section>
       <section className="section journey-section" id="academics">
-        <div className="sec-head">
+        <Reveal className="sec-head">
           <Heading label="THE JOURNEY SO FAR">
             Always learning.
             <br />
@@ -694,25 +675,33 @@ function Home() {
             Engineering coursework, side projects, hackathons, and the small
             discoveries that connect them.
           </p>
-        </div>
+        </Reveal>
         <div className="journey-rows">
-          {about.timeline.map((t) => (
-            <div key={t.year}>
+          {about.timeline.map((t, index) => (
+            <Reveal
+              className="journey-item"
+              key={t.year}
+              delay={(index % 3) * 0.06}
+            >
               <span className="journey-icon">↗</span>
               <h3>{t.title}</h3>
               <span className="eyebrow">{t.year}</span>
               <p>{t.detail}</p>
-            </div>
+            </Reveal>
           ))}
-          {achievements.slice(0, 3).map((a) => (
-            <div key={a.title}>
+          {achievements.slice(0, 3).map((a, index) => (
+            <Reveal
+              className="journey-item"
+              key={a.title}
+              delay={(index % 3) * 0.06}
+            >
               <span className="journey-icon">✓</span>
               <h3>{a.title}</h3>
               <span className="eyebrow">
                 {a.year} · {a.type}
               </span>
               <p>{a.detail}</p>
-            </div>
+            </Reveal>
           ))}
         </div>
         <details className="record-details">
@@ -1062,6 +1051,7 @@ function ProjectPage() {
 export default function App() {
   return (
     <div className="site-frame" id="top">
+      <SiteCursor />
       <a href="#main" className="skip-link">
         Skip to content
       </a>

@@ -4,7 +4,6 @@ import { createParticleStage, PARTICLE_SCENES } from "../lib/particleStage";
 
 export default function HeroParticles() {
   const canvas = useRef(null),
-    cursor = useRef(null),
     controls = useRef(null),
     engine = useRef(null),
     current = useRef(0);
@@ -15,7 +14,6 @@ export default function HeroParticles() {
     const stage = createParticleStage(canvas.current, {
       reducedMotion: !!reducedMotion,
       initialScene: current.current,
-      cursor: cursor.current,
       controls: controls.current,
       onScene: (index) => {
         current.current = index;
@@ -38,9 +36,6 @@ export default function HeroParticles() {
         aria-hidden="true"
         data-cursor="Click"
       />
-      <span className="particle-cursor" ref={cursor} aria-hidden="true">
-        Click
-      </span>
       <div
         ref={controls}
         className={`scene-selector particle-selector ${moving ? "is-morphing" : ""}`}

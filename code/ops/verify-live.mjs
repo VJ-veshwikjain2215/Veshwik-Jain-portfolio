@@ -101,7 +101,7 @@ const images = new Set(
     ),
   ].map((match) => match[1]),
 );
-check(images.size >= 4, "all four project screenshots are bundled");
+check(images.size >= 5, "all five project screenshots are bundled");
 for (const path of images) {
   const reply = await get(base + path);
   check(
