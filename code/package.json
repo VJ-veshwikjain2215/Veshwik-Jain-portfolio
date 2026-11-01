@@ -11,7 +11,9 @@
     "format": "prettier --write . ../*.md ../.github ../documents",
     "format:check": "prettier --check . ../*.md ../.github ../documents",
     "check": "npm run format:check && npm run lint && npm run test && npm run build",
-    "test": "node --test contact-api/*.test.js"
+    "test": "npm run test:api && npm run test:ui",
+    "test:api": "node --test contact-api/*.test.js",
+    "test:ui": "vitest run"
   },
   "dependencies": {
     "framer-motion": "^12.42.2",
@@ -22,14 +24,18 @@
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
+    "@testing-library/react": "^16.3.3",
+    "@testing-library/user-event": "^14.6.8",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.3",
+    "jsdom": "^26.1.0",
+    "nodemailer": "^10.3.1",
     "oxlint": "^1.71.0",
     "prettier": "^3.9.10",
     "tailwindcss": "^4.3.3",
     "vite": "^8.1.1",
-    "nodemailer": "^10.3.1"
+    "vitest": "^5.0.5"
   },
   "description": "Developer portfolio with a morphing particle hero, expanding capability panels, staggered project grid, and responsive React UI.",
   "license": "MIT",

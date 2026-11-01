@@ -614,6 +614,32 @@ function Home() {
                 <h3>{p.title}</h3>
                 <p>{p.showcaseDescription}</p>
               </Link>
+              <div className="actions project-links">
+                {p.demo ? (
+                  <a
+                    className="button soft"
+                    href={p.demo}
+                    target="_blank"
+                    rel="noreferrer"
+                    aria-label={`Open ${p.title} live site`}
+                  >
+                    Live site ↗
+                  </a>
+                ) : (
+                  <span className="project-availability">
+                    No public live site
+                  </span>
+                )}
+                <a
+                  className="button soft"
+                  href={p.github}
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label={`View ${p.title} source code`}
+                >
+                  View code ↗
+                </a>
+              </div>
             </Reveal>
           ))}
         </div>
@@ -1015,7 +1041,7 @@ function ProjectPage() {
             >
               VIEW CODE ↗
             </a>
-            {p.demo && (
+            {p.demo ? (
               <a
                 className="button"
                 href={p.demo}
@@ -1024,6 +1050,11 @@ function ProjectPage() {
               >
                 OPEN LIVE SITE ↗
               </a>
+            ) : (
+              <p className="project-availability">
+                No public live site is available for this project. Explore the
+                source code above.
+              </p>
             )}
           </div>
         </div>

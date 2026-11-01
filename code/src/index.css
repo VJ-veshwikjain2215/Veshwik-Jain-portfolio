@@ -997,6 +997,10 @@ h3 {
 .work-more {
   margin-top: 55px;
 }
+.project-availability {
+  color: var(--muted);
+  font-size: 14px;
+}
 .dark-section {
   background: var(--teal);
   color: var(--on-dark);
