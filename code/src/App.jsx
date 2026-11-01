@@ -596,7 +596,7 @@ function Home() {
           {projects.map((p) => (
             <Reveal className="work-card" key={p.id}>
               <Link
-                className={`work-frame${p.illustration ? " project-illustration" : ""}`}
+                className={`work-frame${p.illustration ? " project-illustration" : ""}${p.imageFit === "contain" ? " image-contain" : ""}`}
                 to={`/project/${encodeURIComponent(p.id)}`}
                 aria-label={`View ${p.title} project`}
               >

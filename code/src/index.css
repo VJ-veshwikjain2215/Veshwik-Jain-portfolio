@@ -964,6 +964,7 @@ h3 {
 .project-illustration {
   background: #234b37;
 }
+.work-frame.image-contain img,
 .work-frame.project-illustration img,
 .detail-image.project-illustration {
   object-fit: contain;
