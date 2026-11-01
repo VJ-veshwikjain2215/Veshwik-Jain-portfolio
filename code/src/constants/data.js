@@ -123,6 +123,7 @@ export const projects = [
     demo: "https://countcheck.embarko.app/",
     featured: true,
     screenshot: countCheckImg,
+    imageFit: "contain",
     imageAlt: "CountCheck homepage showing inventory count comparison",
   },
   {
