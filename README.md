@@ -152,3 +152,5 @@ Source code is available under the [MIT license](LICENSE). See [personal content
 ## Design update
 
 The current redesign closely follows the section structure and visual system of [Potadot](https://potadot.com.my/), with Veshwik’s portfolio content and code-generated particle compositions. See [redesign notes](documents/REDESIGN.md) for implementation and verification.
+
+The latest [light-and-green motion refinement](documents/design-motion-refinement.md) adds coordinated entrances, refined project hovers, a smoother mobile menu, larger hero controls, and visibility-aware statement updates.

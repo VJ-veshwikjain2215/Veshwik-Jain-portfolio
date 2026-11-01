@@ -32,6 +32,9 @@
   --shadow-press: inset 6px 6px 14px #a0a6ba61, inset -6px -6px 14px #fffffff2;
   --gutter: clamp(16px, 4vw, 56px);
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --motion-fast: 180ms;
+  --motion-medium: 320ms;
+  --motion-enter: 560ms;
   --font-display: "Outfit", sans-serif;
   --font-body: "Figtree", sans-serif;
   --font-mono: "JetBrains Mono", monospace;
@@ -228,8 +231,9 @@ h3 {
   position: relative;
   border-radius: 24px;
   transition:
-    background 0.25s,
-    box-shadow 0.25s;
+    background var(--motion-fast),
+    color var(--motion-fast),
+    box-shadow var(--motion-medium);
   white-space: nowrap;
 }
 .nav-links a:hover,
@@ -341,9 +345,14 @@ h3 {
     transform 0.35s var(--ease),
     box-shadow 0.35s;
 }
-.button:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-raise);
+.button:active {
+  transform: translateY(0) scale(0.98);
+}
+@media (hover: hover) and (pointer: fine) {
+  .button:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-raise);
+  }
 }
 .button > span {
   display: grid;
@@ -385,6 +394,20 @@ h3 {
   border-radius: 20px;
   background: #ffffff7a;
   box-shadow: 0 2px 8px #a0a6ba15;
+}
+.hero-tags > span:first-child {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #166534;
+  background: var(--green-soft);
+}
+.hero-tags > span:first-child::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: currentColor;
 }
 .hero-visual {
   position: relative;
@@ -812,8 +835,8 @@ h3 {
   box-shadow: var(--shadow-soft);
   overflow: hidden;
   transition:
-    flex 0.7s cubic-bezier(0.65, 0, 0.25, 1),
-    background 0.5s;
+    flex var(--motion-enter) var(--ease),
+    background var(--motion-medium);
 }
 .expand-card.is-open {
   flex: 5.2;
@@ -950,13 +973,14 @@ h3 {
   border-radius: 28px;
   background: var(--paper);
   box-shadow: var(--shadow-raise);
+  transition: transform var(--motion-medium) var(--ease);
 }
 .work-frame img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transform: scale(1.08);
-  transition: transform 1.2s var(--ease);
+  transition: transform var(--motion-enter) var(--ease);
 }
 .work-card:hover img {
   transform: scale(1);
@@ -993,6 +1017,24 @@ h3 {
   border-radius: 50%;
   color: var(--green-ink);
   font-size: 25px;
+  transition:
+    transform var(--motion-medium) var(--ease),
+    color var(--motion-fast),
+    background var(--motion-fast);
+}
+.work-card:focus-within .work-arrow {
+  background: var(--green);
+  color: var(--teal);
+}
+@media (hover: hover) and (pointer: fine) {
+  .work-card:hover .work-frame {
+    transform: translateY(-4px);
+  }
+  .work-card:hover .work-arrow {
+    background: var(--green);
+    color: var(--teal);
+    transform: rotate(-8deg);
+  }
 }
 .work-card h3 {
   font-size: 29px;
@@ -1672,7 +1714,14 @@ footer {
     padding: 8px 9px 8px 15px;
   }
   .nav-links {
-    display: none;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px) scale(0.98);
+    transform-origin: top center;
     position: absolute;
     top: 76px;
     left: 0;
@@ -1682,11 +1731,19 @@ footer {
     border-radius: 25px;
     background: #f2f3f7f5;
     box-shadow: var(--shadow-raise);
+    max-height: calc(100svh - 110px);
+    overflow-y: auto;
+    transition:
+      opacity var(--motion-fast),
+      transform var(--motion-medium) var(--ease),
+      visibility 0s var(--motion-fast);
   }
   .nav-links.open {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transform: none;
+    transition-delay: 0s;
   }
   .nav-links a {
     font-size: 16px;
@@ -2217,9 +2274,13 @@ footer {
   transform: translateX(-50%);
   min-width: 260px;
   white-space: nowrap;
+  max-width: calc(100vw - var(--gutter) * 2);
 }
 .particle-selector b {
   animation: particle-caption 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  max-width: 90px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .scene-number {
   display: grid;
@@ -2233,14 +2294,36 @@ footer {
 .particle-selector button {
   position: relative;
   overflow: hidden;
+  width: 24px;
+  height: 26px;
+  background: transparent;
+}
+.particle-selector > div {
+  gap: 0;
+  margin-left: 8px;
+  flex-shrink: 0;
+}
+.particle-selector .scene-brand-dot {
+  flex-shrink: 0;
+}
+.particle-selector button::before {
+  content: "";
+  position: absolute;
+  inset: 10px 9px;
+  border-radius: 8px;
+  background: #cbd0d7;
 }
 .particle-selector button[aria-pressed="true"] {
-  background: #cbd0d7;
+  width: 32px;
+  background: transparent;
+}
+.particle-selector button[aria-pressed="true"]::before {
+  inset: 10px 3px;
 }
 .particle-selector button[aria-pressed="true"]::after {
   content: "";
   position: absolute;
-  inset: 0;
+  inset: 10px 3px;
   background: var(--green);
   border-radius: inherit;
   transform-origin: left;
@@ -2286,12 +2369,56 @@ footer {
     transform: translateY(0);
   }
 }
+@keyframes content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-copy > * {
+    animation: content-enter var(--motion-enter) var(--ease) both;
+  }
+  .hero-copy > :nth-child(2) {
+    animation-delay: 60ms;
+  }
+  .hero-copy > :nth-child(3) {
+    animation-delay: 120ms;
+  }
+  .hero-copy > :nth-child(4) {
+    animation-delay: 180ms;
+  }
+  .hero-copy > :nth-child(5) {
+    animation-delay: 240ms;
+  }
+  .serve-stage-copy,
+  .contact-intro,
+  .project-page > h1,
+  .project-subtitle {
+    animation: content-enter var(--motion-enter) var(--ease) both;
+  }
+}
+@media (max-width: 760px) {
+  .particle-selector b {
+    max-width: 80px;
+  }
+}
 @media (hover: hover) and (pointer: fine) {
   .hero-canvas {
     cursor: none;
   }
 }
 @media (prefers-reduced-motion: reduce) {
+  .button:hover,
+  .button:active,
+  .work-card:hover .work-frame,
+  .work-card:hover .work-arrow {
+    transform: none;
+  }
   .particle-cursor {
     display: none;
   }

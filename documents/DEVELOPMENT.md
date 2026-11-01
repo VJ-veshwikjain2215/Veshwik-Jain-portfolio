@@ -6,6 +6,8 @@
 
 Project details resolve from the `id` in `code/src/constants/data.js`. Unknown project IDs and unknown routes show a recovery link. The contact form requests an emailed code and submits verified messages through the standalone Node/SMTP service in `code/contact-api/`. See [email verification setup](EMAIL-VERIFICATION.md).
 
+`code/src/components/ScrollStatement.jsx` updates revealed words only near the viewport, coalesces scroll/resize measurements into one frame, and skips animation entirely for reduced motion. See [motion refinement](design-motion-refinement.md) for the current behavior and verification limits.
+
 The renderer samples five procedural masks into a reusable particle pool. It uses perspective projection, depth shading, spring attraction, cursor repulsion, drag rotation, curved staggered morphs, and velocity trails. The cycle advances every three seconds of active animation time; manual selection restarts that interval. The full-hero drawing surface prevents the illustration column from clipping trails.
 
 Rendering runs through `requestAnimationFrame`, caps display resolution at 2�, pauses offscreen and in hidden tabs, and disconnects observers and listeners on unmount. Reduced-motion visitors receive a still graphic with manual scene controls. Motion preferences also disable reveal transitions.
@@ -25,7 +27,7 @@ Application source, package manifests, build/hosting configuration, and the cont
 After a meaningful interaction or layout change:
 
 - Check the homepage at a desktop width and a phone width (for example, 390 px).
-- Open and close the phone menu; follow each section anchor.
+- Open and close the phone menu; dismiss it with Escape and an outside click; follow each section anchor.
 - Check toolkit arrow-key navigation, expanding capability panels, and the FAQ.
 - Open `/about` and `/contact`.
 - Open each project page and reload a deep link such as `/project/TrueVoice`.
