@@ -607,7 +607,7 @@ h3 {
 }
 .serve-tabs button[aria-selected="true"] .serve-icon {
   background: var(--green);
-  color: white;
+  color: var(--teal);
   box-shadow: 0 10px 22px -8px #3db663b3;
 }
 .serve-tabs b {
@@ -632,6 +632,24 @@ h3 {
   opacity: 1;
   background: linear-gradient(to right, var(--green) 45%, var(--line) 45%);
 }
+.serve-icon svg {
+  width: 24px;
+  height: 24px;
+  stroke-width: 1.8;
+}
+.serve-tabs button[data-theme="dark"][aria-selected="true"] {
+  background: var(--teal);
+  color: var(--on-dark);
+  box-shadow: 0 12px 24px -16px #0a282d80;
+}
+.serve-tabs button[data-theme="dark"][aria-selected="true"] small {
+  color: #c4d8d0;
+}
+.serve-tabs button[data-theme="dark"][aria-selected="true"] .serve-icon {
+  background: var(--teal-2);
+  color: #bbefcb;
+  box-shadow: inset 0 0 0 1px #eaf4ee24;
+}
 .serve-side > .button {
   justify-self: start;
 }
@@ -652,6 +670,39 @@ h3 {
 .serve-stage-copy p {
   font-size: 15px;
   color: var(--muted);
+}
+.serve-stage {
+  transition:
+    background-color var(--motion-medium),
+    color var(--motion-medium);
+}
+.serve-stage[data-theme="dark"] {
+  background-color: var(--teal);
+  color: var(--on-dark);
+  background-image: radial-gradient(#eaf4ee15 1.2px, transparent 1.6px);
+  box-shadow: 0 20px 44px -24px #0a282d80;
+}
+.serve-stage[data-theme="dark"] .serve-stage-copy p {
+  color: #c4d8d0;
+}
+.capability-scene[data-theme="dark"] {
+  --paper: #123a3b;
+  --card: #1a4645;
+  --ink: #eaf4ee;
+  --ink-2: #d3e6df;
+  --muted: #c4d8d0;
+  --line: #eaf4ee24;
+  --green-ink: #bbefcb;
+  --green-soft: #234e45;
+  --shadow-soft: none;
+  color: var(--ink);
+}
+.capability-scene[data-theme="dark"] .mini-window {
+  border-color: #eaf4ee24;
+}
+.capability-scene[data-theme="dark"] .mock-confirm {
+  background: var(--green-soft);
+  color: var(--green-ink);
 }
 .capability-scene {
   padding-top: 30px;
@@ -733,6 +784,31 @@ h3 {
   padding: 6px 10px;
   font-size: 10px;
   color: var(--green-ink);
+}
+.scene-chips {
+  gap: 10px;
+  margin-top: 24px;
+}
+.tech-label,
+.scene-chips .tech-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 38px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--card);
+  color: var(--ink-2);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.4;
+  box-shadow: none;
+}
+.tech-label svg {
+  width: 19px;
+  height: 19px;
+  flex: 0 0 19px;
 }
 .mock-heading {
   font: 700 27px var(--font-display);
@@ -821,10 +897,28 @@ h3 {
   color: var(--muted);
   font-size: 11px;
 }
+.flow-node b {
+  font-size: 14px;
+}
+.flow-node small {
+  font-size: 12px;
+}
+.mini-toolbar span {
+  font-size: 11px;
+}
+.schema-node small {
+  font-size: 11px;
+}
+.workflow-row small {
+  font-size: 12px;
+}
+.capability-scene > .eyebrow {
+  font-size: 11px;
+}
 .expanding-panels {
   display: flex;
   gap: 14px;
-  height: 530px;
+  height: 640px;
 }
 .expand-card {
   position: relative;
@@ -842,7 +936,7 @@ h3 {
   flex: 5.2;
   box-shadow: var(--shadow-raise);
 }
-.expand-card:nth-child(even).is-open {
+.expand-card[data-theme="dark"].is-open {
   background: var(--teal);
   color: var(--on-dark);
 }
@@ -923,6 +1017,19 @@ h3 {
   margin-right: 8px;
   color: var(--green);
 }
+.expand-body .tech-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+.tech-list li::before {
+  content: none;
+}
+.expand-card[data-theme="dark"].is-open .tech-label {
+  background: #ffffff0d;
+  color: #eaf4ee;
+  border-color: #eaf4ee24;
+}
 .expand-body .button {
   font-size: 11px;
   padding-left: 16px;
@@ -938,22 +1045,28 @@ h3 {
 .expand-body .mini-window {
   padding-inline: 14px;
 }
-.expand-card:nth-child(even).is-open .expand-body p {
+.expand-card[data-theme="dark"].is-open .expand-body p {
   color: var(--on-dark-muted);
 }
-.expand-card:nth-child(even).is-open h3 {
+.expand-card[data-theme="dark"].is-open h3 {
   color: var(--green);
 }
-.expand-card:nth-child(even).is-open .mini-window {
+.expand-card[data-theme="dark"].is-open .mini-window {
   color: var(--ink);
 }
-.expand-card:nth-child(even).is-open .scene-chips > span {
+.expand-card[data-theme="dark"].is-open .scene-chips > span {
   box-shadow: none;
 }
 .work-grid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: clamp(20px, 3vw, 36px);
+}
+.work-row {
+  display: contents;
+}
+.work-media {
+  min-width: 0;
 }
 .work-card {
   display: grid;
@@ -964,6 +1077,42 @@ h3 {
 .work-card:nth-child(even) {
   grid-column: span 5;
   margin-top: 120px;
+}
+/* Reserve the large preview height and text rows; flex-basis changes never
+   re-order projects or change the height of the project section. */
+@media (min-width: 1000px) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .work-grid {
+    --project-gap: clamp(20px, 3vw, 36px);
+  }
+  .work-row {
+    display: flex;
+    grid-column: 1 / -1;
+    gap: var(--project-gap);
+    align-items: flex-start;
+    container-type: inline-size;
+  }
+  .work-row .work-card {
+    flex: 0 0 calc((100% - var(--project-gap)) * 5 / 12);
+    min-width: 0;
+    margin-top: 0;
+    grid-template-rows: calc((100cqw - var(--project-gap)) * 7 / 16) 180px 58px;
+    transition: flex-basis 620ms var(--ease);
+  }
+  .work-row .work-card.is-expanded {
+    flex-basis: calc((100% - var(--project-gap)) * 7 / 12);
+  }
+  .work-media {
+    display: flex;
+    align-items: flex-end;
+    min-width: 0;
+  }
+  .work-media .work-frame {
+    width: 100%;
+    flex-shrink: 0;
+  }
+  .work-row .project-links {
+    align-self: start;
+  }
 }
 .work-frame {
   position: relative;
@@ -1105,6 +1254,16 @@ h3 {
     0 24px 40px -14px #0009;
   margin-bottom: 10px;
 }
+.ring-num {
+  transition:
+    box-shadow var(--motion-medium),
+    transform var(--motion-medium) var(--ease);
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .ring-item:hover .ring-num {
+    transform: translateY(-3px);
+  }
+}
 .ring-num b {
   width: 88px;
   height: 88px;
@@ -1151,6 +1310,18 @@ h3 {
   place-items: center;
   box-shadow: var(--shadow-press);
   color: var(--green-ink);
+}
+.journey-item {
+  position: relative;
+}
+.journey-item::after {
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 60px;
+  width: 36px;
+  height: 2px;
+  background: var(--green);
 }
 .journey-rows h3 {
   font-size: 19px;
@@ -2161,7 +2332,7 @@ footer {
   }
 }
 
-.expand-card:nth-child(even) .button {
+.expand-card[data-theme="dark"] .button {
   color: var(--ink);
 }
 .scene-selector {
@@ -2329,26 +2500,6 @@ footer {
   transform-origin: left;
   transform: scaleX(var(--scene-progress, 0));
 }
-.particle-cursor {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background: var(--ink);
-  color: white;
-  font: 8px var(--font-mono);
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  pointer-events: none;
-  opacity: 0;
-  z-index: 3;
-  transition: opacity 0.2s;
-  will-change: transform;
-}
 .particle-help {
   position: absolute;
   bottom: -23px;
@@ -2358,6 +2509,37 @@ footer {
   color: var(--muted);
   font-size: 9px;
   letter-spacing: 0.02em;
+}
+.site-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  display: none;
+  place-items: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: #1f1c1d;
+  color: #fff;
+  font: 500 9px var(--font-mono);
+  letter-spacing: 0.12em;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 120ms;
+  will-change: transform;
+}
+@media (hover: hover) and (pointer: fine) {
+  .site-cursor {
+    display: grid;
+  }
+  .site-cursor[data-visible="true"] {
+    opacity: 1;
+  }
+  html.custom-cursor-ready,
+  html.custom-cursor-ready * {
+    cursor: none !important;
+  }
 }
 @keyframes particle-caption {
   from {
@@ -2407,11 +2589,6 @@ footer {
     max-width: 80px;
   }
 }
-@media (hover: hover) and (pointer: fine) {
-  .hero-canvas {
-    cursor: none;
-  }
-}
 @media (prefers-reduced-motion: reduce) {
   .button:hover,
   .button:active,
@@ -2420,9 +2597,6 @@ footer {
   .work-card:hover .work-frame,
   .work-card:hover .work-arrow {
     transform: none;
-  }
-  .particle-cursor {
-    display: none;
   }
   .particle-help {
     display: none;

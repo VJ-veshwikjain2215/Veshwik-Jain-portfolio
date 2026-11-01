@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  act,
   fireEvent,
   render,
   screen,
@@ -56,6 +57,35 @@ describe("portfolio navigation and features", () => {
     ).toBe("https://github.com/VJ-veshwikjain2215/FlowFund");
   });
 
+  it("expands every project on hover or focus without changing project order or row membership", () => {
+    const { container } = open();
+    const cards = [...container.querySelectorAll("#projects .work-card")];
+    const order = cards.map((card) => card.dataset.projectId);
+    const rows = [...container.querySelectorAll(".work-row")];
+    expect(rows.map((row) => row.children.length)).toEqual([2, 2, 1]);
+    for (const card of cards) {
+      fireEvent.mouseEnter(card);
+      expect(container.querySelectorAll(".work-card.is-expanded")).toHaveLength(
+        1,
+      );
+      expect(card.classList.contains("is-expanded")).toBe(true);
+    }
+    const focusedLink = cards[1].querySelector("a");
+    act(() => focusedLink.focus());
+    expect(cards[1].classList.contains("is-expanded")).toBe(true);
+    fireEvent.mouseEnter(cards[3]);
+    fireEvent.mouseLeave(container.querySelector(".work-grid"));
+    expect(cards[1].classList.contains("is-expanded")).toBe(true);
+    act(() => focusedLink.blur());
+    expect(cards[0].classList.contains("is-expanded")).toBe(true);
+    expect(
+      [...container.querySelectorAll("#projects .work-card")].map(
+        (card) => card.dataset.projectId,
+      ),
+    ).toEqual(order);
+    expect([...container.querySelectorAll(".work-row")]).toEqual(rows);
+  });
+
   it("provides valid home anchors, documents, and safe external links", () => {
     const { container } = open();
     for (const link of container.querySelectorAll(
@@ -84,22 +114,62 @@ describe("portfolio navigation and features", () => {
     open();
     const user = userEvent.setup();
     const tabs = screen.getAllByRole("tab");
+    expect(screen.getByRole("tabpanel").dataset.theme).toBe("light");
     tabs[0].focus();
     await user.keyboard("{ArrowDown}");
     expect(document.activeElement).toBe(tabs[1]);
     expect(tabs[1].getAttribute("aria-selected")).toBe("true");
+    expect(tabs[1].dataset.theme).toBe("dark");
+    expect(screen.getByRole("tabpanel").dataset.theme).toBe("dark");
+    for (const tech of ["React", "JavaScript", "HTML", "CSS"]) {
+      expect(
+        within(screen.getByRole("tabpanel"))
+          .getByText(tech)
+          .closest(".tech-label")
+          .querySelector("svg"),
+      ).toBeTruthy();
+    }
     expect(screen.getByRole("tabpanel").getAttribute("aria-labelledby")).toBe(
       tabs[1].id,
     );
     await user.keyboard("{End}");
     expect(document.activeElement).toBe(tabs[3]);
+    expect(screen.getByRole("tabpanel").dataset.theme).toBe("dark");
+    for (const tech of ["GitHub", "VS Code", "Linux"])
+      expect(within(screen.getByRole("tabpanel")).getByText(tech)).toBeTruthy();
+    await user.keyboard("{ArrowUp}");
+    expect(screen.getByRole("tabpanel").dataset.theme).toBe("light");
+    for (const tech of ["MySQL", "DBMS", "SQL"])
+      expect(
+        within(screen.getByRole("tabpanel"))
+          .getByText(tech)
+          .closest(".tech-label")
+          .querySelector("svg"),
+      ).toBeTruthy();
     await user.keyboard("{Home}");
     expect(document.activeElement).toBe(tabs[0]);
+    for (const tech of ["Java", "Spring Boot", "REST APIs"])
+      expect(
+        within(screen.getByRole("tabpanel"))
+          .getByText(tech)
+          .closest(".tech-label")
+          .querySelector("svg"),
+      ).toBeTruthy();
     const trigger = screen.getByRole("button", {
       name: "Explore Data & storage",
     });
     await user.click(trigger);
     expect(trigger.getAttribute("aria-expanded")).toBe("true");
+    expect(trigger.closest(".expand-card").dataset.theme).toBe("light");
+    await user.click(
+      screen.getByRole("button", { name: "Explore Web applications" }),
+    );
+    expect(
+      screen
+        .getByRole("button", { name: "Explore Web applications" })
+        .closest(".expand-card").dataset.theme,
+    ).toBe("dark");
+    await user.click(trigger);
     expect(
       document.getElementById(trigger.getAttribute("aria-controls")).hidden,
     ).toBe(false);
@@ -113,6 +183,29 @@ describe("portfolio navigation and features", () => {
   it("toggles navigation and reaches about/contact routes", async () => {
     open();
     const user = userEvent.setup();
+    const navigation = screen.getByRole("navigation", {
+      name: "Main navigation",
+    });
+    const navigationLinks = within(navigation).getAllByRole("link");
+    expect(navigationLinks.map((link) => link.textContent)).toEqual([
+      "Home",
+      "About",
+      "Toolkit",
+      "Capabilities",
+      "Projects",
+      "Journey",
+      "Contact",
+    ]);
+    expect(navigationLinks.map((link) => link.getAttribute("href"))).toEqual([
+      "/#home",
+      "/#about",
+      "/#skills",
+      "/#capabilities",
+      "/#projects",
+      "/#academics",
+      "/contact",
+    ]);
+    const siteCursor = document.querySelector(".site-cursor");
     const menu = screen.getByRole("button", { name: "Toggle navigation" });
     await user.click(menu);
     expect(menu.getAttribute("aria-expanded")).toBe("true");
@@ -131,6 +224,7 @@ describe("portfolio navigation and features", () => {
     );
     expect(menu.getAttribute("aria-expanded")).toBe("false");
     expect(screen.getByRole("textbox", { name: "Subject" })).toBeTruthy();
+    expect(document.querySelector(".site-cursor")).toBe(siteCursor);
     await user.click(screen.getByRole("link", { name: "Veshwik Jain home" }));
     await user.click(screen.getByRole("link", { name: /More about Veshwik/i }));
     expect(screen.getByRole("heading", { level: 1 }).textContent).toContain(
