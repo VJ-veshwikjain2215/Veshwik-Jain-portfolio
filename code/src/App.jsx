@@ -10,16 +10,21 @@ import {
 } from "./constants/data";
 import ContactForm from "./components/ContactForm";
 import HeroParticles from "./components/HeroParticles";
+import ScrollStatement from "./components/ScrollStatement";
 const num = (i) => String(i + 1).padStart(2, "0");
-function Reveal({ children, className = "" }) {
+function Reveal({ children, className = "", delay = 0 }) {
   const reduce = useReducedMotion();
   return (
     <motion.div
       className={className}
-      initial={reduce ? false : { opacity: 0, y: 24 }}
+      initial={reduce ? false : { opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.08 }}
-      transition={{ duration: 0.7 }}
+      viewport={{ once: true, amount: 0.08, margin: "0px 0px -24px 0px" }}
+      transition={{
+        duration: reduce ? 0 : 0.56,
+        delay: reduce ? 0 : delay,
+        ease: [0.22, 1, 0.36, 1],
+      }}
     >
       {children}
     </motion.div>
@@ -55,49 +60,6 @@ const capabilities = [
     copy: "Small iterations, meaningful checks, and the tools to turn a working idea into something that can be improved.",
   },
 ];
-function ScrollStatement({ children, dark = false }) {
-  const ref = useRef(null),
-    [progress, setProgress] = useState(0),
-    reduce = useReducedMotion();
-  const words = children.split(" ");
-  useEffect(() => {
-    let frame;
-    const update = () => {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        if (!ref.current) return;
-        const r = ref.current.getBoundingClientRect();
-        setProgress(
-          Math.max(
-            0,
-            Math.min(
-              1,
-              (window.innerHeight * 0.84 - r.top) / (window.innerHeight * 0.65),
-            ),
-          ),
-        );
-      });
-    };
-    window.addEventListener("scroll", update, { passive: true });
-    update();
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", update);
-    };
-  }, []);
-  return (
-    <p ref={ref} className={`statement ${dark ? "statement-dark" : ""}`}>
-      {words.map((word, i) => (
-        <span
-          key={i}
-          className={`${reduce || i < progress * words.length ? "on" : ""} ${["Java,", "reliable", "people.", "learning,"].includes(word) ? "highlight" : ""}`}
-        >
-          {word}{" "}
-        </span>
-      ))}
-    </p>
-  );
-}
 function Nav() {
   const location = useLocation();
   const currentSection =
@@ -107,9 +69,33 @@ function Nav() {
         ? location.hash.slice(1) || "home"
         : "";
   const [open, setOpen] = useState(false);
+  const header = useRef(null);
+  const menu = useRef(null);
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (event) => {
+      if (event.key !== "Escape") return;
+      setOpen(false);
+      menu.current?.focus();
+    };
+    const onPointerDown = (event) => {
+      if (!header.current?.contains(event.target)) setOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("pointerdown", onPointerDown);
+    };
+  }, [open]);
   return (
-    <header className="nav">
-      <Link className="brand" to="/" aria-label="Veshwik Jain home">
+    <header className="nav" ref={header}>
+      <Link
+        className="brand"
+        to="/"
+        aria-label="Veshwik Jain home"
+        onClick={() => setOpen(false)}
+      >
         <span className="brand-orb">
           <i />
         </span>
@@ -117,6 +103,9 @@ function Nav() {
       </Link>
       <button
         className="menu-toggle"
+        ref={menu}
+        aria-controls="main-navigation"
+        type="button"
         onClick={() => setOpen(!open)}
         aria-expanded={open}
         aria-label="Toggle navigation"
@@ -126,6 +115,7 @@ function Nav() {
       <nav
         className={open ? "nav-links open" : "nav-links"}
         aria-label="Main navigation"
+        id="main-navigation"
       >
         {[
           ["Home", "home"],
@@ -139,6 +129,7 @@ function Nav() {
             key={id}
             className={id === currentSection ? "home-link" : ""}
             href={`/#${id}`}
+            aria-current={id === currentSection ? "location" : undefined}
             onClick={() => setOpen(false)}
           >
             {label}
@@ -147,6 +138,7 @@ function Nav() {
         <Link
           to="/contact"
           className={location.pathname === "/contact" ? "home-link" : ""}
+          aria-current={location.pathname === "/contact" ? "page" : undefined}
           onClick={() => setOpen(false)}
         >
           Contact
@@ -160,7 +152,7 @@ function Nav() {
       >
         Résumé ↗
       </a>
-      <Link className="nav-status" to="/contact">
+      <Link className="nav-status" to="/contact" onClick={() => setOpen(false)}>
         Let's talk <span>↗</span>
       </Link>
     </header>
@@ -521,7 +513,7 @@ function Home() {
           id="skill-panel"
           aria-labelledby={`skill-tab-${activeSkill}`}
         >
-          <div className="serve-stage-copy">
+          <div className="serve-stage-copy" key={activeSkill}>
             <h3>{capabilities[activeSkill].title}</h3>
             <p>{capabilities[activeSkill].copy}</p>
           </div>
@@ -593,8 +585,8 @@ function Home() {
           </p>
         </div>
         <div className="work-grid">
-          {projects.map((p) => (
-            <Reveal className="work-card" key={p.id}>
+          {projects.map((p, index) => (
+            <Reveal className="work-card" key={p.id} delay={(index % 2) * 0.08}>
               <Link
                 className={`work-frame${p.illustration ? " project-illustration" : ""}${p.imageFit === "contain" ? " image-contain" : ""}`}
                 to={`/project/${encodeURIComponent(p.id)}`}

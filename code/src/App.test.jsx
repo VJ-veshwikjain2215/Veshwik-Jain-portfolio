@@ -116,6 +116,14 @@ describe("portfolio navigation and features", () => {
     const menu = screen.getByRole("button", { name: "Toggle navigation" });
     await user.click(menu);
     expect(menu.getAttribute("aria-expanded")).toBe("true");
+    expect(menu.getAttribute("aria-controls")).toBe("main-navigation");
+    await user.keyboard("{Escape}");
+    expect(menu.getAttribute("aria-expanded")).toBe("false");
+    expect(document.activeElement).toBe(menu);
+    await user.click(menu);
+    await user.click(document.querySelector("main"));
+    expect(menu.getAttribute("aria-expanded")).toBe("false");
+    await user.click(menu);
     await user.click(
       within(
         screen.getByRole("navigation", { name: "Main navigation" }),
