@@ -7,7 +7,7 @@ import civicIssueImg from "../assets/civic-issue.png";
 import rupeeRakshakImg from "../assets/RupeeRakshak.png";
 import trueVoiceImg from "../assets/TrueVoice.png";
 import secureCryptImg from "../assets/Secure-Crypt.png";
-import countCheckImg from "../assets/CountCheck.svg";
+import countCheckImg from "../assets/CountCheck.jpg";
 export const profile = {
   name: "Veshwik Jain",
   roles: [
@@ -123,8 +123,7 @@ export const projects = [
     demo: "https://countcheck.embarko.app/",
     featured: true,
     screenshot: countCheckImg,
-    imageAlt: "CountCheck — Every count matters, project brand illustration",
-    illustration: true,
+    imageAlt: "CountCheck homepage showing inventory count comparison",
   },
   {
     id: "TrueVoice",
