@@ -14,51 +14,9 @@ import ScrollStatement from "./components/ScrollStatement";
 import Reveal from "./components/Reveal";
 import SiteCursor from "./components/SiteCursor";
 import ProjectGrid from "./components/ProjectGrid";
-import TechnologyLabel from "./components/TechnologyLabel";
-import {
-  LuServer,
-  LuPanelsTopLeft,
-  LuDatabase,
-  LuGitBranch,
-  LuCheck,
-} from "react-icons/lu";
-import { TbApi } from "react-icons/tb";
-import { FaJava } from "react-icons/fa6";
+import Toolkit from "./components/Toolkit";
+import Capabilities from "./components/Capabilities";
 const num = (i) => String(i + 1).padStart(2, "0");
-const capabilities = [
-  {
-    title: "Backend systems",
-    note: "APIs, business logic, and reliable data flows",
-    icon: LuServer,
-    theme: "light",
-    tech: ["Java", "Spring Boot", "REST APIs"],
-    copy: "Clear application layers and dependable APIs, built around the problem the software needs to solve.",
-  },
-  {
-    title: "Web applications",
-    note: "Useful interfaces, from idea to interaction",
-    icon: LuPanelsTopLeft,
-    theme: "dark",
-    tech: ["React", "JavaScript", "HTML", "CSS"],
-    copy: "Responsive interfaces that connect the system underneath to a clear, useful experience on the screen.",
-  },
-  {
-    title: "Data & storage",
-    note: "Structured information, thoughtfully connected",
-    icon: LuDatabase,
-    theme: "light",
-    tech: ["MySQL", "DBMS", "SQL"],
-    copy: "Practical data models, understandable relationships, and the foundations that help an application stay predictable.",
-  },
-  {
-    title: "Developer workflow",
-    note: "Version control, tools, and continuous learning",
-    icon: LuGitBranch,
-    theme: "dark",
-    tech: ["Git", "GitHub", "VS Code", "Linux", "Windows", "C/C++"],
-    copy: "Small iterations, meaningful checks, and the tools to turn a working idea into something that can be improved.",
-  },
-];
 function Nav() {
   const location = useLocation();
   const currentSection =
@@ -165,132 +123,6 @@ function Heading({ label, children }) {
     </div>
   );
 }
-function CapabilityScene({ index }) {
-  return (
-    <div
-      className={`capability-scene scene-${index}`}
-      data-theme={capabilities[index].theme}
-    >
-      <span className="eyebrow">
-        {
-          [
-            "APPLICATION FLOW",
-            "INTERFACE PREVIEW",
-            "DATA MODEL",
-            "BUILD WORKFLOW",
-          ][index]
-        }
-      </span>
-      <div className="mini-window">
-        <div className="mini-toolbar">
-          <i />
-          <i />
-          <i />
-          <span>
-            {
-              [
-                "api.veshwik.dev",
-                "app.veshwik.dev",
-                "data.workspace",
-                "project.workspace",
-              ][index]
-            }
-          </span>
-        </div>
-        {index === 0 ? (
-          <>
-            <div className="flow-node">
-              <span>
-                <TbApi aria-hidden="true" />
-              </span>
-              <b>Request received</b>
-              <small>REST endpoint</small>
-            </div>
-            <div className="flow-line" />
-            <div className="flow-node">
-              <span>
-                <FaJava aria-hidden="true" />
-              </span>
-              <b>Application logic</b>
-              <small>Java · Spring Boot</small>
-            </div>
-            <div className="flow-line" />
-            <div className="flow-node">
-              <span>
-                <LuCheck aria-hidden="true" />
-              </span>
-              <b>Response returned</b>
-              <small>Clear, structured data</small>
-            </div>
-          </>
-        ) : index === 1 ? (
-          <>
-            <div className="mock-heading">A clear next step.</div>
-            <div className="mock-bars">
-              <i />
-              <i />
-              <i />
-            </div>
-            <div className="mock-cards">
-              <span>Explore →</span>
-              <span>Build ↗</span>
-            </div>
-            <div className="mock-confirm">✓ Responsive by design</div>
-          </>
-        ) : index === 2 ? (
-          <>
-            <div className="schema-node">
-              <b>Application</b>
-              <small>id · name · status</small>
-            </div>
-            <div className="schema-connector" />
-            <div className="schema-pair">
-              <div className="schema-node">
-                <b>Users</b>
-                <small>id · email</small>
-              </div>
-              <div className="schema-node">
-                <b>Records</b>
-                <small>id · user_id</small>
-              </div>
-            </div>
-            <div className="mock-confirm">
-              Connected. Consistent. Understandable.
-            </div>
-          </>
-        ) : (
-          <>
-            <div className="workflow-row">
-              <span>01</span>
-              <b>Define</b>
-              <small>Understand the problem</small>
-            </div>
-            <div className="workflow-row">
-              <span>02</span>
-              <b>Build</b>
-              <small>Small, clear iterations</small>
-            </div>
-            <div className="workflow-row">
-              <span>03</span>
-              <b>Check</b>
-              <small>Test the real flow</small>
-            </div>
-            <div className="workflow-row">
-              <span>04</span>
-              <b>Improve</b>
-              <small>Learn from what breaks</small>
-            </div>
-          </>
-        )}
-      </div>
-      <div className="scene-chips">
-        {capabilities[index].tech.map((t) => (
-          <TechnologyLabel name={t} key={t} />
-        ))}
-      </div>
-    </div>
-  );
-}
 function Footer() {
   return (
     <footer>
@@ -362,8 +194,6 @@ function Footer() {
   );
 }
 function Home() {
-  const [activeSkill, setActiveSkill] = useState(0),
-    [activeCapability, setActiveCapability] = useState(0);
   const reducedMotion = useReducedMotion();
   useEffect(() => {
     const hash = window.location.hash.slice(1);
@@ -463,131 +293,8 @@ function Home() {
           More about Veshwik <span>↗</span>
         </Link>
       </section>
-      <section className="section serve-section" id="skills">
-        <div className="serve-side">
-          <Heading label="WHAT I BRING">
-            See where my
-            <br />
-            skills fit.
-          </Heading>
-          <p className="lead">
-            Four parts of the software I enjoy building, from the logic behind
-            the screen to the experience in front of it.
-          </p>
-          <div
-            className="serve-tabs"
-            role="tablist"
-            aria-label="Development skills"
-            aria-orientation="vertical"
-          >
-            {capabilities.map((c, i) => (
-              <button
-                role="tab"
-                data-theme={c.theme}
-                id={`skill-tab-${i}`}
-                aria-controls="skill-panel"
-                aria-selected={activeSkill === i}
-                tabIndex={activeSkill === i ? 0 : -1}
-                key={c.title}
-                onClick={() => setActiveSkill(i)}
-                onKeyDown={(e) => {
-                  if (["ArrowUp", "ArrowDown", "Home", "End"].includes(e.key)) {
-                    e.preventDefault();
-                    const next =
-                      e.key === "Home"
-                        ? 0
-                        : e.key === "End"
-                          ? 3
-                          : (i + (e.key === "ArrowDown" ? 1 : -1) + 4) % 4;
-                    setActiveSkill(next);
-                    e.currentTarget.parentElement
-                      .querySelectorAll("button")
-                      [next].focus();
-                  }
-                }}
-              >
-                <span className="serve-icon">
-                  <c.icon aria-hidden="true" />
-                </span>
-                <b>{c.title}</b>
-                <small>{c.note}</small>
-                <i className="serve-progress" />
-              </button>
-            ))}
-          </div>
-          <a href="#capabilities" className="button soft">
-            Explore my approach <span>↗</span>
-          </a>
-        </div>
-        <div
-          className="serve-stage"
-          data-theme={capabilities[activeSkill].theme}
-          role="tabpanel"
-          id="skill-panel"
-          aria-labelledby={`skill-tab-${activeSkill}`}
-        >
-          <div className="serve-stage-copy" key={activeSkill}>
-            <h3>{capabilities[activeSkill].title}</h3>
-            <p>{capabilities[activeSkill].copy}</p>
-          </div>
-          <CapabilityScene index={activeSkill} />
-        </div>
-      </section>
-      <section className="section" id="capabilities">
-        <div className="sec-head">
-          <Heading label="MY CAPABILITIES">
-            Four ways I<br />
-            turn ideas into code.
-          </Heading>
-          <p className="lead">
-            From the API that powers an application to the interface someone
-            uses every day. Thoughtful choices at every layer.
-          </p>
-        </div>
-        <div className="expanding-panels">
-          {capabilities.map((c, i) => (
-            <div
-              key={c.title}
-              className={`expand-card ${activeCapability === i ? "is-open" : ""}`}
-              data-theme={c.theme}
-            >
-              <button
-                className="expand-trigger"
-                aria-label={`Explore ${c.title}`}
-                aria-expanded={activeCapability === i}
-                aria-controls={`capability-${i}`}
-                onClick={() => setActiveCapability(i)}
-              >
-                <span>{num(i)}</span>
-                <b>{c.title}</b>
-                <i>↗</i>
-              </button>
-              <div
-                className="expand-body"
-                id={`capability-${i}`}
-                hidden={activeCapability !== i}
-              >
-                <div>
-                  <span className="eyebrow">{num(i)} / 04</span>
-                  <h3>{c.title}</h3>
-                  <p>{c.copy}</p>
-                  <ul className="tech-list">
-                    {c.tech.map((t) => (
-                      <li key={t}>
-                        <TechnologyLabel name={t} />
-                      </li>
-                    ))}
-                  </ul>
-                  <a href="#projects" className="button soft">
-                    Explore the projects <span>↗</span>
-                  </a>
-                </div>
-                <CapabilityScene index={i} />
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <Toolkit />
+      <Capabilities />
       <section className="section" id="projects">
         <div className="sec-head">
           <Heading label="PROJECT REFERENCE">

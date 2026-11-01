@@ -1,18 +1,22 @@
-import { FaJava, FaWindows } from "react-icons/fa6";
+import { FaJava } from "react-icons/fa6";
 import {
   SiSpringboot,
   SiReact,
   SiJavascript,
   SiHtml5,
   SiCss,
-  SiMysql,
   SiGithub,
-  SiLinux,
   SiGit,
+  SiKotlin,
+  SiNodedotjs,
+  SiExpress,
+  SiPostgresql,
+  SiFlyway,
+  SiApachemaven,
+  SiGithubactions,
 } from "react-icons/si";
 import { LuDatabase, LuCodeXml } from "react-icons/lu";
-import { TbApi, TbSql, TbBrandCpp } from "react-icons/tb";
-import { VscVscode } from "react-icons/vsc";
+import { TbApi, TbSql } from "react-icons/tb";
 
 const icons = {
   Java: FaJava,
@@ -22,15 +26,17 @@ const icons = {
   JavaScript: SiJavascript,
   HTML: SiHtml5,
   CSS: SiCss,
-  MySQL: SiMysql,
-  DBMS: LuDatabase,
   SQL: TbSql,
   Git: SiGit,
   GitHub: SiGithub,
-  "VS Code": VscVscode,
-  Linux: SiLinux,
-  Windows: FaWindows,
-  "C/C++": TbBrandCpp,
+  Kotlin: SiKotlin,
+  "Node.js": SiNodedotjs,
+  Express: SiExpress,
+  PostgreSQL: SiPostgresql,
+  JDBC: LuDatabase,
+  Flyway: SiFlyway,
+  Maven: SiApachemaven,
+  "GitHub Actions": SiGithubactions,
 };
 export default function TechnologyLabel({ name }) {
   const Icon = icons[name] || LuCodeXml;

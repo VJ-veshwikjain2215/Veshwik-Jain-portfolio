@@ -67,34 +67,6 @@ export const about = {
   ],
 };
 
-export const skillCategories = [
-  {
-    label: "Programming Languages",
-    path: "~/skills/languages",
-    skills: ["C/C++", "Java", "JavaScript", "HTML", "CSS"],
-  },
-  {
-    label: "Frameworks & Libraries",
-    path: "~/skills/frameworks",
-    skills: ["Spring Boot", "REST APIs", "React", "Node.js"],
-  },
-  {
-    label: "Databases",
-    path: "~/skills/databases",
-    skills: ["MySQL", "DBMS"],
-  },
-  {
-    label: "Tools",
-    path: "~/skills/tools",
-    skills: ["Git", "GitHub", "VS Code"],
-  },
-  {
-    label: "Operating Systems",
-    path: "~/skills/systems",
-    skills: ["Linux", "Windows"],
-  },
-];
-
 export const projects = [
   {
     id: "CountCheck",

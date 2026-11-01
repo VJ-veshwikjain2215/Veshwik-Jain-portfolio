@@ -28,7 +28,8 @@ A personal developer portfolio with an animated dot sculpture, scroll reveals, d
 This portfolio introduces my work in Java, Spring Boot, and full-stack development. It pairs a light-and-green visual system with original canvas animation and practical project information.
 
 - **Morphing particle hero** — five shaded particle scenes with perspective, curved morphs, drag rotation, and a three-second automatic cycle.
-- **Interactive capabilities** — keyboard-accessible toolkit tabs, expanding service panels, and scroll-revealed statements.
+- **Categorized toolkit** — a filterable technology grid with readable labels, local SVG logos, and keyboard navigation.
+- **Practical capabilities** — expandable development outcomes linked to supporting projects, separate from the technology stack.
 - **Staggered project grid** — large application previews, category labels, project summaries, and linked case studies.
 - **Project detail routes** — screenshots, context, technology lists, source links, and available live demos.
 - **Responsive navigation** — desktop anchors and a collapsible phone menu.
@@ -93,9 +94,9 @@ No secret is required to run the portfolio. Google Fonts loads the typefaces ove
 
 The code is MIT licensed. Before publishing a fork, replace the personal content and documents with your own.
 
-1. Edit **[`code/src/constants/data.js`](code/src/constants/data.js)** for profile links, projects, skills, academic records, and achievements.
+1. Edit **[`code/src/constants/data.js`](code/src/constants/data.js)** for profile links, projects, academic records, and achievements. The categorized toolkit and project-backed capabilities live in **[`code/src/constants/experience.js`](code/src/constants/experience.js)**.
 2. Edit **[`code/src/App.jsx`](code/src/App.jsx)** for hero copy, profile facts, navigation, and section structure. Some presentation copy is intentionally local to its component.
-3. Change the visual system in **[`code/src/index.css`](code/src/index.css)**.
+3. Change the visual system in **[`code/src/index.css`](code/src/index.css)**; Toolkit and Capabilities styles live in **[`code/src/components/experience.css`](code/src/components/experience.css)**.
 4. Replace project images in **`code/src/assets/`**, the résumé at **`code/public/resume.pdf`**, and marksheets in **`code/public/marksheets/`**. Remove documents you do not want to publish.
 5. Configure your own SMTP sender and notification inbox in the backend hosting settings, and replace the public API address in `code/src/config.js`. See [verification setup](documents/EMAIL-VERIFICATION.md). Do not send test messages to the original owner.
 6. Update the page metadata, favicon, repository links, and deployment identity. Remove the original `appId` from **`code/embarko.json`** before deploying a fork.
