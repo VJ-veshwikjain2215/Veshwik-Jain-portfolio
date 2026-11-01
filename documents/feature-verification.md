@@ -28,7 +28,17 @@ Project cards now provide separate live-site and source-code actions alongside t
 
 DOM tests use jsdom. Canvas drawing is mocked; these tests check controls and lifecycle rather than actual particle rendering. Contact tests use mocked fetch or an in-memory mailer and send no real email.
 
-`node ops/verify-live.mjs` checks the published JavaScript destinations, correct project identities, SPA deep-link responses, image/CSS/JS/public assets, actual PDF signatures, contact health, CORS, and empty-payload rejection without sending messages. Deployment verification is recorded after release.
+`node ops/verify-live.mjs` checks the published JavaScript destinations, correct project identities, SPA deep-link responses, image/CSS/JS/public assets, actual PDF signatures, contact health, CORS, and empty-payload rejection without sending messages. All 39 checks passed against the published release.
+
+## Published release
+
+- Portfolio: https://veshwikjain.embarko.app/ (existing claimed app).
+- Source release: `0bbe82c9b49dbcb4c1f5c9db8d68e08d514086ea`, merged through [PR #22](https://github.com/VJ-veshwikjain2215/Veshwik-Jain-portfolio/pull/22).
+- Required [GitHub CI](https://github.com/VJ-veshwikjain2215/Veshwik-Jain-portfolio/actions/runs/41334199686) passed all 24 tests and quality/build checks.
+- Embarko reported live, then `node ops/verify-live.mjs` passed all 39 live checks. Correct destinations are present in the served JavaScript; obsolete URLs are absent.
+- The live checker initially expected generic `invalid` for empty contact payloads. The documented email validation correctly returns `email`; corrected the checker and reran the complete check successfully. No backend change was needed.
+- Source-only upload excluded the separate contact backend, tests, credentials, dependencies, build output and local tooling. Existing SMTP settings and contact backend deployment were preserved. No real email was sent.
+- Published a successful GitHub deployment record for the verified source commit.
 
 ## Limits
 
