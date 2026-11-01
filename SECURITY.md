@@ -12,7 +12,7 @@ This is a personal project; there is no guaranteed response deadline or bug boun
 
 The current `main` branch is maintained. The website is a browser application; project backends linked from it are separate repositories.
 
-- All files in `public/` are publicly accessible when deployed.
+- All files in `code/public/` are publicly accessible when deployed.
 - Frontend bundles are public; do not place secrets in source or frontend environment variables.
 - The Formspree endpoint is a public form identifier, not a secret. Form service settings control spam protection and delivery.
 - Embarko credentials belong outside the checkout, in the local credential file or an appropriately scoped CI secret.

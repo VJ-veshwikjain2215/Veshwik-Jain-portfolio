@@ -2,9 +2,9 @@
 
 ## Architecture
 
-`src/main.jsx` mounts the application with React Strict Mode and BrowserRouter. `src/App.jsx` contains the homepage composition, the about/contact and project detail routes, navigation, shared footer, and scroll reveals. `src/components/HeroParticles.jsx` connects the accessible scene controls to the standalone Canvas 2D renderer in `src/lib/particleStage.js`.
+`code/src/main.jsx` mounts the application with React Strict Mode and BrowserRouter. `code/src/App.jsx` contains the homepage composition, the about/contact and project detail routes, navigation, shared footer, and scroll reveals. `code/src/components/HeroParticles.jsx` connects the accessible scene controls to the standalone Canvas 2D renderer in `code/src/lib/particleStage.js`.
 
-Project details resolve from the `id` in `src/constants/data.js`. Unknown project IDs and unknown routes show a recovery link. The contact form requests an emailed code and submits verified messages through the standalone Node/SMTP service in `contact-api/`. See [email verification setup](EMAIL-VERIFICATION.md).
+Project details resolve from the `id` in `code/src/constants/data.js`. Unknown project IDs and unknown routes show a recovery link. The contact form requests an emailed code and submits verified messages through the standalone Node/SMTP service in `code/contact-api/`. See [email verification setup](EMAIL-VERIFICATION.md).
 
 The renderer samples five procedural masks into a reusable particle pool. It uses perspective projection, depth shading, spring attraction, cursor repulsion, drag rotation, curved staggered morphs, and velocity trails. The cycle advances every three seconds of active animation time; manual selection restarts that interval. The full-hero drawing surface prevents the illustration column from clipping trails.
 
@@ -12,9 +12,13 @@ Rendering runs through `requestAnimationFrame`, caps display resolution at 2�,
 
 ## Content and styling
 
-Most structured content is in `src/constants/data.js`. Hero and section presentation copy also lives in `src/App.jsx`. Typography and layout are defined in `src/index.css`, using Outfit, Figtree, and JetBrains Mono from Google Fonts.
+Most structured content is in `code/src/constants/data.js`. Hero and section presentation copy also lives in `code/src/App.jsx`. Typography and layout are defined in `code/src/index.css`, using Outfit, Figtree, and JetBrains Mono from Google Fonts.
 
 The current design has one light theme with green accents, rounded surfaces, and a floating navigation bar. It has no theme-switcher, chat assistant, authentication, database, or portfolio data API. The separate contact backend only handles email-code verification and notifications.
+
+## Repository layout
+
+Application source, package manifests, build/hosting configuration, and the contact backend live in `code/`. Run npm commands from that directory. Design, implementation, changes, and verification notes live in `documents/`. GitHub configuration, project overview, contribution/security guidance, and licenses stay at the repository root.
 
 ## Manual verification
 
@@ -38,13 +42,13 @@ The automated checks cover formatting, lint, contact verification tests, and pro
 
 The current production site is [veshwikjain.embarko.app](https://veshwikjain.embarko.app/).
 
-Embarko builds the Vite source and serves its output. Upload source with `package.json` at the root; exclude `.git`, `node_modules`, `dist`, and `.env` files. No Dockerfile or custom Node server is needed. Follow the [Embarko quickstart](https://embarko.ai/docs/quickstart.md) for the current API contract.
+Embarko builds the Vite source and serves its output. Upload the contents of `code/`, with `package.json` at the archive root; exclude `.git`, `node_modules`, `dist`, and `.env` files. No Dockerfile or custom Node server is needed. Follow the [Embarko quickstart](https://embarko.ai/docs/quickstart.md) for the current API contract.
 
-`embarko.json` identifies this existing app so updates reach the same deployment. A fork must remove that identity and deploy under its own app name. Keep deploy credentials outside the repository and authenticate both deployment and status requests.
+`code/embarko.json` identifies this existing app so updates reach the same deployment. A fork must remove that identity and deploy under its own app name. Keep deploy credentials outside the repository and authenticate both deployment and status requests.
 
 The GitHub Actions workflow is **validation only**. It does not deploy to Embarko. A GitHub deployment record links a verified Embarko release to its source commit; registering that record does not publish code. After a manual release, check the live site before marking its deployment successful.
 
-The included Netlify and Vercel configuration files provide SPA fallback routing if the project is hosted there. Build with `npm run build`; publish `dist/`. A host must route non-file paths back to `index.html` for client-side project routes.
+The included Netlify and Vercel configuration files provide SPA fallback routing if the project is hosted there. Set the hosting project root/base directory to `code/`, build with `npm run build`, and publish `dist/` relative to that directory. A host must route non-file paths back to `index.html` for client-side project routes.
 
 ## Dependency maintenance
 

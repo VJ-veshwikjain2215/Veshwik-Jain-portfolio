@@ -4,7 +4,7 @@ Explain the visitor-facing problem and the resulting behavior.
 
 ## Verification
 
-- [ ] `npm run check` passes
+- [ ] `npm run check` passes from `code/`
 - [ ] Affected flow checked in a browser
 - [ ] Desktop and phone screenshots included for visual changes
 - [ ] Keyboard and reduced-motion behavior checked when relevant

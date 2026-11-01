@@ -6,7 +6,7 @@
 
 A personal developer portfolio with an animated dot sculpture, scroll reveals, detailed project pages, and a responsive layout.
 
-[Live portfolio](https://veshwikjain.embarko.app/) · [Explore the code](src/App.jsx) · [Run locally](#run-locally) · [Report a bug](../../issues/new?template=bug_report.yml)
+[Live portfolio](https://veshwikjain.embarko.app/) · [Explore the code](code/src/App.jsx) · [Run locally](#run-locally) · [Report a bug](../../issues/new?template=bug_report.yml)
 
 [![CI](https://github.com/VJ-veshwikjain2215/Veshwik-Jain-portfolio/actions/workflows/ci.yml/badge.svg)](https://github.com/VJ-veshwikjain2215/Veshwik-Jain-portfolio/actions/workflows/ci.yml)
 [![Code license: MIT](https://img.shields.io/badge/code_license-MIT-white?labelColor=111111)](LICENSE)
@@ -14,12 +14,12 @@ A personal developer portfolio with an animated dot sculpture, scroll reveals, d
 
 </div>
 
-[![Veshwik Jain portfolio — desktop preview](docs/images/desktop.png)](https://veshwikjain.embarko.app/)
+[![Veshwik Jain portfolio — desktop preview](documents/images/desktop.png)](https://veshwikjain.embarko.app/)
 
 <details>
 <summary>Phone preview</summary>
 
-<img src="docs/images/mobile.png" alt="Responsive portfolio at a 390-pixel phone viewport" width="280" />
+<img src="documents/images/mobile.png" alt="Responsive portfolio at a 390-pixel phone viewport" width="280" />
 
 </details>
 
@@ -65,10 +65,12 @@ Use **Node.js 22.12 or newer** and npm. Node 22 is used in CI.
 
 ```bash
 git clone https://github.com/VJ-veshwikjain2215/Veshwik-Jain-portfolio.git
-cd Veshwik-Jain-portfolio
+cd Veshwik-Jain-portfolio/code
 npm ci
 npm run dev
 ```
+
+Run the commands below from `code/`. Formatting also covers root Markdown, GitHub configuration, and `documents/`.
 
 Open the Local URL printed by Vite, normally `http://localhost:5173`.
 
@@ -82,35 +84,44 @@ Open the Local URL printed by Vite, normally `http://localhost:5173`.
 | `npm run format:check` | Check formatting without changing files |
 | `npm run check`        | Run formatting, lint, and build checks  |
 
-No secret is required to run the portfolio. Google Fonts loads the typefaces over the network. Actual code and message delivery requires SMTP settings on the separate contact backend. See [email setup](docs/EMAIL-VERIFICATION.md); credentials stay outside the frontend.
+No secret is required to run the portfolio. Google Fonts loads the typefaces over the network. Actual code and message delivery requires SMTP settings on the separate contact backend. See [email setup](documents/EMAIL-VERIFICATION.md); credentials stay outside the frontend.
 
 ## Make it yours
 
 The code is MIT licensed. Before publishing a fork, replace the personal content and documents with your own.
 
-1. Edit **[`src/constants/data.js`](src/constants/data.js)** for profile links, projects, skills, academic records, and achievements.
-2. Edit **[`src/App.jsx`](src/App.jsx)** for hero copy, profile facts, navigation, and section structure. Some presentation copy is intentionally local to its component.
-3. Change the visual system in **[`src/index.css`](src/index.css)**.
-4. Replace project images in **`src/assets/`**, the résumé at **`public/resume.pdf`**, and marksheets in **`public/marksheets/`**. Remove documents you do not want to publish.
-5. Configure your own SMTP sender and notification inbox in the backend hosting settings, and replace the public API address in `src/config.js`. See [verification setup](docs/EMAIL-VERIFICATION.md). Do not send test messages to the original owner.
-6. Update the page metadata, favicon, repository links, and deployment identity. Remove the original `appId` from **`embarko.json`** before deploying a fork.
+1. Edit **[`code/src/constants/data.js`](code/src/constants/data.js)** for profile links, projects, skills, academic records, and achievements.
+2. Edit **[`code/src/App.jsx`](code/src/App.jsx)** for hero copy, profile facts, navigation, and section structure. Some presentation copy is intentionally local to its component.
+3. Change the visual system in **[`code/src/index.css`](code/src/index.css)**.
+4. Replace project images in **`code/src/assets/`**, the résumé at **`code/public/resume.pdf`**, and marksheets in **`code/public/marksheets/`**. Remove documents you do not want to publish.
+5. Configure your own SMTP sender and notification inbox in the backend hosting settings, and replace the public API address in `code/src/config.js`. See [verification setup](documents/EMAIL-VERIFICATION.md). Do not send test messages to the original owner.
+6. Update the page metadata, favicon, repository links, and deployment identity. Remove the original `appId` from **`code/embarko.json`** before deploying a fork.
 
-See [development and deployment notes](docs/DEVELOPMENT.md) for the architecture, verification checklist, and hosting details.
+See [development and deployment notes](documents/DEVELOPMENT.md) for the architecture, verification checklist, and hosting details.
 
 ## Project structure
 
 ```text
 .github/               CI, dependency updates, issue and PR templates
- docs/                 Screenshots and development notes
- public/               Public documents and favicon
- src/
-   App.jsx             Routes, homepage sections, canvas animation
-   components/         Shared contact form and button
-   constants/data.js   Portfolio content and project image imports
-   assets/             Project screenshots
-   index.css           Typography, layout, responsive styles, motion
-   main.jsx            React entry point
- embarko.json          Existing Embarko app identity; no credentials
+code/
+  src/                 React routes, components, content, styles, and assets
+  public/              Public documents, favicon, and social image
+  contact-api/         Standalone email verification and SMTP backend
+  package.json         Frontend tooling and quality commands
+  vite.config.js       Frontend build and local API proxy
+  embarko.json         Existing frontend deployment identity
+  netlify.toml         Optional Netlify SPA routing
+  vercel.json          Optional Vercel SPA routing
+documents/
+  images/              Portfolio preview screenshots
+  DEVELOPMENT.md       Architecture, verification, and deployment notes
+  EMAIL-VERIFICATION.md Contact backend setup
+  REDESIGN.md          Design and implementation notes
+README.md              Project overview and setup
+CONTRIBUTING.md         Contribution workflow
+SECURITY.md             Security reporting and safeguards
+LICENSE                 Source code license
+CONTENT-LICENSE.md      Personal content and media terms
 ```
 
 ## Accessibility and verification
@@ -135,4 +146,4 @@ Source code is available under the [MIT license](LICENSE). See [personal content
 
 ## Design update
 
-The current redesign closely follows the section structure and visual system of [Potadot](https://potadot.com.my/), with Veshwik’s portfolio content and code-generated particle compositions. See [redesign notes](docs/REDESIGN.md) for implementation and verification.
+The current redesign closely follows the section structure and visual system of [Potadot](https://potadot.com.my/), with Veshwik’s portfolio content and code-generated particle compositions. See [redesign notes](documents/REDESIGN.md) for implementation and verification.
